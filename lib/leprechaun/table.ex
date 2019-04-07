@@ -51,10 +51,10 @@ defmodule Leprechaun.Table do
     {:reply, table.score, table}
   end
 
-  def handle_call({:move, from, {x1, y}, {x2, y}}, table) when abs(x1 - x2) == 1 do
+  def handle_cast({:move, from, {x1, y}, {x2, y}}, table) when abs(x1 - x2) == 1 do
     move(from, {x1, y}, {x2, y}, table)
   end
-  def handle_call({:move, from, {x, y1}, {x, y2}}, table) when abs(y1 - y2) == 1 do
+  def handle_cast({:move, from, {x, y1}, {x, y2}}, table) when abs(y1 - y2) == 1 do
     move(from, {x, y1}, {x, y2}, table)
   end
   def handle_cast({:move, from, point1, point2}, table) do
