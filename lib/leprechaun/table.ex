@@ -13,6 +13,7 @@ defmodule Leprechaun.Table do
 
   @max_tries 1000
 
+  @init_turns 10
   @init_symbols_prob [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                       2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
                       3, 3, 3, 3, 3, 3, 3, 3, 3,
@@ -20,7 +21,10 @@ defmodule Leprechaun.Table do
                       5]
 
   defstruct cells: [],
-            score: 0
+            score: 0,
+            turns: @init_turns,
+            played_turns: 0,
+            extra_turns: 0
 
   def start_link(name \\ __MODULE__) do
     GenServer.start_link __MODULE__, [], name: name
@@ -36,6 +40,10 @@ defmodule Leprechaun.Table do
 
   def score(name \\ __MODULE__), do: GenServer.call(name, :score)
 
+  def turns(name \\ __MODULE__), do: GenServer.call(name, :turns)
+
+  def stats(name \\ __MODULE__), do: GenServer.call(name, :stats)
+
   def init([]) do
     cells = for y <- 1..@table_y, into: %{} do
       {y, for(x <- 1..@table_x, into: %{}, do: {x, gen_symbol()})}
@@ -46,11 +54,22 @@ defmodule Leprechaun.Table do
   def handle_call(:show, _from, %Table{cells: cells} = table) do
     {:reply, build_show(cells), table}
   end
-
   def handle_call(:score, _from, table) do
     {:reply, table.score, table}
   end
+  def handle_call(:turns, _from, table) do
+    {:reply, table.turns, table}
+  end
+  def handle_call(:stats, _form, table) do
+    stats = %{"played_turns" => table.played_turns,
+              "extra_turns" => table.extra_turns}
+    {:reply, stats, table}
+  end
 
+  def handle_cast({:move, from, _point1, _point2}, %Table{turns: 0} = table) do
+    send(from, {:error, :gameover})
+    {:noreply, table}
+  end
   def handle_cast({:move, from, {x1, y}, {x2, y}}, table) when abs(x1 - x2) == 1 do
     move(from, {x1, y}, {x2, y}, table)
   end
@@ -72,13 +91,23 @@ defmodule Leprechaun.Table do
                    |> check()
     moves = [{x1, y1}, {x2, y2}]
     if acc != [] do
-      {cells, score} = check_and_clean(cells, from, acc, table.score, moves)
-      {:noreply, %Table{cells: cells, score: score}}
+      {cells, score, extra_turn} = check_and_clean(cells, from, acc, table.score, :decr_turn, moves)
+      {turns, extra_turns} = update_turns(table.turns, table.extra_turns, extra_turn)
+      if turns == 0, do: send(from, {:gameover, score})
+      {:noreply, %Table{cells: cells,
+                        score: score,
+                        extra_turns: extra_turns,
+                        played_turns: table.played_turns + 1,
+                        turns: turns}}
     else
       send(from, {:error, {:illegal_move, {x1,y1}, {x2,y2}}})
       {:noreply, table}
     end
   end
+
+  defp update_turns(turns, extra, :no_action), do: {turns, extra}
+  defp update_turns(turns, extra, :decr_turn), do: {turns - 1, extra}
+  defp update_turns(turns, extra, :extra_turn), do: {turns + 1, extra + 1}
 
   defp build_show(cells) do
     for y <- 1..8 do
@@ -98,20 +127,46 @@ defmodule Leprechaun.Table do
     end)
   end
 
-  defp check_and_clean(cells, _from, [], score, _moves), do: {cells, score}
-  defp check_and_clean(cells, from, acc, score, moves) do
+  defp check_extra_turns(:extra_turn, _), do: :extra_turn
+  defp check_extra_turns(:no_action, acc) do
+    sizes = for {_, p} <- acc, length(p) > 4 do
+      length(p)
+    end
+    if sizes != [] do
+      :extra_turn
+    else
+      :no_action
+    end
+  end
+  defp check_extra_turns(:decr_turn, acc) do
+    max = for {_, p} <- acc, length(p) > 3 do
+            length(p)
+          end
+          |> Enum.max(fn -> 0 end)
+    case max do
+      0 -> :decr_turn
+      4 -> :no_action
+      n when is_integer(n) and n > 4 -> :extra_turn
+    end
+  end
+
+  defp check_and_clean(cells, _from, [], score, extra_turns, _moves) do
+    {cells, score, extra_turns}
+  end
+  defp check_and_clean(cells, from, acc, score, extra_turns, moves) do
     new_score = for({_dir, points} <- acc, do: points)
                 |> List.flatten()
                 |> Enum.map(fn {x, y} -> cells[y][x] end)
                 |> Enum.sum()
-    send(from, {:match, new_score, acc, build_show(cells)})
+    extra_turns = check_extra_turns(extra_turns, acc)
+    send(from, {:match, new_score, extra_turns, acc, build_show(cells)})
     moves = add_moves(acc, moves)
     Logger.debug "[check_and_clean] moves => #{inspect moves}"
     {cells, acc} = cells
                    |> clean(acc, moves)
                    |> check()
     send(from, {:show, build_show(cells)})
-    check_and_clean(cells, from, acc, score + new_score, [])
+    check_and_clean(cells, from, acc, score + new_score, extra_turns, [])
   end
 
   defp check(cells, n, acc, x, y, inc_x, inc_y) do

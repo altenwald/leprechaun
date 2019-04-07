@@ -35,47 +35,55 @@ defmodule Leprechaun.Game do
   def run(table) do
     cells = Table.show(table)
     score = Table.score(table)
-    show score, cells
+    turns = Table.turns(table)
+    show score, turns, cells
     IO.puts IO.ANSI.underline() <> "move" <> IO.ANSI.reset()
     x1 = ask_int "from X: "
     y1 = ask_int "from Y: "
 
-    show score, cells, blink: [{x1, y1}]
+    show score, turns, cells, blink: [{x1, y1}]
     IO.puts IO.ANSI.underline() <> "move" <> IO.ANSI.reset()
     x2 = ask_int "to X: "
     y2 = ask_int "to Y: "
 
     Table.move table, {x1, y1}, {x2, y2}
-    recv_all score, cells
+    continues? = recv_all score, table, cells
 
-    if ask_bool("continue [Y/n]? ") do
+    if continues? and ask_bool("continue [Y/n]? ") do
       run(table)
     end
   end
 
-  defp recv_all(global_score, cells) do
+  defp recv_all(global_score, table, cells) do
     receive do
-      {:match, score, acc, cells} ->
+      {:match, score, extra?, acc, cells} ->
         points = for({_, p} <- acc, do: p)
                  |> List.flatten()
-        show global_score, cells, blink: points
-        IO.puts "+#{score} points!"
+        turns = Table.turns(table)
+        show global_score, turns, cells, blink: points
+        IO.puts "+#{score} points!" <> if(extra?, do: " EXTRA!", else: "")
         Process.sleep @time_to_wait_blink
-        recv_all global_score + score, cells
+        recv_all global_score + score, table, cells
       {:show, cells} ->
-        show global_score, cells
-        recv_all global_score, cells
+        turns = Table.turns(table)
+        show global_score, turns, cells
+        recv_all global_score, table, cells
+      {:gameover, score} ->
+        show score, 0, cells
+        show_stats Table.stats(table)
+        false
       {:error, error} ->
         IO.inspect error
-        cells
+        false
     after @time_to_wait ->
-      cells
+      true
     end
   end
 
-  defp show(score, cells, opts \\ []) do
-    IO.puts IO.ANSI.clear() <> "Leprechaun"
-    IO.puts IO.ANSI.underline() <> "Score" <> IO.ANSI.reset() <> ": #{score}\n"
+  defp show(score, turns, cells, opts \\ []) do
+    IO.puts IO.ANSI.clear() <> "Leprechaun " <> to_string(Application.spec(:leprechaun)[:vsn])
+    IO.puts IO.ANSI.underline() <> "Score" <> IO.ANSI.reset() <> ": #{score}"
+    IO.puts IO.ANSI.underline() <> "Turns" <> IO.ANSI.reset() <> ": #{turns}\n"
     blink = if opts[:blink] do
       opts[:blink]
     else
@@ -99,5 +107,18 @@ defmodule Leprechaun.Game do
       "\n"
     end
     |> IO.puts()
+    if turns == 0 do
+      IO.puts " G A M E   O V E R !!"
+    end
+  end
+
+  defp humanize("played_turns"), do: "Played Turns"
+  defp humanize("extra_turns"), do: "Extra Turns"
+  defp humanize(other), do: other
+
+  defp show_stats(stats) do
+    for {key, value} <- stats do
+      IO.puts "#{humanize(key)} = #{value}"
+    end
   end
 end
