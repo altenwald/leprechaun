@@ -62,7 +62,7 @@ defmodule Leprechaun.Table do
     {:noreply, table}
   end
 
-  def move(from, point1, point2, %Table{cells: cells} = table) do
+  def move(from, {x1, y1}, {x2, y2}, %Table{cells: cells} = table) do
     e1 = cells[y1][x1]
     e2 = cells[y2][x2]
 
