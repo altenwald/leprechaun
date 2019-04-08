@@ -1,6 +1,6 @@
 defmodule Leprechaun.Game do
 
-  alias Leprechaun.Table
+  alias Leprechaun.Board
 
   @time_to_wait 500
   @time_to_wait_blink 1500
@@ -11,6 +11,8 @@ defmodule Leprechaun.Game do
   defp draw_number(4), do: IO.ANSI.color_background(52) <> " 💶 " <> IO.ANSI.reset()
   defp draw_number(5), do: IO.ANSI.light_black_background() <> " 💶 " <> IO.ANSI.reset()
   defp draw_number(6), do: IO.ANSI.yellow_background() <> " 💶 " <> IO.ANSI.reset()
+  defp draw_number(7), do: IO.ANSI.light_black_background() <> " MX " <> IO.ANSI.reset()
+  defp draw_number(8), do: IO.ANSI.yellow_background() <> " MX " <> IO.ANSI.reset()
 
   defp ask_int(prompt) do
     prompt
@@ -28,14 +30,14 @@ defmodule Leprechaun.Game do
   end
 
   def run do
-    {:ok, table} = Table.start_link
-    run table
+    {:ok, board} = Board.start_link(__MODULE__)
+    run board
   end
 
-  def run(table) do
-    cells = Table.show(table)
-    score = Table.score(table)
-    turns = Table.turns(table)
+  def run(board) do
+    cells = Board.show(board)
+    score = Board.score(board)
+    turns = Board.turns(board)
     show score, turns, cells
     IO.puts IO.ANSI.underline() <> "move" <> IO.ANSI.reset()
     x1 = ask_int "from X: "
@@ -46,35 +48,35 @@ defmodule Leprechaun.Game do
     x2 = ask_int "to X: "
     y2 = ask_int "to Y: "
 
-    Table.move table, {x1, y1}, {x2, y2}
-    continues? = recv_all score, table, cells
+    Board.move board, {x1, y1}, {x2, y2}
+    continues? = recv_all score, board, cells
 
     if continues? and ask_bool("continue [Y/n]? ") do
-      run(table)
+      run(board)
     end
   end
 
-  defp recv_all(global_score, table, cells) do
+  defp recv_all(global_score, board, cells) do
     receive do
       {:match, score, extra_turn, acc, cells} ->
         points = for({_, p} <- acc, do: p)
                  |> List.flatten()
-        turns = Table.turns(table)
+        turns = Board.turns(board)
         show global_score, turns, cells, blink: points
         IO.puts "+#{score} points!" <> if(extra_turn == :extra_turn, do: " EXTRA!", else: "")
         Process.sleep @time_to_wait_blink
-        recv_all global_score + score, table, cells
+        recv_all global_score + score, board, cells
       {:show, cells} ->
-        turns = Table.turns(table)
+        turns = Board.turns(board)
         show global_score, turns, cells
-        recv_all global_score, table, cells
+        recv_all global_score, board, cells
       {:gameover, score} ->
         show score, 0, cells
-        show_stats Table.stats(table)
+        show_stats Board.stats(board)
         false
       {:error, error} ->
         IO.inspect error
-        false
+        true
     after @time_to_wait ->
       true
     end

@@ -21,7 +21,25 @@ iex -S mix run
 The Elixir shell will be running after the compilation. You can start the game using this command:
 
 ```elixir
-Leprechaun.Game.run
+Leprechaun.Game.run :mygame
 ```
 
 Follow the instructions and enjoy!
+
+### Web Interface
+
+Version 0.2.0 has a new addition and it's [cowboy][1] and [jason][2] among others to provide an HTTP
+interface to let us to play via web as you can see in the picture:
+
+[![Leprechaun WebGame](screenshot_web.png)](screenshot_web.png)
+
+You only need to run the project as showed above (in the previous section) and then access via this link:
+
+http://localhost:1234
+
+You can change the configuration to listen in another port and even to use IPv6 instead.
+
+Enjoy!
+
+[1]: https://github.com/ninenines/cowboy
+[2]: https://github.com/michalmuskala/jason

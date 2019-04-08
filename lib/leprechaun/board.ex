@@ -1,17 +1,18 @@
-defmodule Leprechaun.Table do
+defmodule Leprechaun.Board do
   @moduledoc """
-  The table have different pieces inside. It cannot be empty. When we choose
+  The board have different pieces inside. It cannot be empty. When we choose
   move one piece to achieve 3 or more connected similar symbols 
   """
 
   use GenServer
-  alias Leprechaun.Table
+  alias Leprechaun.Board
   require Logger
 
-  @table_x 8
-  @table_y 8
+  @board_x 8
+  @board_y 8
 
   @max_tries 1000
+  @max_hours_running 2
 
   @init_turns 10
   @init_symbols_prob [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -26,62 +27,79 @@ defmodule Leprechaun.Table do
             played_turns: 0,
             extra_turns: 0
 
-  def start_link(name \\ __MODULE__) do
-    GenServer.start_link __MODULE__, [], name: name
+  def start_link(name) do
+    GenServer.start_link __MODULE__, [], name: via(name)
   end
 
-  def stop(name \\ __MODULE__), do: GenServer.stop(name)
-
-  def show(name \\ __MODULE__), do: GenServer.call(name, :show)
-
-  def move(name \\ __MODULE__, point_from, point_to) do
-    GenServer.cast name, {:move, self(), point_from, point_to}
+  defp via(board) do
+    {:via, Registry, {Leprechaun.Registry, board}}
   end
 
-  def score(name \\ __MODULE__), do: GenServer.call(name, :score)
+  def exists?(board) do
+    case Registry.lookup(Leprechaun.Registry, board) do
+      [{_pid, nil}] -> true
+      [] -> false
+    end
+  end
 
-  def turns(name \\ __MODULE__), do: GenServer.call(name, :turns)
+  def stop(name), do: GenServer.stop(via(name))
 
-  def stats(name \\ __MODULE__), do: GenServer.call(name, :stats)
+  def show(name), do: GenServer.call(via(name), :show)
+
+  def move(name, point_from, point_to) do
+    GenServer.cast via(name), {:move, self(), point_from, point_to}
+  end
+
+  def score(name), do: GenServer.call(via(name), :score)
+
+  def turns(name), do: GenServer.call(via(name), :turns)
+
+  def stats(name), do: GenServer.call(via(name), :stats)
 
   def init([]) do
-    cells = for y <- 1..@table_y, into: %{} do
-      {y, for(x <- 1..@table_x, into: %{}, do: {x, gen_symbol()})}
+    cells = for y <- 1..@board_y, into: %{} do
+      {y, for(x <- 1..@board_x, into: %{}, do: {x, gen_symbol()})}
     end
-    {:ok, %Table{cells: gen_clean(cells)}}
+    Process.send_after self(), :stop, :timer.hours(@max_hours_running)
+    Logger.info "[board] started #{inspect self()}"
+    {:ok, %Board{cells: gen_clean(cells)}}
   end
 
-  def handle_call(:show, _from, %Table{cells: cells} = table) do
-    {:reply, build_show(cells), table}
+  def handle_call(:show, _from, %Board{cells: cells} = board) do
+    {:reply, build_show(cells), board}
   end
-  def handle_call(:score, _from, table) do
-    {:reply, table.score, table}
+  def handle_call(:score, _from, board) do
+    {:reply, board.score, board}
   end
-  def handle_call(:turns, _from, table) do
-    {:reply, table.turns, table}
+  def handle_call(:turns, _from, board) do
+    {:reply, board.turns, board}
   end
-  def handle_call(:stats, _form, table) do
-    stats = %{"played_turns" => table.played_turns,
-              "extra_turns" => table.extra_turns}
-    {:reply, stats, table}
+  def handle_call(:stats, _form, board) do
+    stats = %{"played_turns" => board.played_turns,
+              "extra_turns" => board.extra_turns}
+    {:reply, stats, board}
   end
 
-  def handle_cast({:move, from, _point1, _point2}, %Table{turns: 0} = table) do
+  def handle_cast({:move, from, _point1, _point2}, %Board{turns: 0} = board) do
     send(from, {:error, :gameover})
-    {:noreply, table}
+    {:noreply, board}
   end
-  def handle_cast({:move, from, {x1, y}, {x2, y}}, table) when abs(x1 - x2) == 1 do
-    move(from, {x1, y}, {x2, y}, table)
+  def handle_cast({:move, from, {x1, y}, {x2, y}}, board) when abs(x1 - x2) == 1 do
+    move(from, {x1, y}, {x2, y}, board)
   end
-  def handle_cast({:move, from, {x, y1}, {x, y2}}, table) when abs(y1 - y2) == 1 do
-    move(from, {x, y1}, {x, y2}, table)
+  def handle_cast({:move, from, {x, y1}, {x, y2}}, board) when abs(y1 - y2) == 1 do
+    move(from, {x, y1}, {x, y2}, board)
   end
-  def handle_cast({:move, from, point1, point2}, table) do
+  def handle_cast({:move, from, point1, point2}, board) do
     send(from, {:error, {:illegal_move, point1, point2}})
-    {:noreply, table}
+    {:noreply, board}
   end
 
-  def move(from, {x1, y1}, {x2, y2}, %Table{cells: cells} = table) do
+  def handle_info(:stop, state) do
+    {:stop, :normal, state}
+  end
+
+  def move(from, {x1, y1}, {x2, y2}, %Board{cells: cells} = board) do
     e1 = cells[y1][x1]
     e2 = cells[y2][x2]
 
@@ -91,17 +109,17 @@ defmodule Leprechaun.Table do
                    |> check()
     moves = [{x1, y1}, {x2, y2}]
     if acc != [] do
-      {cells, score, extra_turn} = check_and_clean(cells, from, acc, table.score, :decr_turn, moves)
-      {turns, extra_turns} = update_turns(table.turns, table.extra_turns, extra_turn)
+      {cells, score, extra_turn} = check_and_clean(cells, from, acc, board.score, :decr_turn, moves)
+      {turns, extra_turns} = update_turns(board.turns, board.extra_turns, extra_turn)
       if turns == 0, do: send(from, {:gameover, score})
-      {:noreply, %Table{cells: cells,
+      {:noreply, %Board{cells: cells,
                         score: score,
                         extra_turns: extra_turns,
-                        played_turns: table.played_turns + 1,
+                        played_turns: board.played_turns + 1,
                         turns: turns}}
     else
       send(from, {:error, {:illegal_move, {x1,y1}, {x2,y2}}})
-      {:noreply, table}
+      {:noreply, board}
     end
   end
 
@@ -118,10 +136,13 @@ defmodule Leprechaun.Table do
   end
 
   defp add_moves(acc, moves) do
-    Enum.reduce(acc, moves, fn {_, [point|_] = points}, acc_moves ->
+    Enum.reduce(acc, moves, fn {_, points}, acc_moves ->
       if (points -- (points -- moves)) != [] do
         acc_moves
       else
+        point = points
+                |> Enum.sort_by(fn({x, y}) -> {y, x} end)
+                |> List.first()
         [point|acc_moves]
       end
     end)
@@ -150,7 +171,8 @@ defmodule Leprechaun.Table do
     end
   end
 
-  defp check_and_clean(cells, _from, [], score, extra_turns, _moves) do
+  defp check_and_clean(cells, from, [], score, extra_turns, _moves) do
+    send(from, :play)
     {cells, score, extra_turns}
   end
   defp check_and_clean(cells, from, acc, score, extra_turns, moves) do
@@ -173,7 +195,7 @@ defmodule Leprechaun.Table do
     if cells[y][x] == n do
       new_x = inc_x + x
       new_y = inc_y + y
-      if new_x >= 1 and new_x <= @table_x and new_y >= 1 and new_y <= @table_y do
+      if new_x >= 1 and new_x <= @board_x and new_y >= 1 and new_y <= @board_y do
         Logger.debug "[check] (#{x},#{y}) + (#{inc_x},#{inc_y}) -- #{n} #{inspect acc}"
         check(cells, n, [{x,y}|acc], new_x, new_y, inc_x, inc_y)
       else
@@ -202,7 +224,7 @@ defmodule Leprechaun.Table do
     end
   end
 
-  defp incr_kind(6), do: 6
+  defp incr_kind(8), do: 8
   defp incr_kind(i), do: i + 1
 
   defp clean({cells, acc}), do: clean(cells, acc)
@@ -233,8 +255,8 @@ defmodule Leprechaun.Table do
   end
 
   defp check(cells, acc \\ [], x \\ 1, y \\ 1)
-  defp check(cells, acc, x, y) when x > @table_x, do: check(cells, acc, 1, y + 1)
-  defp check(cells, acc, _x, y) when y > @table_y do
+  defp check(cells, acc, x, y) when x > @board_x, do: check(cells, acc, 1, y + 1)
+  defp check(cells, acc, _x, y) when y > @board_y do
     acc = acc
           |> Enum.filter(fn {_, elems} -> length(elems) >= 3 end)
           |> Enum.sort_by(fn {dir, elems} -> {dir, length(elems)} end, &>=/2)
