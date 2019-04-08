@@ -27,6 +27,7 @@ defmodule Leprechaun.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:throttle, "~> 0.2.0", hex: :lambda_throttle},
       {:uuid, "~> 1.1"},
+      {:distillery, "~> 2.0"},
     ]
   end
 end
