@@ -5,18 +5,18 @@ defmodule Leprechaun.Websocket do
   @throttle_time_to_wait 100
   @tries 100
 
-  defp check_throttle(tries \\ @tries)
-  defp check_throttle(0) do
+  defp check_throttle(_id, tries \\ @tries)
+  defp check_throttle(_id, 0) do
     Logger.error "[websocket] overloaded!"
     {:error, :overload}
   end
-  defp check_throttle(tries) do
-    case :throttle.check(:websocket, :global) do
+  defp check_throttle(id, tries) do
+    case :throttle.check(:websocket, id) do
       {:ok, _, _} ->
         :ok
       {:limit_exceeded, _, _} ->
         Process.sleep @throttle_time_to_wait
-        check_throttle(tries - 1)
+        check_throttle(id, tries - 1)
     end
   end
 
@@ -59,7 +59,7 @@ defmodule Leprechaun.Websocket do
     {:reply, {:text, Jason.encode!(%{"type" => "play"})}, state}
   end
   def websocket_info({:match, score, extra, acc, cells}, state) do
-    check_throttle()
+    check_throttle(state.board)
     acc = for {_, points} <- acc do
       for {x, y} <- points do
         "row#{y}-col#{x}"
@@ -79,13 +79,13 @@ defmodule Leprechaun.Websocket do
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
   def websocket_info({:show, cells}, state) do
-    check_throttle()
+    check_throttle(state.board)
     html = build_show(cells)
     msg = %{"type" => "draw", "html" => html}
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
   def websocket_info({:gameover, score}, state) do
-    check_throttle()
+    check_throttle(state.board)
     msg = %{"type" => "gameover", "score" => score, "turns" => 0}
     {:reply, {:text, Jason.encode!(msg)}, state}
   end

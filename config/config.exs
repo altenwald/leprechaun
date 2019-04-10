@@ -1,6 +1,6 @@
 use Mix.Config
 
-config :leprechaun, port: 1234,
+config :leprechaun, port: 4012,
                     family: :inet
 
 config :throttle, rates: [{:websocket, 1, :per_second}]
