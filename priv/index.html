@@ -21,6 +21,17 @@
     <script src="/js/jquery-swapsies.js"></script>
     <link rel="stylesheet" type="text/css" href="app.css"/>
     <script type="text/javascript" src="app.js"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-6954758-10"></script>
+    <script><!--
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-6954758-10');
+    // --></script>
+    <!-- Go to www.addthis.com/dashboard to customize your tools -->
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5cad355f0a4ac15b"></script>
 </head>
 <body>
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
@@ -31,7 +42,8 @@
       <p class="lead"></p>
     </div> -->
     <div class="container text-center">
-      <a id="board-restart" class="btn btn-default" href="#">Restart Game</a>
+      <a id="board-hiscore" class="btn btn-outline-success" href="#" data-toggle="modal" data-target="#hiscoreModal">HiScore</a>
+      <a id="board-restart" class="btn btn-outline-danger" href="#">Restart Game</a>
       <div id="leprechaun">
         <img src="/img/leprechaun.gif">
       </div>
@@ -40,5 +52,40 @@
       <div id="board-msg"></div>
       <div id="board"></div>
     </div>
-</body>
+    <div class="modal" id="hiscoreModal" tabindex="-1"  role="dialog" aria-labelledby="hiscoreLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="hiscoreLabel">Hi-Score Table</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div id="hiscore-pos"></div>
+            <div id="hiscore"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal" id="hiscoreNameModal" tabindex="-1"  role="dialog" aria-labelledby="hiscoreNameLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="hiscoreNameLabel">Hi-Score Set Name</h5>
+            </div>
+            <div class="modal-body">
+            <div class="form-group">
+              <input type="text" class="form-control" id="hiscore-name" placeholder="Name">
+            </div>
+            <div class="modal-footer">
+              <button id="hiscore-ok" type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  </body>
 </html>

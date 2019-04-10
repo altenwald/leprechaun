@@ -4,7 +4,7 @@ defmodule Leprechaun.MixProject do
   def project do
     [
       app: :leprechaun,
-      version: "0.2.0",
+      version: "0.3.0",
       elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
       deps: deps()
@@ -15,7 +15,7 @@ defmodule Leprechaun.MixProject do
   def application do
     [
       mod: {Leprechaun.Application, []},
-      extra_applications: [:logger]
+      extra_applications: [:logger, :mnesia]
     ]
   end
 
@@ -27,7 +27,11 @@ defmodule Leprechaun.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:throttle, "~> 0.2.0", hex: :lambda_throttle},
       {:uuid, "~> 1.1"},
+      {:ecto_mnesia, "~> 0.9.1"},
+
+      # for releases
       {:distillery, "~> 2.0"},
+      {:ecto_boot_migration, "~> 0.1.1"},
     ]
   end
 end

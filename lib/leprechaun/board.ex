@@ -5,7 +5,7 @@ defmodule Leprechaun.Board do
   """
 
   use GenServer
-  alias Leprechaun.Board
+  alias Leprechaun.{Board, HiScore}
   require Logger
 
   @board_x 8
@@ -25,7 +25,8 @@ defmodule Leprechaun.Board do
             score: 0,
             turns: @init_turns,
             played_turns: 0,
-            extra_turns: 0
+            extra_turns: 0,
+            username: nil
 
   def start_link(name) do
     GenServer.start_link __MODULE__, [], name: via(name)
@@ -48,6 +49,10 @@ defmodule Leprechaun.Board do
 
   def move(name, point_from, point_to) do
     GenServer.cast via(name), {:move, self(), point_from, point_to}
+  end
+  
+  def hiscore(name, username, remote_ip) do
+    GenServer.cast via(name), {:hiscore, self(), username, remote_ip}
   end
 
   def score(name), do: GenServer.call(via(name), :score)
@@ -92,6 +97,15 @@ defmodule Leprechaun.Board do
   end
   def handle_cast({:move, from, point1, point2}, board) do
     send(from, {:error, {:illegal_move, point1, point2}})
+    {:noreply, board}
+  end
+  def handle_cast({:hiscore, from, username, remote_ip}, %Board{turns: 0, username: nil} = board) do
+    {:ok, hiscore} = HiScore.save(username, board.score, board.played_turns, board.extra_turns, remote_ip)
+    send(from, {:hiscore, HiScore.get_order(hiscore.id)})
+    {:noreply, %Board{board | username: username}}
+  end
+  def handle_cast(info, board) do
+    Logger.warn "[board] info discarded => #{inspect info}"
     {:noreply, board}
   end
 

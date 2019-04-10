@@ -4,6 +4,13 @@ var game_id;
 var click_enabled = true;
 var current_board;
 
+function draw_hiscore(html, position) {
+    $("#hiscore").html(html);
+    if (position) {
+        $("#hiscore-pos").html("<p>Your position is " + position + "</p>");
+    }
+}
+
 function draw(html) {
     current_board = html;
     $("#board").html(html);
@@ -117,6 +124,7 @@ function connect() {
                 disable_moves();
                 update_score(data);
                 $("#board-msg").html("<h2>GAME OVER!</h2>");
+                $("#hiscoreNameModal").modal('show');
                 break;
             case "draw":
                 draw(data.html);
@@ -124,6 +132,9 @@ function connect() {
                 break;
             case "id":
                 game_id = data.id;
+                break;
+            case "hiscore":
+                draw_hiscore(data.top_list, data.position);
                 break;
             default:
                 draw(current_board);
@@ -137,5 +148,15 @@ $(document).ready(function(){
     connect();
     $("#board-restart").on("click", function(event){
         send({type: "restart"});
+    });
+    $("#board-hiscore").on("click", function(event){
+        send({type: "hiscore"});
+    });
+    $("#hiscore-ok").on("click", function(event){
+        var name = $("#hiscore-name").val();
+        send({type: "set-hiscore-name", name: name});
+        $("#hiscoreNameModal").modal('hide');
+        send({type: "hiscore"});
+        $("#hiscoreModal").modal('show');
     });
 });
