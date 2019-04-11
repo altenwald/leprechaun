@@ -138,6 +138,7 @@ function connect() {
                 draw(data.html);
                 if (extra_turn) {
                     data.turns = turns;
+                    data.extra_turn = "extra_turn";
                     extra_turn = false;
                 }
                 update_score(data);
