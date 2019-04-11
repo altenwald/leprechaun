@@ -75,7 +75,10 @@ function update_score(data) {
 function blink(data) {
     if (data.points) {
         for (var i=0; i<data.points.length; i++) {
-            $("#" + data.points[i]).addClass("blink_me");
+            blink_id = $("#" + data.points[i]);
+            $(blink_id).addClass("blink_me");
+            var blink_png = $(blink_id).attr("src").split(".").slice(0, -1).join() + "_blink.png";
+            $(blink_id).attr("src", blink_png);
             console.log("blinking " + data.points[i]);
         }
     }
@@ -135,6 +138,9 @@ function connect() {
                 break;
             case "hiscore":
                 draw_hiscore(data.top_list, data.position);
+                break;
+            case "vsn":
+                $("#vsn").html("v" + data.vsn);
                 break;
             default:
                 draw(current_board);

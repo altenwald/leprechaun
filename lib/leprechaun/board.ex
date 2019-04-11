@@ -123,7 +123,7 @@ defmodule Leprechaun.Board do
                    |> check()
     moves = [{x1, y1}, {x2, y2}]
     if acc != [] do
-      {cells, score, extra_turn} = check_and_clean(cells, from, acc, board.score, :decr_turn, moves)
+      {cells, score, extra_turn} = check_and_clean(cells, from, acc, board.score, board.turns, :decr_turn, moves)
       {turns, extra_turns} = update_turns(board.turns, board.extra_turns, extra_turn)
       if turns == 0, do: send(from, {:gameover, score})
       {:noreply, %Board{cells: cells,
@@ -185,24 +185,25 @@ defmodule Leprechaun.Board do
     end
   end
 
-  defp check_and_clean(cells, from, [], score, extra_turns, _moves) do
+  defp check_and_clean(cells, from, [], score, _turns, extra_turns, _moves) do
     send(from, :play)
     {cells, score, extra_turns}
   end
-  defp check_and_clean(cells, from, acc, score, extra_turns, moves) do
+  defp check_and_clean(cells, from, acc, score, turns, extra_turns, moves) do
     new_score = for({_dir, points} <- acc, do: points)
                 |> List.flatten()
                 |> Enum.map(fn {x, y} -> cells[y][x] end)
                 |> Enum.sum()
     extra_turns = check_extra_turns(extra_turns, acc)
-    send(from, {:match, new_score, extra_turns, acc, build_show(cells)})
+    total_score = new_score + score
+    send(from, {:match, new_score, total_score, extra_turns, turns, acc, build_show(cells)})
     moves = add_moves(acc, moves)
     Logger.debug "[check_and_clean] moves => #{inspect moves}"
     {cells, acc} = cells
                    |> clean(acc, moves)
                    |> check()
     send(from, {:show, build_show(cells)})
-    check_and_clean(cells, from, acc, score + new_score, extra_turns, [])
+    check_and_clean(cells, from, acc, total_score, turns, extra_turns, [])
   end
 
   defp check(cells, n, acc, x, y, inc_x, inc_y) do

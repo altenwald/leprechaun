@@ -58,14 +58,13 @@ defmodule Leprechaun.Game do
 
   defp recv_all(global_score, board, cells) do
     receive do
-      {:match, score, extra_turn, acc, cells} ->
+      {:match, score, total_score, extra_turn, turns, acc, cells} ->
         points = for({_, p} <- acc, do: p)
                  |> List.flatten()
-        turns = Board.turns(board)
-        show global_score, turns, cells, blink: points
+        show total_score, turns, cells, blink: points
         IO.puts "+#{score} points!" <> if(extra_turn == :extra_turn, do: " EXTRA!", else: "")
         Process.sleep @time_to_wait_blink
-        recv_all global_score + score, board, cells
+        recv_all total_score, board, cells
       {:show, cells} ->
         turns = Board.turns(board)
         show global_score, turns, cells

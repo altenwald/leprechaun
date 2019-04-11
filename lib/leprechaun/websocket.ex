@@ -35,6 +35,8 @@ defmodule Leprechaun.Websocket do
   end
 
   def websocket_init(remote_ip: remote_ip) do
+    vsn = to_string(Application.spec(:leprechaun)[:vsn])
+    send self(), {:send, Jason.encode!(%{"type" => "vsn", "vsn" => vsn})}
     {:ok, %{board: nil, remote_ip: remote_ip}}
   end
 
@@ -58,7 +60,7 @@ defmodule Leprechaun.Websocket do
   def websocket_info(:play, state) do
     {:reply, {:text, Jason.encode!(%{"type" => "play"})}, state}
   end
-  def websocket_info({:match, score, extra, acc, cells}, state) do
+  def websocket_info({:match, score, global_score, extra, turns, acc, cells}, state) do
     check_throttle(state.board)
     acc = for {_, points} <- acc do
       for {x, y} <- points do
@@ -67,8 +69,6 @@ defmodule Leprechaun.Websocket do
     end
     |> List.flatten()
     extra = to_string(extra)
-    turns = Board.turns(state.board)
-    global_score = Board.score(state.board)
     msg = %{"type" => "match",
             "add_score" => score,
             "score" => global_score,
