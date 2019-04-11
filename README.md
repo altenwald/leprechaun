@@ -4,6 +4,10 @@ Leprechaun is a game based on [Gems of War](https://gemsofwar.com/), the [Threas
 
 The base of the game is swap pieces, only one each time and only with the ones in north, south, east or west of the source one. The combinations should be made by 3 or more in vertical or horizontal way. If you achieve to match 4 then you won't loose a turn and if you achieve match more than 4 then you'll obtain an extra turn. The game starts with 10 turns and ends when you run out of turns.
 
+If you love this content and want we can generate more, you can support us:
+
+[![paypal](https://www.paypalobjects.com/en_US/GB/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=CBYJ5V2ZWWZ8G)
+
 ## Installation
 
 It's easy to install. You only needs to have [Elixir](https://elixir-lang.org/install.html) installed and run this to obtain the code:

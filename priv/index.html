@@ -42,6 +42,7 @@
       <p class="lead"></p>
     </div> -->
     <div class="container text-center">
+      <a id="board-howtoplay" class="btn btn-outline-primary" href="#" data-toggle="modal" data-target="#howToPlayModal">How to play</a>
       <a id="board-hiscore" class="btn btn-outline-success" href="#" data-toggle="modal" data-target="#hiscoreModal">HiScore</a>
       <a id="board-restart" class="btn btn-outline-danger" href="#">Restart Game</a>
       <div id="leprechaun">
@@ -72,20 +73,82 @@
       </div>
     </div>
     <div class="modal" id="hiscoreNameModal" tabindex="-1"  role="dialog" aria-labelledby="hiscoreNameLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="hiscoreNameLabel">Hi-Score Set Name</h5>
-            </div>
-            <div class="modal-body">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="hiscoreNameLabel">Hi-Score Set Name</h5>
+          </div>
+          <div class="modal-body">
             <div class="form-group">
               <input type="text" class="form-control" id="hiscore-name" placeholder="Name">
             </div>
-            <div class="modal-footer">
-              <button id="hiscore-ok" type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
-            </div>
+          </div>
+          <div class="modal-footer">
+            <button id="hiscore-ok" type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
           </div>
         </div>
       </div>
+    </div>
+    <div class="modal" id="howToPlayModal" tabindex="-1"  role="dialog" aria-labelledby="howToPlayLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="howToPlayLabel">How to Play</h5>
+          </div>
+          <div class="modal-body">
+            <p>You have to move pieces to swap them with their neighbors up, left, right or down. If you achieve to put 3 equal pieces in a row (in a vertical or horizontal way) then you obtain points and the pieces are upgraded to 1 of higher level. For example 3 copper coins are transformed in 1 silver coin.</p>
+            <p>If you put <strong>4 pieces together the remaining turns counter isn't decreased</strong>. In the same way, putting <strong>5 or more pieces together will increase the turns counter</strong>.</p>
+            <p>These are the points obtained:</p>
+            <table class="table">
+              <thead>
+                <th>Piece</th>
+                <th>Points</th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><img src="/img/cell_1.png"></td>
+                  <td>1</td>
+                </tr>
+                <tr>
+                  <td><img src="/img/cell_2.png"></td>
+                  <td>2</td>
+                </tr>
+                <tr>
+                  <td><img src="/img/cell_3.png"></td>
+                  <td>3</td>
+                </tr>
+                <tr>
+                  <td><img src="/img/cell_4.png"></td>
+                  <td>4</td>
+                </tr>
+                <tr>
+                  <td><img src="/img/cell_5.png"></td>
+                  <td>5</td>
+                </tr>
+                <tr>
+                  <td><img src="/img/cell_6.png"></td>
+                  <td>6</td>
+                </tr>
+                <tr>
+                  <td><img src="/img/cell_7.png"></td>
+                  <td>7</td>
+                </tr>
+                <tr>
+                  <td><img src="/img/cell_8.png"></td>
+                  <td>8</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>If you want to make suggestions or obtain the source code you can go to <a href="https://github.com/altenwald/leprechaun">Github site</a> and create a issue, fork the code to send us modifications or fixes or whatever.</p>
+            <p>In the same way we will be pleased receiving donations:</p>
+            <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=CBYJ5V2ZWWZ8G"><img src="https://www.paypalobjects.com/en_US/GB/i/btn/btn_donateCC_LG.gif" alt="paypal"></a>
+            <p>Thanks! and Enjoy!</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
