@@ -81,7 +81,8 @@ defmodule Leprechaun.Websocket do
   def websocket_info({:show, cells}, state) do
     check_throttle(state.board)
     html = build_show(cells)
-    msg = %{"type" => "draw", "html" => html}
+    turns = Board.turns(state.board)
+    msg = %{"type" => "draw", "html" => html, "turns" => turns}
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
   def websocket_info({:gameover, score}, state) do
