@@ -196,7 +196,8 @@ defmodule Leprechaun.Board do
                 |> Enum.sum()
     extra_turns = check_extra_turns(extra_turns, acc)
     total_score = new_score + score
-    send(from, {:match, new_score, total_score, extra_turns, turns, acc, build_show(cells)})
+    {show_turns, _} = update_turns(turns, 0, extra_turns)
+    send(from, {:match, new_score, total_score, extra_turns, show_turns, acc, build_show(cells)})
     moves = add_moves(acc, moves)
     Logger.debug "[check_and_clean] moves => #{inspect moves}"
     {cells, acc} = cells
