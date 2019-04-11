@@ -2,7 +2,6 @@ defmodule Leprechaun.Game do
 
   alias Leprechaun.Board
 
-  @time_to_wait 500
   @time_to_wait_blink 1500
 
   defp draw_number(1), do: IO.ANSI.color_background(52) <> " 💰 " <> IO.ANSI.reset()
@@ -58,13 +57,18 @@ defmodule Leprechaun.Game do
 
   defp recv_all(global_score, board, cells) do
     receive do
-      {:match, score, total_score, extra_turn, turns, acc, cells} ->
+      {:match, score, total_score, acc, cells} ->
         points = for({_, p} <- acc, do: p)
                  |> List.flatten()
+        turns = Board.turns(board)
         show total_score, turns, cells, blink: points
-        IO.puts "+#{score} points!" <> if(extra_turn == :extra_turn, do: " EXTRA!", else: "")
+        IO.puts "+#{score} points!"
         Process.sleep @time_to_wait_blink
         recv_all total_score, board, cells
+      :extra_turn ->
+        recv_all global_score, board, cells
+      :play ->
+        true
       {:show, cells} ->
         turns = Board.turns(board)
         show global_score, turns, cells
@@ -76,8 +80,6 @@ defmodule Leprechaun.Game do
       {:error, error} ->
         IO.inspect error
         true
-    after @time_to_wait ->
-      true
     end
   end
 

@@ -162,31 +162,36 @@ defmodule Leprechaun.Board do
     end)
   end
 
-  defp check_extra_turns(:extra_turn, _), do: :extra_turn
-  defp check_extra_turns(:no_action, acc) do
+  defp check_extra_turns(_from, :extra_turn, _), do: :extra_turn
+  defp check_extra_turns(from, :no_action, acc) do
     sizes = for {_, p} <- acc, length(p) > 4 do
       length(p)
     end
     if sizes != [] do
+      send(from, :extra_turn)
       :extra_turn
     else
       :no_action
     end
   end
-  defp check_extra_turns(:decr_turn, acc) do
+  defp check_extra_turns(from, :decr_turn, acc) do
     max = for {_, p} <- acc, length(p) > 3 do
             length(p)
           end
           |> Enum.max(fn -> 0 end)
     case max do
-      0 -> :decr_turn
-      4 -> :no_action
-      n when is_integer(n) and n > 4 -> :extra_turn
+      0 ->
+        :decr_turn
+      4 ->
+        :no_action
+      n when is_integer(n) and n > 4 ->
+        send(from, :extra_turn)
+        :extra_turn
     end
   end
 
   defp check_and_clean(cells, from, [], score, _turns, extra_turns, _moves) do
-    send(from, :play)
+    send from, :play
     {cells, score, extra_turns}
   end
   defp check_and_clean(cells, from, acc, score, turns, extra_turns, moves) do
@@ -194,16 +199,15 @@ defmodule Leprechaun.Board do
                 |> List.flatten()
                 |> Enum.map(fn {x, y} -> cells[y][x] end)
                 |> Enum.sum()
-    extra_turns = check_extra_turns(extra_turns, acc)
+    extra_turns = check_extra_turns(from, extra_turns, acc)
     total_score = new_score + score
-    {show_turns, _} = update_turns(turns, 0, extra_turns)
-    send(from, {:match, new_score, total_score, extra_turns, show_turns, acc, build_show(cells)})
+    send from, {:match, new_score, total_score, acc, build_show(cells)}
     moves = add_moves(acc, moves)
     Logger.debug "[check_and_clean] moves => #{inspect moves}"
     {cells, acc} = cells
                    |> clean(acc, moves)
                    |> check()
-    send(from, {:show, build_show(cells)})
+    send from, {:show, build_show(cells)}
     check_and_clean(cells, from, acc, total_score, turns, extra_turns, [])
   end
 

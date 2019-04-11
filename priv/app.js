@@ -4,6 +4,9 @@ var game_id;
 var click_enabled = true;
 var current_board;
 
+var turns = 0;
+var extra_turn = false;
+
 function draw_hiscore(html, position) {
     $("#hiscore").html(html);
     if (position) {
@@ -65,10 +68,23 @@ function disconnected(should_i_reconnect) {
 function update_score(data) {
     console.log("updating: ", data)
     if (data.score >= 0) {
-        $("#board-score span").html(data.score);
+        var score_text = data.score;
+        if (data.add_score >= 0) {
+            score_text += " (+" + data.add_score + ")";
+        }
+        $("#board-score span").html(score_text);
     }
     if (data.turns >= 0) {
-        $("#board-turns span").html(data.turns);
+        var turns_text = data.turns;
+        switch (data.extra_turn) {
+            case "extra_turn":
+                turns_text += " (+1)"
+                break;
+            case "decr_turn":
+                turns_text += " (-1)"
+                break;
+        }
+        $("#board-turns span").html(turns_text);
     }
 }
 
@@ -120,14 +136,20 @@ function connect() {
         switch(data.type) {
             case "match":
                 draw(data.html);
+                if (extra_turn) {
+                    data.turns = turns;
+                    extra_turn = false;
+                }
                 update_score(data);
                 blink(data);
                 break;
             case "gameover":
                 disable_moves();
-                update_score(data);
                 $("#board-msg").html("<h2>GAME OVER!</h2>");
-                $("#hiscoreNameModal").modal('show');
+                if (!data.error) {
+                    update_score(data);
+                    $("#hiscoreNameModal").modal('show');
+                }
                 break;
             case "draw":
                 draw(data.html);
@@ -142,8 +164,13 @@ function connect() {
             case "vsn":
                 $("#vsn").html("v" + data.vsn);
                 break;
+            case "extra_turn":
+                extra_turn = true;
+                turns = data.turns;
+                break;
             default:
                 draw(current_board);
+                update_score(data);
                 enable_moves();
                 break;
         }
@@ -153,7 +180,8 @@ function connect() {
 $(document).ready(function(){
     connect();
     $("#board-restart").on("click", function(event){
-        send({type: "restart"});
+        send({type: "stop"});
+        location.reload(true);
     });
     $("#board-hiscore").on("click", function(event){
         send({type: "hiscore"});
