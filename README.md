@@ -16,6 +16,12 @@ It's easy to install. You only needs to have [Elixir](https://elixir-lang.org/in
 git clone git@github.com:altenwald/leprechaun.git
 ```
 
+Because we use [Ecto](https://hexdocs.pm/ecto/Ecto.html) and [Mnesia](https://en.wikipedia.org/wiki/Mnesia) to store the high scores you'll need to run these tasks before:
+
+```
+mix do ecto.create, ecto.migrate
+```
+
 Then you can see there are a new directory in that path called `leprechaun`. You can go inside using the terminal and write:
 
 ```

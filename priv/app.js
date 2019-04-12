@@ -110,7 +110,8 @@ function connect() {
     if (ws) {
         ws.close();
     }
-    ws = new WebSocket("ws://" + hostname + "/websession");
+    var schema = (location.href.split(":")[0] == "https") ? "wss" : "ws";
+    ws = new WebSocket(schema + "://" + hostname + "/websession");
     ws.onopen = function(){
         console.log("connected!");
         if (game_id) {
