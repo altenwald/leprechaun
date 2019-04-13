@@ -11,8 +11,8 @@ defmodule Leprechaun.Http do
                             [{:mimetypes, :cow_mimetypes, :all}]}}
   end
 
-  def start_link(port_number, family) do
-    dispatch = :cowboy_router.compile [
+  defp dispatch do
+    :cowboy_router.compile [
       {:_, [
         priv('/', 'index.html'),
         priv('favicon.ico'),
@@ -24,9 +24,16 @@ defmodule Leprechaun.Http do
         {'/websession', Leprechaun.Websocket, []}
       ]}
     ]
-    opts = %{env: %{dispatch: dispatch}}
+  end
+
+  def start_link(port_number, family) do
+    opts = %{env: %{dispatch: dispatch()}}
     port = [{:port, port_number}, family]
     {:ok, _} = :cowboy.start_clear(__MODULE__, port, opts)
+  end
+
+  def code_upgrade do
+    :cowboy.set_env __MODULE__, :dispatch, dispatch()
   end
 
   def init(req, opts) do
