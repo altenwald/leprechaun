@@ -41,6 +41,10 @@
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5cad355f0a4ac15b"></script>
 </head>
 <body>
+    <audio id="board-music" autoplay="true" loop="true">
+        <source src="/audio/music.mp3" type="audio/mpeg"/>
+        Your browser does not support the audio element.
+    </audio>
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
       <h5 class="my-0 mr-md-auto font-weight-normal">Leprechaun <span id="vsn"></span></h5>
     </div>
@@ -49,11 +53,12 @@
       <p class="lead"></p>
     </div> -->
     <div class="container text-center">
+      <a id="board-music-button" class="btn btn-outline-primary" href="#">Mute</a>
       <a id="board-howtoplay" class="btn btn-outline-primary" href="#" data-toggle="modal" data-target="#howToPlayModal">How to play</a>
       <a id="board-hiscore" class="btn btn-outline-success" href="#" data-toggle="modal" data-target="#hiscoreModal">HiScore</a>
       <a id="board-restart" class="btn btn-outline-danger" href="#">Restart Game</a>
       <div id="leprechaun">
-        <img src="/img/leprechaun.gif">
+        <img src="/img/leprechaun.png"/>
       </div>
       <div id="board-score">Score: <span>0</span></div>
       <div id="board-turns">Turns: <span>10</span></div>

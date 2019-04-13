@@ -18,6 +18,7 @@ defmodule Leprechaun.Http do
         priv('favicon.ico'),
         priv('app.css'),
         priv('app.js'),
+        priv_dir('/audio/[...]', 'audio'),
         priv_dir('/img/[...]', 'img'),
         priv_dir('/js/[...]', 'js'),
         {'/websession', Leprechaun.Websocket, []}

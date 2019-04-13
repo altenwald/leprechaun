@@ -195,4 +195,14 @@ $(document).ready(function(){
         send({type: "hiscore"});
         $("#hiscoreModal").modal('show');
     });
+    $("#board-music-button").on("click", function(event){
+        var music = $("#board-music")[0];
+        if (music.paused) {
+            $("#board-music-button").html("Mute");
+            music.play();
+        } else {
+            $("#board-music-button").html("UnMute");
+            music.pause();
+        }
+    });
 });
