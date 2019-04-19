@@ -73,7 +73,7 @@ defmodule Leprechaun.Game do
         turns = Board.turns(board)
         show global_score, turns, cells
         recv_all global_score, board, cells
-      {:gameover, score} ->
+      {:gameover, score, _has_username} ->
         show score, 0, cells
         show_stats Board.stats(board)
         false

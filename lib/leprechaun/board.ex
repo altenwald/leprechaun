@@ -26,18 +26,21 @@ defmodule Leprechaun.Board do
             turns: @init_turns,
             played_turns: 0,
             extra_turns: 0,
-            username: nil
+            username: nil,
+            consumers: []
 
   def start_link(name) do
-    GenServer.start_link __MODULE__, [], name: via(name)
+    {:ok, board} = GenServer.start_link __MODULE__, [], name: via(name)
+    :ok = add_consumer(name)
+    {:ok, board}
   end
 
   defp via(board) do
-    {:via, Registry, {Leprechaun.Registry, board}}
+    {:via, Registry, {Leprechaun.Board.Registry, board}}
   end
 
   def exists?(board) do
-    case Registry.lookup(Leprechaun.Registry, board) do
+    case Registry.lookup(Leprechaun.Board.Registry, board) do
       [{_pid, nil}] -> true
       [] -> false
     end
@@ -48,11 +51,19 @@ defmodule Leprechaun.Board do
   def show(name), do: GenServer.call(via(name), :show)
 
   def move(name, point_from, point_to) do
-    GenServer.cast via(name), {:move, self(), point_from, point_to}
+    GenServer.cast via(name), {:move, point_from, point_to}
   end
-  
+
+  def check_move(name, point_from, point_to) do
+    GenServer.call via(name), {:check_move, point_from, point_to}
+  end
+
   def hiscore(name, username, remote_ip) do
-    GenServer.cast via(name), {:hiscore, self(), username, remote_ip}
+    GenServer.cast via(name), {:hiscore, username, remote_ip}
+  end
+
+  def add_consumer(name) do
+    GenServer.cast via(name), {:consumer, self()}
   end
 
   def score(name), do: GenServer.call(via(name), :score)
@@ -79,41 +90,68 @@ defmodule Leprechaun.Board do
   def handle_call(:turns, _from, board) do
     {:reply, board.turns, board}
   end
-  def handle_call(:stats, _form, board) do
+  def handle_call(:stats, _from, board) do
     stats = %{"played_turns" => board.played_turns,
               "extra_turns" => board.extra_turns}
     {:reply, stats, board}
   end
+  def handle_call({:check_move, _point1, _point2}, _from, %Board{turns: 0} = board) do
+    {:reply, {false, []}, board}
+  end
+  def handle_call({:check_move, {x1, y}, {x2, y}}, _from, board) when abs(x1 - x2) == 1 do
+    check_swap({x1, y}, {x2, y}, board)
+  end
+  def handle_call({:check_move, {x, y1}, {x, y2}}, _from, board) when abs(y1 - y2) == 1 do
+    check_swap({x, y1}, {x, y2}, board)
+  end
+  def handle_call({:check_move, _point1, _point2}, _from, board) do
+    {:reply, {false, []}, board}
+  end
 
-  def handle_cast({:move, from, _point1, _point2}, %Board{turns: 0} = board) do
-    send(from, {:error, :gameover})
+  def handle_cast({:move, _point1, _point2}, %Board{turns: 0} = board) do
+    send_to(board.consumers, {:error, :gameover})
     {:noreply, board}
   end
-  def handle_cast({:move, from, {x1, y}, {x2, y}}, board) when abs(x1 - x2) == 1 do
-    move(from, {x1, y}, {x2, y}, board)
+  def handle_cast({:move, {x1, y}, {x2, y}}, board) when abs(x1 - x2) == 1 do
+    swap({x1, y}, {x2, y}, board)
   end
-  def handle_cast({:move, from, {x, y1}, {x, y2}}, board) when abs(y1 - y2) == 1 do
-    move(from, {x, y1}, {x, y2}, board)
+  def handle_cast({:move, {x, y1}, {x, y2}}, board) when abs(y1 - y2) == 1 do
+    swap({x, y1}, {x, y2}, board)
   end
-  def handle_cast({:move, from, point1, point2}, board) do
-    send(from, {:error, {:illegal_move, point1, point2}})
+  def handle_cast({:move, point1, point2}, board) do
+    send_to(board.consumers, {:error, {:illegal_move, point1, point2}})
     {:noreply, board}
   end
-  def handle_cast({:hiscore, from, username, remote_ip}, %Board{turns: 0, username: nil} = board) do
+  def handle_cast({:hiscore, username, remote_ip}, %Board{turns: 0, username: nil} = board) do
     {:ok, hiscore} = HiScore.save(username, board.score, board.played_turns, board.extra_turns, remote_ip)
-    send(from, {:hiscore, HiScore.get_order(hiscore.id)})
+    send_to(board.consumers, {:hiscore, HiScore.get_order(hiscore.id)})
     {:noreply, %Board{board | username: username}}
+  end
+  def handle_cast({:consumer, from}, board) do
+    Process.monitor(from)
+    {:noreply, %Board{board | consumers: [from|board.consumers]}}
   end
   def handle_cast(info, board) do
     Logger.warn "[board] info discarded => #{inspect info}"
     {:noreply, board}
   end
 
+  def handle_info({:DOWN, _ref, :process, pid, _reason}, %Board{consumers: consumers} = board) do
+    {:noreply, %Board{board | consumers: consumers -- [pid]}}
+  end
   def handle_info(:stop, state) do
     {:stop, :normal, state}
   end
 
-  def move(from, {x1, y1}, {x2, y2}, %Board{cells: cells} = board) do
+  defp send_to(consumers, message) do
+    for consumer <- consumers, do: send(consumer, message)
+  end
+
+  defp swap({x1, y1}, {x2, y2}, %Board{cells: cells,
+                                       consumers: consumers,
+                                       score: score,
+                                       turns: turns,
+                                       extra_turns: extra_turns} = board) do
     e1 = cells[y1][x1]
     e2 = cells[y2][x2]
 
@@ -123,18 +161,31 @@ defmodule Leprechaun.Board do
                    |> check()
     moves = [{x1, y1}, {x2, y2}]
     if acc != [] do
-      {cells, score, extra_turn} = check_and_clean(cells, from, acc, board.score, board.turns, :decr_turn, moves)
-      {turns, extra_turns} = update_turns(board.turns, board.extra_turns, extra_turn)
-      if turns == 0, do: send(from, {:gameover, score})
-      {:noreply, %Board{cells: cells,
-                        score: score,
-                        extra_turns: extra_turns,
-                        played_turns: board.played_turns + 1,
-                        turns: turns}}
+      {cells, score, extra_turn} = check_and_clean(cells, consumers, acc, score, turns, :decr_turn, moves)
+      {turns, extra_turns} = update_turns(turns, extra_turns, extra_turn)
+      if turns == 0, do: send_to(consumers, {:gameover, score, board.username != nil})
+      {:noreply, %Board{board | cells: cells,
+                                score: score,
+                                extra_turns: extra_turns,
+                                played_turns: board.played_turns + 1,
+                                turns: turns}}
     else
-      send(from, {:error, {:illegal_move, {x1,y1}, {x2,y2}}})
+      send_to(consumers, {:error, {:illegal_move, {x1,y1}, {x2,y2}}})
       {:noreply, board}
     end
+  end
+
+  defp check_swap({x1, y1}, {x2, y2}, %Board{cells: cells} = board)
+    when x1 >= 1 and x1 <= 8 and y1 >= 1 and y1 <= 8 and
+         x2 >= 1 and x2 <= 8 and y2 >= 1 and y2 <= 8 do
+    e1 = cells[y1][x1]
+    e2 = cells[y2][x2]
+
+    {_cells, acc} = cells
+                   |> put_in([y1, x1], e2)
+                   |> put_in([y2, x2], e1)
+                   |> check()
+    {:reply, {acc != [], acc}, board}
   end
 
   defp update_turns(turns, extra, :no_action), do: {turns, extra}
@@ -162,19 +213,19 @@ defmodule Leprechaun.Board do
     end)
   end
 
-  defp check_extra_turns(_from, :extra_turn, _), do: :extra_turn
-  defp check_extra_turns(from, :no_action, acc) do
+  defp check_extra_turns(_consumers, :extra_turn, _), do: :extra_turn
+  defp check_extra_turns(consumers, :no_action, acc) do
     sizes = for {_, p} <- acc, length(p) > 4 do
       length(p)
     end
     if sizes != [] do
-      send(from, :extra_turn)
+      send_to(consumers, :extra_turn)
       :extra_turn
     else
       :no_action
     end
   end
-  defp check_extra_turns(from, :decr_turn, acc) do
+  defp check_extra_turns(consumers, :decr_turn, acc) do
     max = for {_, p} <- acc, length(p) > 3 do
             length(p)
           end
@@ -185,30 +236,30 @@ defmodule Leprechaun.Board do
       4 ->
         :no_action
       n when is_integer(n) and n > 4 ->
-        send(from, :extra_turn)
+        send_to(consumers, :extra_turn)
         :extra_turn
     end
   end
 
-  defp check_and_clean(cells, from, [], score, _turns, extra_turns, _moves) do
-    send from, :play
+  defp check_and_clean(cells, consumers, [], score, _turns, extra_turns, _moves) do
+    send_to consumers, :play
     {cells, score, extra_turns}
   end
-  defp check_and_clean(cells, from, acc, score, turns, extra_turns, moves) do
+  defp check_and_clean(cells, consumers, acc, score, turns, extra_turns, moves) do
     new_score = for({_dir, points} <- acc, do: points)
                 |> List.flatten()
                 |> Enum.map(fn {x, y} -> cells[y][x] end)
                 |> Enum.sum()
-    extra_turns = check_extra_turns(from, extra_turns, acc)
+    extra_turns = check_extra_turns(consumers, extra_turns, acc)
     total_score = new_score + score
-    send from, {:match, new_score, total_score, acc, build_show(cells)}
+    send_to consumers, {:match, new_score, total_score, acc, build_show(cells)}
     moves = add_moves(acc, moves)
     Logger.debug "[check_and_clean] moves => #{inspect moves}"
     {cells, acc} = cells
                    |> clean(acc, moves)
                    |> check()
-    send from, {:show, build_show(cells)}
-    check_and_clean(cells, from, acc, total_score, turns, extra_turns, [])
+    send_to consumers, {:show, build_show(cells)}
+    check_and_clean(cells, consumers, acc, total_score, turns, extra_turns, [])
   end
 
   defp check(cells, n, acc, x, y, inc_x, inc_y) do

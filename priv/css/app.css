@@ -29,6 +29,9 @@ table#juego tr td.vacio {
 }
 
 div#leprechaun img {
-    width: 200px;
-    float: right;
+    width: 100px;
+    position: absolute;
+    top: 75px;
+    right: 15px;
+    z-index: 100;
 }

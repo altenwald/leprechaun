@@ -1,6 +1,6 @@
 defmodule Leprechaun.Websocket do
   require Logger
-  alias Leprechaun.{Board, HiScore}
+  alias Leprechaun.{Board, Bot, HiScore}
 
   @throttle_time_to_wait 100
   @tries 100
@@ -89,14 +89,20 @@ defmodule Leprechaun.Websocket do
     msg = %{"type" => "draw", "html" => html}
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
-  def websocket_info({:gameover, score}, state) do
+  def websocket_info({:gameover, score, has_username}, state) do
     check_throttle(state.board)
-    msg = %{"type" => "gameover", "score" => score, "turns" => 0}
+    msg = %{"type" => "gameover",
+            "score" => score,
+            "turns" => 0,
+            "has_username" => has_username}
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
   def websocket_info({:error, :gameover}, state) do
     score = Board.score(state.board)
-    msg = %{"type" => "gameover", "score" => score, "turns" => 0}
+    msg = %{"type" => "gameover",
+            "score" => score,
+            "turns" => 0,
+            "has_username" => true}
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
   def websocket_info({:error, {:illegal_move, {x1, y1}, {x2, y2}}}, state) do
@@ -124,6 +130,24 @@ defmodule Leprechaun.Websocket do
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
 
+  defp process_data(%{"type" => "run", "code" => code} = info, state) do
+    if state[:bot_id] != nil do
+      if Bot.exists?(state.bot_id) do
+        result = Bot.run(state.bot_id, code)
+        msg = %{"type" => "log", "info" => result}
+        {:reply, {:text, Jason.encode!(msg)}, state}
+      else
+        process_data(info, Map.delete(state, :bot_id))
+      end
+    else
+      id = UUID.uuid4()
+      Bot.start_link(id, state.board)
+      result = Bot.run(id, code)
+      msg = %{"type" => "log", "info" => result}
+      send self(), {:send, Jason.encode!(%{"type" => "bot_id", "id" => id})}
+      {:reply, {:text, Jason.encode!(msg)}, Map.put(state, :bot_id, id)}
+    end
+  end
   defp process_data(%{"type" => "hiscore"}, state) do
     send_hiscore(state)
   end
@@ -137,11 +161,17 @@ defmodule Leprechaun.Websocket do
     msg = %{"type" => "id", "id" => id}
     {:reply, {:text, Jason.encode!(msg)}, Map.put(state, :board, id)}
   end
-  defp process_data(%{"type" => "join", "id" => id}, state) do
+  defp process_data(%{"type" => "join", "id" => id} = info, state) do
     if Board.exists?(id) do
       state = Map.put(state, :board, id)
       if Board.turns(id) > 0 do
-        {:ok, state}
+        Board.add_consumer(id)
+        if info["bot_id"] != nil do
+          Bot.join(info["bot_id"])
+          {:ok, Map.put(state, :bot_id, info["bot_id"])}
+        else
+          {:ok, state}
+        end
       else
         msg = %{"type" => "gameover", "turns" => 0}
         {:reply, {:text, Jason.encode!(msg)}, state}
