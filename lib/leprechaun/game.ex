@@ -69,11 +69,17 @@ defmodule Leprechaun.Game do
         recv_all global_score, board, cells
       :play ->
         true
+      {:slide_new, _x, _symbol} ->
+        true
+      {:slide, _x, _y1, _y2} ->
+        true
+      {:new_kind, _x, _y, _new_kind} ->
+        true
       {:show, cells} ->
         turns = Board.turns(board)
         show global_score, turns, cells
         recv_all global_score, board, cells
-      {:gameover, score} ->
+      {:gameover, score, _has_username} ->
         show score, 0, cells
         show_stats Board.stats(board)
         false

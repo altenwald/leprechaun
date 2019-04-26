@@ -28,6 +28,7 @@ defmodule Leprechaun.MixProject do
       {:throttle, "~> 0.2.0", hex: :lambda_throttle},
       {:uuid, "~> 1.1"},
       {:ecto_mnesia, "~> 0.9.1"},
+      {:ephp, "~> 0.2"},
 
       # for releases
       {:distillery, "~> 2.0"},

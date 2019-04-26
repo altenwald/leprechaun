@@ -1,0 +1,254 @@
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <title>Leprechaun</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Leprechaun">
+    <meta name="author" content="Altenwald Solutions, S.L.">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+    <script src="/js/jquery-swapsies.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/bot.css"/>
+    <script type="text/javascript" src="/js/bot.js"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-6954758-10"></script>
+    <script><!--
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-6954758-10');
+    // --></script>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script><!--
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-2705619039446049",
+              enable_page_level_ads: true
+         });
+    // --></script>
+    <!-- Go to www.addthis.com/dashboard to customize your tools -->
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5cad355f0a4ac15b"></script>
+
+    <link rel="stylesheet" href="/css/codemirror.css">
+    <script src="/js/codemirror.js"></script>
+    <script src="/js/addon/edit/matchbrackets.js"></script>
+    <script src="/js/mode/htmlmixed/htmlmixed.js"></script>
+    <script src="/js/mode/xml/xml.js"></script>
+    <script src="/js/mode/javascript/javascript.js"></script>
+    <script src="/js/mode/css/css.js"></script>
+    <script src="/js/mode/clike/clike.js"></script>
+    <script src="/js/mode/php/php.js"></script>
+
+</head>
+<body>
+    <audio id="board-music" autoplay="true" loop="true">
+        <source src="/audio/music.mp3" type="audio/mpeg"/>
+        Your browser does not support the audio element.
+    </audio>
+    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+      <h5 class="my-0 mr-md-auto font-weight-normal">Leprechaun <span id="vsn"></span></h5>
+    </div>
+    <div class="container">
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link" id="board-game-tab" data-toggle="tab" href="#board-game" role="tab" aria-controls="board-game" aria-selected="false">Game</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" id="board-code-tab" data-toggle="tab" href="#board-code" role="tab" aria-controls="board-code" aria-selected="true">Code</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="board-logs-tab" data-toggle="tab" href="#board-logs" role="tab" aria-controls="board-logs">Logs</a>
+        </li>
+      </ul>
+      <div class="tab-content" id="boardContent">
+        <div class="tab-pane fade" id="board-game" role="tabpanel" aria-labelledby="board-game-tab">
+          <div class="btn-toolbar" role="toolbar">
+            <div class="btn-group mr-2" role="group">
+              <button id="board-music-button" type="button" class="btn btn-outline-primary">Mute</button>
+              <button id="board-howtoplay" type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#howToPlayModal">How to play</button>
+              <button id="board-hiscore" type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#hiscoreModal">HiScore</button>
+              <button id="board-restart" type="button" class="btn btn-outline-danger">Restart Game</button>
+            </div>
+          </div>
+          <div id="board-score">Score: <span>0</span></div>
+          <div id="board-turns">Turns: <span>10</span></div>
+          <div id="board-msg"></div>
+          <div id="board"></div>
+        </div>
+        <div id="leprechaun">
+          <img src="/img/leprechaun.png"/>
+        </div>
+        <div class="tab-pane fade show active" id="board-code" role="tabpanel" aria-labelledby="board-code-tab">
+          <div class="btn-toolbar" role="toolbar">
+            <div class="btn-group mr-2" role="group">
+              <button id="board-run" type="button" class="btn btn-outline-primary">Run</button>
+            </div>
+          </div>
+          <div id="board-code">
+            <textarea id="code" name="code">
+<?php
+
+$move = [];
+$points = 0;
+
+$options = [ [0, -1],
+        [-1, 0],
+        [0, 1],
+        [1, 0] ];
+
+function get_points($matches) {
+  $points = 0;
+  foreach ($matches as $match) {
+    foreach ($match[1] as $coords) {
+      $points += leprechaun_get_points($coords[0], $coords[1]);
+    }
+    if (count($match[1]) > 3) {
+      $points *= 100;
+    }
+    if (count($match[1]) > 4) {
+      $points *= 1000;
+    }
+  }
+  return $points;
+}
+
+for ($i=1; $i<=8; $i++) {
+  for ($j=1; $j<=8; $j++) {
+    foreach ($options as $k) {
+      $x = $i + $k[0];
+      $y = $j + $k[1];
+      if ($x >= 1 and $x <= 8 and $y >= 1 and $y <= 8) {
+        $result = leprechaun_check_move($i, $j, $x, $y);
+        $found_points = get_points($result["matches"]);
+        if ($result["check"] and $found_points > $points) {
+          $move = [$i, $j, $x, $y];
+          $points = $found_points;
+        }
+      }
+    }
+  }
+}
+if ($points > 0) {
+  leprechaun_move($move[0], $move[1], $move[2], $move[3]);
+}                
+            </textarea>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="board-logs" role="tabpanel" aria-labelledby="board-logs-tab">
+          <div id="board-logs">
+            Leprechaun bot logs...
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal" id="hiscoreModal" tabindex="-1"  role="dialog" aria-labelledby="hiscoreLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="hiscoreLabel">Hi-Score Table</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div id="hiscore-pos"></div>
+            <div id="hiscore"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal" id="hiscoreNameModal" tabindex="-1"  role="dialog" aria-labelledby="hiscoreNameLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="hiscoreNameLabel">Hi-Score Set Name</h5>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <input type="text" class="form-control" id="hiscore-name" placeholder="Name">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button id="hiscore-ok" type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal" id="howToPlayModal" tabindex="-1"  role="dialog" aria-labelledby="howToPlayLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="howToPlayLabel">How to Play</h5>
+          </div>
+          <div class="modal-body">
+            <p>You have to move pieces to swap them with their neighbors up, left, right or down. If you achieve to put 3 equal pieces in a row (in a vertical or horizontal way) then you obtain points and the pieces are upgraded to 1 of higher level. For example 3 copper nuggets are transformed in 1 silver nugget. Check table below.</p>
+            <p>If you put <strong>4 pieces together the remaining turns counter isn't decreased</strong>. In the same way, putting <strong>5 or more pieces together will increase the turns counter</strong>.</p>
+            <p>These are the points obtained:</p>
+            <table class="table">
+              <thead>
+                <th>Piece</th>
+                <th>Points</th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><img src="/img/cell_1.png"></td>
+                  <td><img src="/img/cell_1_blink.png" alt="1"></td>
+                </tr>
+                <tr>
+                  <td><img src="/img/cell_2.png"></td>
+                  <td><img src="/img/cell_2_blink.png" alt="2"></td>
+                </tr>
+                <tr>
+                  <td><img src="/img/cell_3.png"></td>
+                  <td><img src="/img/cell_3_blink.png" alt="3"></td>
+                </tr>
+                <tr>
+                  <td><img src="/img/cell_4.png"></td>
+                  <td><img src="/img/cell_4_blink.png" alt="4"></td>
+                </tr>
+                <tr>
+                  <td><img src="/img/cell_5.png"></td>
+                  <td><img src="/img/cell_5_blink.png" alt="5"></td>
+                </tr>
+                <tr>
+                  <td><img src="/img/cell_6.png"></td>
+                  <td><img src="/img/cell_6_blink.png" alt="6"></td>
+                </tr>
+                <tr>
+                  <td><img src="/img/cell_7.png"></td>
+                  <td><img src="/img/cell_7_blink.png" alt="7"></td>
+                </tr>
+                <tr>
+                  <td><img src="/img/cell_8.png"></td>
+                  <td><img src="/img/cell_8_blink.png" alt="8"></td>
+                </tr>
+              </tbody>
+            </table>
+            <p>If you want to make suggestions or obtain the source code you can go to <a href="https://github.com/altenwald/leprechaun">Github site</a> and create a issue, fork the code to send us modifications or fixes or whatever.</p>
+            <p>In the same way we will be pleased receiving donations:</p>
+            <a target="_blank" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RC5F8STDA6AXE"><img src="https://www.paypalobjects.com/en_US/GB/i/btn/btn_donateCC_LG.gif" alt="paypal"></a>
+            <p>Thanks! and Enjoy!</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

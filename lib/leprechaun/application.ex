@@ -16,11 +16,15 @@ defmodule Leprechaun.Application do
 
     {:ok, _} = EctoBootMigration.migrate(:leprechaun)
 
+    :ephp.start()
+
     children = [
       # Start the Ecto repository
       supervisor(Leprechaun.Repo, []),
       # Start the Registry for boards
-      supervisor(Registry, [:unique, Leprechaun.Registry]),
+      {Registry, keys: :unique, name: Leprechaun.Board.Registry},
+      # Start the Registry for bots
+      {Registry, keys: :unique, name: Leprechaun.Bot.Registry},
       # Start worker for HTTP listener
       worker(Leprechaun.Http, [port, family])
     ]
