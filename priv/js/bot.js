@@ -96,6 +96,35 @@ function connect() {
         var data = JSON.parse(message.data);
 
         switch(data.type) {
+            case "new_kind":
+                console.log("new_kind", data.id, "kind", data.piece);
+                $("#" + data.id).attr("src", data.piece);
+                $("#" + data.id).removeClass("blink_me");
+                break;
+            case "slide_new":
+                console.log("change", data.id, "to", data.piece);
+                $("#" + data.id).attr("src", data.piece);
+                $("#" + data.id).removeClass("blink_me");
+                break;
+            case "slide":
+                console.log("change", data.orig, "to", data.dest);
+                $("#" + data.orig).css("position", "relative");
+                if ($("#" + data.dest).attr("src").includes("blink")) {
+                    $("#" + data.dest).hide();
+                }
+                $("#" + data.orig).css("z-index", "100");
+                $("#" + data.dest).css("z-index", "-1");
+                $("#" + data.orig).animate({top: "+=50px"}, "fast", function(){
+                    $("#" + data.dest).attr("src", $("#" + data.orig).attr("src"));
+                    $("#" + data.dest).removeClass("blink_me");
+                    $("#" + data.dest).show();
+                    $("#" + data.orig).hide();
+                    $("#" + data.orig).animate({top: "-=50px"}, 0, function(){
+                      $("#" + data.orig).attr("src", "img/cell_0.png");
+                      $("#" + data.orig).show();
+                    });
+                });
+                break;
             case "match":
                 draw(data.html);
                 if (extra_turn) {

@@ -256,7 +256,7 @@ defmodule Leprechaun.Board do
     moves = add_moves(acc, moves)
     Logger.debug "[check_and_clean] moves => #{inspect moves}"
     {cells, acc} = cells
-                   |> clean(acc, moves)
+                   |> clean(consumers, acc, moves)
                    |> check()
     send_to consumers, {:show, build_show(cells)}
     check_and_clean(cells, consumers, acc, total_score, turns, extra_turns, [])
@@ -298,8 +298,8 @@ defmodule Leprechaun.Board do
   defp incr_kind(8), do: 8
   defp incr_kind(i), do: i + 1
 
-  defp clean({cells, acc}), do: clean(cells, acc)
-  defp clean(cells, acc, moves \\ []) do
+  defp clean({cells, acc}), do: clean(cells, [], acc)
+  defp clean(cells, consumers, acc, moves \\ []) do
     points = for({_, elems} <- acc, do: elems)
              |> List.flatten()
 
@@ -308,21 +308,25 @@ defmodule Leprechaun.Board do
             |> Enum.reduce(cells, fn {x, y}, cells ->
                                     new_kind = incr_kind(cells[y][x])
                                     Logger.debug "[clean] add #{new_kind} to (#{x},#{y})"
+                                    send_to consumers, {:new_kind, x, y, new_kind}
                                     put_in cells[y][x], new_kind
                                   end)
-    
+
     (points -- move_points)
     |> Enum.filter(fn elem -> elem not in moves end)
     |> Enum.sort_by(fn {x, y} -> {y, x} end)
-    |> Enum.reduce(cells, fn {x, y}, cells -> slide(cells, x, y) end)
+    |> Enum.reduce(cells, fn {x, y}, cells -> slide(cells, consumers, x, y) end)
   end
 
-  defp slide(cells, x, 1) do
-    put_in cells[1][x], gen_symbol()
+  defp slide(cells, consumers, x, 1) do
+    new_piece = gen_symbol()
+    send_to consumers, {:slide_new, x, new_piece}
+    put_in cells[1][x], new_piece
   end
-  defp slide(cells, x, y) do
-    put_in(cells[y][x], cells[y-1][x])
-    |> slide(x, y - 1)
+  defp slide(cells, consumers, x, y) do
+    send_to consumers, {:slide, x, y - 1, y}
+    put_in(cells[y][x], cells[y - 1][x])
+    |> slide(consumers, x, y - 1)
   end
 
   defp check(cells, acc \\ [], x \\ 1, y \\ 1)

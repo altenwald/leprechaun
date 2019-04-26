@@ -63,10 +63,16 @@ defmodule Leprechaun.Bot do
   def handle_info({:match, _score, _global_score, _acc, _cells}, state) do
     {:noreply, state}
   end
+  def handle_info({:slide, _x, _y_orig, _y_dest}, state) do
+    {:noreply, state}
+  end
+  def handle_info({:slide_new, _x, _piece}, state) do
+    {:noreply, state}
+  end
   def handle_info({:show, _cells}, state) do
     {:noreply, state}
   end
-  def handle_info({:gameover, _score}, state) do
+  def handle_info({:gameover, _score, _}, state) do
     {:stop, :normal, state}
   end
   def handle_info({:error, :gameover}, state) do
@@ -79,7 +85,7 @@ defmodule Leprechaun.Bot do
     {:stop, :normal, state}
   end
   def handle_info(other, state) do
-    Logger.warn "[bot] discarded info => #{other}"
+    Logger.warn "[bot] discarded info => #{inspect other}"
     {:noreply, state}
   end
 end

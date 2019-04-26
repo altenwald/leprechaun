@@ -76,7 +76,7 @@ defmodule Leprechaun.Php do
   def run(content, board_id, cells) do
     try do
       parsed = EphpParser.parse(content)
-      Logger.info "[php] content => #{inspect content}"
+      Logger.debug "[php] content => #{inspect content}"
       EphpConfig.start_link(Application.get_env(:php, :php_ini, "php.ini"))
       EphpConfig.start_local()
       {:ok, ctx} = Ephp.context_new(@filename)

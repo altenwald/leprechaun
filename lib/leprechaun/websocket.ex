@@ -3,22 +3,8 @@ defmodule Leprechaun.Websocket do
   alias Leprechaun.{Board, Bot, HiScore}
 
   @throttle_time_to_wait 100
-  @tries 100
 
-  defp check_throttle(_id, tries \\ @tries)
-  defp check_throttle(_id, 0) do
-    Logger.error "[websocket] overloaded!"
-    {:error, :overload}
-  end
-  defp check_throttle(id, tries) do
-    case :throttle.check(:websocket, id) do
-      {:ok, _, _} ->
-        :ok
-      {:limit_exceeded, _, _} ->
-        Process.sleep @throttle_time_to_wait
-        check_throttle(id, tries - 1)
-    end
-  end
+  defp check_throttle(_id), do: Process.sleep(@throttle_time_to_wait)
 
   def init(req, opts) do
     Logger.info "[websocket] init req => #{inspect req}"
@@ -51,6 +37,7 @@ defmodule Leprechaun.Websocket do
   end
 
   def websocket_info({:send, data}, state) do
+    check_throttle(state.board)
     {:reply, {:text, data}, state}
   end
   def websocket_info({:timeout, _ref, msg}, state) do
@@ -58,10 +45,33 @@ defmodule Leprechaun.Websocket do
   end
 
   def websocket_info(:play, state) do
+    check_throttle(state.board)
     turns = Board.turns(state.board)
     {:reply, {:text, Jason.encode!(%{"type" => "play", "turns" => turns})}, state}
   end
+  def websocket_info({:slide_new, x, piece}, state) do
+    check_throttle(state.board)
+    msg = %{"type" => "slide_new",
+            "id" => "row1-col#{x}",
+            "piece" => img_src(piece)}
+    {:reply, {:text, Jason.encode!(msg)}, state}
+  end
+  def websocket_info({:slide, x, y_orig, y_dest}, state) do
+    check_throttle(state.board)
+    msg = %{"type" => "slide",
+            "orig" => "row#{y_orig}-col#{x}",
+            "dest" => "row#{y_dest}-col#{x}"}
+    {:reply, {:text, Jason.encode!(msg)}, state}
+  end
+  def websocket_info({:new_kind, x, y, new_kind}, state) do
+    check_throttle(state.board)
+    msg = %{"type" => "new_kind",
+            "id" => "row#{y}-col#{x}",
+            "piece" => img_src(new_kind)}
+    {:reply, {:text, Jason.encode!(msg)}, state}
+  end
   def websocket_info(:extra_turn, state) do
+    check_throttle(state.board)
     turns = Board.turns(state.board)
     msg = %{"type" => "extra_turn",
             "extra_turn" => "extra_turn",
@@ -265,8 +275,10 @@ defmodule Leprechaun.Websocket do
 
   defp add(str1, str2), do: str1 <> str2
 
-  defp img(x, y, src) do
-    "<td><img src='img/cell_#{src}.png' id='row#{y}-col#{x}' class='cell'></td>"
+  defp img_src(piece), do: "img/cell_#{piece}.png"
+
+  defp img(x, y, piece) do
+    "<td><img src='#{img_src piece}' id='row#{y}-col#{x}' class='cell'></td>"
   end
 
   defp to_img({col, y}) do

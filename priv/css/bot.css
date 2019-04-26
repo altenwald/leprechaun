@@ -1,0 +1,7 @@
+div#leprechaun img {
+  width: 100px;
+  position: absolute;
+  top: 75px;
+  right: 15px;
+  z-index: 100;
+}
