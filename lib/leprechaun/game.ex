@@ -29,8 +29,8 @@ defmodule Leprechaun.Game do
   end
 
   def run do
-    {:ok, board} = Board.start_link(__MODULE__)
-    run board
+    {:ok, _board} = Board.start_link(__MODULE__)
+    run __MODULE__
   end
 
   def run(board) do
@@ -70,11 +70,11 @@ defmodule Leprechaun.Game do
       :play ->
         true
       {:slide_new, _x, _symbol} ->
-        true
+        recv_all global_score, board, cells
       {:slide, _x, _y1, _y2} ->
-        true
+        recv_all global_score, board, cells
       {:new_kind, _x, _y, _new_kind} ->
-        true
+        recv_all global_score, board, cells
       {:show, cells} ->
         turns = Board.turns(board)
         show global_score, turns, cells
