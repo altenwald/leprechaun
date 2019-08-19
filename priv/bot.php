@@ -1,6 +1,6 @@
 <?php
 
-$move = / [];
+$move = [];
 $points = 0;
 
 $options = [ [0, -1],
