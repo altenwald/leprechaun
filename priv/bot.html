@@ -44,6 +44,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/mode/clike/clike.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/mode/php/php.min.js"></script>
 
+    <script src="https://kit.fontawesome.com/7d70bbec1c.js"></script>
 </head>
 <body>
     <audio id="board-music" autoplay="true" loop="true">
@@ -69,10 +70,18 @@
         <div class="tab-pane fade" id="board-game" role="tabpanel" aria-labelledby="board-game-tab">
           <div class="btn-toolbar" role="toolbar">
             <div class="btn-group mr-2" role="group">
-              <button id="board-music-button" type="button" class="btn btn-outline-primary">Mute</button>
-              <button id="board-howtoplay" type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#howToPlayModal">How to play</button>
-              <button id="board-hiscore" type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#hiscoreModal">HiScore</button>
-              <button id="board-restart" type="button" class="btn btn-outline-danger">Restart Game</button>
+              <a id="board-music-button" class="btn btn-outline-info" href="#">
+                <i class="fas fa-pause"></i>
+              </a>
+              <a id="board-hiscore" class="btn btn-outline-success" href="#" data-toggle="modal" data-target="#hiscoreModal">
+                <i class="far fa-clipboard"></i>
+              </a>
+              <a id="board-howtoplay" class="btn btn-outline-primary" href="#" data-toggle="modal" data-target="#howToPlayModal">
+                <i class="fas fa-life-ring"></i>
+              </a>
+              <a id="board-restart" class="btn btn-outline-danger" href="#">
+                <i class="fas fa-sync"></i>
+              </a>
             </div>
           </div>
           <div id="board-score">Score: <span>0</span></div>

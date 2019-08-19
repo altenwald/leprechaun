@@ -34,6 +34,7 @@
     // --></script>
     <!-- Go to www.addthis.com/dashboard to customize your tools -->
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5cad355f0a4ac15b"></script>
+    <script src="https://kit.fontawesome.com/7d70bbec1c.js"></script>
 </head>
 <body>
     <audio id="board-music" autoplay="true" loop="true">
@@ -44,10 +45,18 @@
       <h5 class="my-0 mr-md-auto font-weight-normal">Leprechaun <span id="vsn"></span></h5>
     </div>
     <div class="container text-center">
-      <a id="board-music-button" class="btn btn-outline-primary" href="#">Mute</a>
-      <a id="board-howtoplay" class="btn btn-outline-primary" href="#" data-toggle="modal" data-target="#howToPlayModal">How to play</a>
-      <a id="board-hiscore" class="btn btn-outline-success" href="#" data-toggle="modal" data-target="#hiscoreModal">HiScore</a>
-      <a id="board-restart" class="btn btn-outline-danger" href="#">Restart Game</a>
+      <a id="board-music-button" class="btn btn-outline-info" href="#">
+        <i class="fas fa-pause"></i>
+      </a>
+      <a id="board-hiscore" class="btn btn-outline-success" href="#" data-toggle="modal" data-target="#hiscoreModal">
+        <i class="far fa-clipboard"></i>
+      </a>
+      <a id="board-howtoplay" class="btn btn-outline-primary" href="#" data-toggle="modal" data-target="#howToPlayModal">
+        <i class="fas fa-life-ring"></i>
+      </a>
+      <a id="board-restart" class="btn btn-outline-danger" href="#">
+        <i class="fas fa-sync"></i>
+      </a>
       <div id="leprechaun">
         <img src="/img/leprechaun.png"/>
       </div>

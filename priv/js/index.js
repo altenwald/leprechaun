@@ -224,13 +224,13 @@ $(document).ready(function(){
         send({type: "hiscore"});
         $("#hiscoreModal").modal('show');
     });
-    $("#board-music-button").on("click", function(event){
+    $("#board-music-button").on("click", function(event) {
         var music = $("#board-music")[0];
         if (music.paused) {
-            $("#board-music-button").html("Mute");
+            $("#board-music-button").html("<i class=\"fas fa-pause\"></i>");
             music.play();
         } else {
-            $("#board-music-button").html("UnMute");
+            $("#board-music-button").html("<i class=\"fas fa-play\"></i>");
             music.pause();
         }
     });

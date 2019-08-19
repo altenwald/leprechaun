@@ -31,3 +31,6 @@ table#juego tr td.vacio {
 div#leprechaun img {
     width: 100px;
 }
+.fas, .far {
+    font-size: 25px;
+}
