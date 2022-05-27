@@ -8,24 +8,21 @@ defmodule Leprechaun.Bot do
             code: ""
 
   def start_link(name, board_id) do
-    GenServer.start_link __MODULE__, [board_id, self()], name: via(name)
+    GenServer.start_link(__MODULE__, [board_id, self()], name: via(name))
   end
 
   def exists?(bot) do
-    case Registry.lookup(Leprechaun.Bot.Registry, bot) do
-      [{_pid, nil}] -> true
-      [] -> false
-    end
+    Registry.lookup(Leprechaun.Bot.Registry, bot) != []
   end
 
   def stop(bot), do: GenServer.stop(via(bot))
 
   def join(bot) do
-    GenServer.cast via(bot), {:join, self()}
+    GenServer.cast(via(bot), {:join, self()})
   end
 
   def run(bot, code) do
-    GenServer.call via(bot), {:run, code}
+    GenServer.call(via(bot), {:run, code})
   end
 
   defp via(bot) do
@@ -52,40 +49,50 @@ defmodule Leprechaun.Bot do
 
   @impl true
   def handle_info(:play, bot) do
-    Process.sleep 2500
+    Process.sleep(2500)
     cells = Board.show(bot.board_id)
     Php.run(bot.code, bot.board_id, cells)
     {:noreply, bot}
   end
+
   def handle_info(:extra_turn, state) do
     {:noreply, state}
   end
+
   def handle_info({:match, _score, _global_score, _acc, _cells}, state) do
     {:noreply, state}
   end
+
   def handle_info({:slide, _x, _y_orig, _y_dest}, state) do
     {:noreply, state}
   end
+
   def handle_info({:slide_new, _x, _piece}, state) do
     {:noreply, state}
   end
+
   def handle_info({:show, _cells}, state) do
     {:noreply, state}
   end
+
   def handle_info({:gameover, _score, _}, state) do
     {:stop, :normal, state}
   end
+
   def handle_info({:error, :gameover}, state) do
     {:stop, :normal, state}
   end
+
   def handle_info({:hiscore, {:ok, _order}}, state) do
     {:noreply, state}
   end
+
   def handle_info({:error, {:illegal_move, {_x1, _y1}, {_x2, _y2}}}, state) do
     {:stop, :normal, state}
   end
+
   def handle_info(other, state) do
-    Logger.warn "[bot] discarded info => #{inspect other}"
+    Logger.warn("[bot] discarded info => #{inspect(other)}")
     {:noreply, state}
   end
 end

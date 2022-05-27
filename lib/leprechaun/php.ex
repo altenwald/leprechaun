@@ -24,7 +24,7 @@ defmodule Leprechaun.Php do
       {:leprechaun_get_points, [:integer, :integer]}
     ]
   end
-  
+
   @impl true
   def init_const() do
     []
@@ -32,8 +32,7 @@ defmodule Leprechaun.Php do
 
   def leprechaun_check_move(ctx, _line, {_, x1}, {_, y1}, {_, x2}, {_, y2}) do
     {check, matches} = Board.check_move(EphpContext.get_meta(ctx, :board_id), {x1, y1}, {x2, y2})
-    tr(%{"check" => check,
-         "matches" => matches})
+    tr(%{"check" => check, "matches" => matches})
   end
 
   def leprechaun_move(ctx, _line, {_, x1}, {_, y1}, {_, x2}, {_, y2}) do
@@ -41,7 +40,9 @@ defmodule Leprechaun.Php do
     true
   end
 
-  def leprechaun_get_points(_ctx, _line, {_, x}, {_, y}) when x < 1 or x > 8 or y < 1 or y > 8, do: false
+  def leprechaun_get_points(_ctx, _line, {_, x}, {_, y}) when x < 1 or x > 8 or y < 1 or y > 8,
+    do: false
+
   def leprechaun_get_points(ctx, _line, {_, x}, {_, y}) do
     Board.show(EphpContext.get_meta(ctx, :board_id))
     |> Enum.at(y - 1)
@@ -53,11 +54,13 @@ defmodule Leprechaun.Php do
     |> Enum.map(fn {k, v} -> {to_string(k), tr(v)} end)
     |> EphpArray.from_list()
   end
+
   defp tr(list) when is_list(list) do
     list
     |> Enum.map(&tr/1)
     |> EphpArray.from_list()
   end
+
   defp tr(true), do: true
   defp tr(false), do: false
   defp tr(nil), do: :undefined
@@ -76,24 +79,26 @@ defmodule Leprechaun.Php do
   def run(content, board_id, cells) do
     try do
       parsed = EphpParser.parse(content)
-      Logger.debug "[php] content => #{inspect content}"
+      Logger.debug("[php] content => #{inspect(content)}")
       EphpConfig.start_link(Application.get_env(:php, :php_ini, "php.ini"))
       EphpConfig.start_local()
       {:ok, ctx} = Ephp.context_new(@filename)
-      Logger.debug "[php] cells => #{inspect cells}"
-      register_assigns ctx, board: cells
-      Ephp.register_superglobals ctx, [@name]
-      Ephp.register_module ctx, __MODULE__
+      Logger.debug("[php] cells => #{inspect(cells)}")
+      register_assigns(ctx, board: cells)
+      Ephp.register_superglobals(ctx, [@name])
+      Ephp.register_module(ctx, __MODULE__)
       {:ok, output} = EphpOutput.start_link(ctx, false)
-      EphpContext.set_output_handler ctx, output
-      EphpContext.set_meta ctx, :board_id, board_id
+      EphpContext.set_output_handler(ctx, output)
+      EphpContext.set_meta(ctx, :board_id, board_id)
+
       try do
-        Ephp.eval @filename, ctx, parsed
+        Ephp.eval(@filename, ctx, parsed)
       catch
         {:ok, :die} -> :ok
       end
+
       out = EphpContext.get_output(ctx)
-      EphpContext.destroy_all ctx
+      EphpContext.destroy_all(ctx)
       EphpConfig.stop_local()
       out
     catch

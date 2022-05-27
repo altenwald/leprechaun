@@ -9,8 +9,6 @@ defmodule Leprechaun.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   def start(_type, _args) do
-    import Supervisor.Spec
-
     port = Application.get_env(:leprechaun, :port, @port)
     family = Application.get_env(:leprechaun, :family, @family)
 
@@ -20,16 +18,16 @@ defmodule Leprechaun.Application do
 
     children = [
       # Start the Ecto repository
-      supervisor(Leprechaun.Repo, []),
+      Leprechaun.Repo,
       # Start the Registry for boards
       {Registry, keys: :unique, name: Leprechaun.Board.Registry},
       # Start the Registry for bots
       {Registry, keys: :unique, name: Leprechaun.Bot.Registry},
       # Start worker for HTTP listener
-      worker(Leprechaun.Http, [port, family])
+      {Leprechaun.Http, [port, family]}
     ]
 
-    Logger.info "[app] iniciada aplicación"
+    Logger.info("[app] iniciada aplicación")
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

@@ -5,7 +5,7 @@ defmodule Leprechaun.MixProject do
     [
       app: :leprechaun,
       version: "0.7.2",
-      elixir: "~> 1.7",
+      elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
@@ -22,17 +22,17 @@ defmodule Leprechaun.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:jason, "~> 1.1"},
-      {:plug, "~> 1.7"},
-      {:plug_cowboy, "~> 2.0"},
-      {:throttle, "~> 0.2.0", hex: :lambda_throttle},
+      {:jason, "~> 1.3"},
+      {:plug, "~> 1.13"},
+      {:plug_cowboy, "~> 2.5"},
+      {:throttle, "~> 0.3", hex: :lambda_throttle},
       {:uuid, "~> 1.1"},
-      {:ecto_mnesia, "~> 0.9.1"},
-      {:ephp, "~> 0.2"},
+      {:ecto_mnesia, "~> 0.9"},
+      {:ephp, "~> 0.3"},
 
       # for releases
-      {:distillery, "~> 2.0"},
-      {:ecto_boot_migration, "~> 0.1.1"},
+      {:distillery, "~> 2.1"},
+      {:ecto_boot_migration, "~> 0.1"}
     ]
   end
 end

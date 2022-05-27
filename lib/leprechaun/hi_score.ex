@@ -9,11 +9,11 @@ defmodule Leprechaun.HiScore do
   @top_num 20
 
   schema "hi_score" do
-    field :name
-    field :score,       :integer
-    field :turns,       :integer
-    field :extra_turns, :integer
-    field :remote_ip
+    field(:name)
+    field(:score, :integer)
+    field(:turns, :integer)
+    field(:extra_turns, :integer)
+    field(:remote_ip)
 
     timestamps()
   end
@@ -28,16 +28,18 @@ defmodule Leprechaun.HiScore do
   end
 
   def save(name, score, turns, extra_turns, remote_ip) do
-    changeset(%HiScore{}, %{"name" => name,
-                            "score" => score,
-                            "turns" => turns,
-                            "extra_turns" => extra_turns,
-                            "remote_ip" => remote_ip})
+    changeset(%HiScore{}, %{
+      "name" => name,
+      "score" => score,
+      "turns" => turns,
+      "extra_turns" => extra_turns,
+      "remote_ip" => remote_ip
+    })
     |> Repo.insert()
   end
 
   defp get_order_index([]), do: {:error, :notfound}
-  defp get_order_index([{%HiScore{}, order}|_]), do: {:ok, order}
+  defp get_order_index([{%HiScore{}, order} | _]), do: {:ok, order}
 
   def get_order(my_id) do
     from(h in HiScore, order_by: [desc: h.score])
