@@ -29,6 +29,18 @@ class Splash extends Phaser.Scene {
       .setDisplaySize(612 * 2, 436 * 2)
   
     this.add
+      .text(width / 2, height - 50, 'Leprechaun - https://altenwald.com', {
+        fontSize: 12,
+        color: '#fff'
+      })
+      .setOrigin(0.5)
+      .setDepth(2)
+      .setInteractive({ useHandCursor: true })
+      .on('pointerdown', () => {
+        window.location.href = 'https://altenwald.com'
+      })
+
+    this.add
       .image(width / 2, height / 2, 'start')
       .setDisplaySize(400, 380)
       .setInteractive({ useHandCursor: true })

@@ -20,7 +20,7 @@ defmodule Leprechaun.Application do
       # Start the Ecto repository
       Leprechaun.Repo,
       # Start the Registry for boards
-      {Registry, keys: :unique, name: Leprechaun.Board.Registry},
+      {Registry, keys: :unique, name: Leprechaun.Game.Registry},
       # Start the Registry for bots
       {Registry, keys: :unique, name: Leprechaun.Bot.Registry},
       # Start worker for HTTP listener

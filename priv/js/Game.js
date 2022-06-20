@@ -6,6 +6,8 @@ class Game extends Phaser.Scene {
 
   init() {
     this.addScore = 0
+    this.extraTurns = 0
+    this.remainTurns = 10
     eventsCenter.on('ws', this.on_event, this)
   }
 
@@ -14,49 +16,56 @@ class Game extends Phaser.Scene {
     switch(data.type) {
       case "new_kind":
         this.new_kind(data.row, data.col, data.piece)
-        break;
+        break
       case "slide_new":
         this.slide_new(data.row, data.col, data.piece)
-        break;
+        break
       case "slide":
         this.slide(data.orig["row"], data.orig["col"], data.dest["row"], data.dest["col"])
-        break;
+        break
       case "match":
         this.save_board(data.cells)
         this.update_info(data)
         this.blink(data.points)
-        break;
+        break
       case "gameover":
         sceneRunning = 'GameOver'
         this.input.off('pointerdown', this.startDrag, this)
         eventsCenter.off('ws', this.on_event, this)
         this.scene.start('GameOver')
         this.scene.get('GameOver').score = data.score
-        break;
+        break
       case "draw":
         this.save_board(data.cells)
         this.update_info(data)
-        break;
+        break
       case "hiscore":
-        break;
+        break
       case "extra_turn":
         this.update_info(data)
-        break;
+        break
       case "play":
-        this.addScore = 0
         this.update_info(data)
+        this.addScore = 0
+        this.extraTurns = 0
         this.input.on('pointerdown', this.startDrag, this)
-        break;
+        break
       case "illegal_move":
         this.undoMove()
         this.input.on('pointerdown', this.startDrag, this)
-        break;
+        break
+      case "disconnected":
+        this.connection.setVisible(true)
+        break
+      case "connected":
+        this.connection.setVisible(false)
+        break
       default:
         if (data.cells) {
           this.save_board(data.cells)
         }
         this.update_info(data)
-        break;
+        break
     }
   }
 
@@ -88,6 +97,8 @@ class Game extends Phaser.Scene {
     this.load.image('big-chest', '/img/cell_6.png')
     this.load.image('pot', '/img/cell_7.png')
     this.load.image('rainbow-pot', '/img/cell_8.png')
+    this.load.image('clover', '/img/cell_A.png')
+    this.load.image('leprechaun-head', '/img/cell_9.png')
 
     this.load.image('bronze-blink', '/img/cell_1_blink.png')
     this.load.image('silver-blink', '/img/cell_2_blink.png')
@@ -115,6 +126,26 @@ class Game extends Phaser.Scene {
     this.add
       .image(width / 2, height / 2, 'background')
       .setDisplaySize(612 * 2, 436 * 2)
+
+    this.vsn = vsn
+    this.vsnText = this.add
+      .text(width / 2, height - 50, 'Leprechaun v' + vsn + ' - https://altenwald.com', {
+        fontSize: 12,
+        color: '#fff'
+      })
+      .setOrigin(0.5)
+      .setDepth(2)
+      .setInteractive({ useHandCursor: true })
+      .on('pointerdown', () => {
+        window.location.href = 'https://altenwald.com'
+      })
+
+    this.connection = this.add
+      .text(400, 275, 'Connecting 🔌', { fontSize: 22, color: '#000' })
+      .setOrigin(0.5)
+      .setDepth(2)
+      .setActive(false)
+      .setVisible(false)
 
     this.add
       .image(270, 275, 'cell-background')
@@ -164,7 +195,9 @@ class Game extends Phaser.Scene {
     for(var i=0; i<points.length; i++) {
       var point = points[i]
       var cell = this.board[point["row"]][point["col"]]
-      cell.setTexture(cell.texture.key + "-blink")
+      if (cell.texture.key != 'leprechaun-head' && cell.texture.key != 'clover') {
+        cell.setTexture(cell.texture.key + "-blink")
+      }
     }
   }
 
@@ -289,6 +322,7 @@ class Game extends Phaser.Scene {
         x2: p2.getData("col"),
         y2: p2.getData("row")
       })
+      this.extraTurns --
     } else if (this.dragObjectSwap) {
       // TODO: animation?
       var p1 = this.dragObject, p2 = this.dragObjectSwap
@@ -328,11 +362,29 @@ class Game extends Phaser.Scene {
       }
       this.score.setText(text)
     }
-    if (data.turns) {
-      this.turns.setText('Turns: ' + data.turns)
+    if (data.extra_turns) {
+      this.extraTurns += data.extra_turns
     }
+    if (data.turns) {
+      this.remainTurns = data.turns
+    }
+    var text = 'Turns: ' + this.remainTurns
+    switch (this.extraTurns) {
+      case -1:
+        text += " (-1)"
+        break
+      case 0:
+        text += " (keep)"
+        break
+      default:
+        text += " (+" + this.extraTurns + ")"
+    }
+    this.turns.setText(text)
   }
 
   update(time, delta) {
+    if (this.vsn != vsn) {
+      this.vsnText.setText('Leprechaun v' + vsn + ' - https://altenwald.com')
+    }
   }
 }

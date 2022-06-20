@@ -52,6 +52,7 @@ class GameOver extends Phaser.Scene {
     this.load.image('big-chest', '/img/cell_6.png')
     this.load.image('pot', '/img/cell_7.png')
     this.load.image('rainbow-pot', '/img/cell_8.png')
+    this.load.image('clover', '/img/cell_A.png')
     this.load.image('leprechaun-head', '/img/cell_9.png')
 
     this.sceneStopped = false
@@ -73,6 +74,18 @@ class GameOver extends Phaser.Scene {
       .setDisplaySize(555, 700)
       .setActive(false)
       .setDepth(1)
+
+    this.add
+      .text(width / 2, height - 50, 'Leprechaun v' + vsn + ' - https://altenwald.com', {
+        fontSize: 12,
+        color: '#fff'
+      })
+      .setOrigin(0.5)
+      .setDepth(2)
+      .setInteractive({ useHandCursor: true })
+      .on('pointerdown', () => {
+        window.location.href = 'https://altenwald.com'
+      })
 
     const fontOptions = {
       fontSize: 24,
@@ -141,14 +154,15 @@ class GameOver extends Phaser.Scene {
   img(i) {
     switch(i) {
       case 1: return 'leprechaun-head'
-      case 2: return 'rainbow-pot'
-      case 3: return 'pot'
-      case 4: return 'big-chest'
-      case 5: return 'chest'
-      case 6: return 'sack'
-      case 7: return 'gold'
-      case 8: return 'silver'
-      case 9: return 'bronze'
+      case 2: return 'clover'
+      case 3: return 'rainbow-pot'
+      case 4: return 'pot'
+      case 5: return 'big-chest'
+      case 6: return 'chest'
+      case 7: return 'sack'
+      case 8: return 'gold'
+      case 9: return 'silver'
+      case 10: return 'bronze'
       default: return false
     }
   }

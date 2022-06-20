@@ -47,8 +47,7 @@ var
     sceneRunning = '',
     ws,
     game_id,
-    vsn,
-    restarting
+    vsn
 
 game.screenBaseSize = {
     maxWidth: MAX_SIZE_WIDTH_SCREEN,
@@ -63,7 +62,11 @@ game.orientation = "portrait"
 
 function disconnected(should_i_reconnect) {
     if (should_i_reconnect) {
-        setTimeout(function(){ connect(); }, 1000)
+        setTimeout(function(){
+            if (!ws || ws.readyState == ws.CLOSED) {
+                connect()
+            }
+        }, 1000)
     }
 }
 
@@ -80,8 +83,13 @@ function restart_game() {
 function connect() {
     const hostname = document.location.href.split("/", 3)[2]
     if (ws) {
-        restarting = true
-        ws.close()
+        if (ws.readyState == ws.OPEN) {
+            send({type: "show"})
+            return
+        }
+        if (ws.readyState != ws.CLOSED || ws.readyState != ws.CLOSING) {
+            ws.close()
+        }
     }
     const schema = (location.href.split(":")[0] == "https") ? "wss" : "ws"
     ws = new WebSocket(schema + "://" + hostname + "/websession")
@@ -92,16 +100,16 @@ function connect() {
             send({type: "create"})
         }
         send({type: "show"})
+        eventsCenter.emit('ws', {type: "connected"})
     };
     ws.onerror = function(message){
         console.error("onerror", message)
+        eventsCenter.emit('ws', {type: "connect-error"})
         disconnected(false)
     };
     ws.onclose = function() {
-        if (!restarting) {
-            disconnected(true)
-        }
-        restarting = false
+        eventsCenter.emit('ws', {type: "disconnected"})
+        disconnected(true)
     }
     ws.onmessage = function(message){
         var data = JSON.parse(message.data)

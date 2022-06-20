@@ -1,6 +1,6 @@
 defmodule Leprechaun.Websocket do
   require Logger
-  alias Leprechaun.{Board, Bot, HiScore}
+  alias Leprechaun.{Game, Bot, HiScore}
 
   @throttle_time_to_wait 100
 
@@ -51,7 +51,7 @@ defmodule Leprechaun.Websocket do
 
   def websocket_info(:play, state) do
     check_throttle(state.board)
-    turns = Board.turns(state.board)
+    turns = Game.turns(state.board)
     {:reply, {:text, Jason.encode!(%{"type" => "play", "turns" => turns})}, state}
   end
 
@@ -73,10 +73,10 @@ defmodule Leprechaun.Websocket do
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
 
-  def websocket_info(:extra_turn, state) do
+  def websocket_info({:extra_turn, extra_turns}, state) do
     check_throttle(state.board)
-    turns = Board.turns(state.board)
-    msg = %{"type" => "extra_turn", "extra_turn" => true, "turns" => turns}
+    turns = Game.turns(state.board)
+    msg = %{"type" => "extra_turn", "extra_turns" => extra_turns, "turns" => turns}
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
 
@@ -107,8 +107,8 @@ defmodule Leprechaun.Websocket do
     msg = %{
       "type" => "draw",
       "cells" => build_show(cells),
-      "score" => Board.score(board),
-      "turns" => Board.turns(board)
+      "score" => Game.score(board),
+      "turns" => Game.turns(board)
     }
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
@@ -120,7 +120,7 @@ defmodule Leprechaun.Websocket do
   end
 
   def websocket_info({:error, :gameover}, state) do
-    score = Board.score(state.board)
+    score = Game.score(state.board)
     msg = %{"type" => "gameover", "score" => score, "turns" => 0, "has_username" => true}
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
@@ -152,7 +152,7 @@ defmodule Leprechaun.Websocket do
     end
   end
 
-  defp build_show(board_id), do: build_show(Board.show(board_id))
+  defp build_show(board_id), do: build_show(Game.show(board_id))
 
   defp send_hiscore(order \\ nil, state) do
     top_list =
@@ -194,7 +194,7 @@ defmodule Leprechaun.Websocket do
   end
 
   defp process_data(%{"type" => "set-hiscore-name", "name" => username}, state) do
-    case Board.hiscore(state.board, username, state.remote_ip) do
+    case Game.hiscore(state.board, username, state.remote_ip) do
       :ok ->
         {:ok, state}
 
@@ -206,17 +206,17 @@ defmodule Leprechaun.Websocket do
 
   defp process_data(%{"type" => "create"}, state) do
     id = UUID.uuid4()
-    {:ok, _board} = Board.start_link(id)
+    {:ok, _board} = Game.start_link(id)
     msg = %{"type" => "id", "id" => id}
     {:reply, {:text, Jason.encode!(msg)}, Map.put(state, :board, id)}
   end
 
   defp process_data(%{"type" => "join", "id" => id} = info, state) do
-    if Board.exists?(id) do
+    if Game.exists?(id) do
       state = Map.put(state, :board, id)
 
-      if Board.turns(id) > 0 do
-        Board.add_consumer(id)
+      if Game.turns(id) > 0 do
+        Game.add_consumer(id)
 
         if info["bot_id"] != nil do
           Bot.join(info["bot_id"])
@@ -238,10 +238,10 @@ defmodule Leprechaun.Websocket do
          %{"type" => "move", "x1" => x1, "y1" => y1, "x2" => x2, "y2" => y2},
          state
        ) do
-    if Board.exists?(state.board) do
+    if Game.exists?(state.board) do
       point1 = {x1, y1}
       point2 = {x2, y2}
-      Board.move(state.board, point1, point2)
+      Game.move(state.board, point1, point2)
       {:ok, state}
     else
       msg = %{"type" => "gameover", "turns" => 0, "error" => true}
@@ -250,12 +250,12 @@ defmodule Leprechaun.Websocket do
   end
 
   defp process_data(%{"type" => "show"}, %{board: board} = state) do
-    if Board.exists?(board) and Board.turns(board) > 0 do
+    if Game.exists?(board) and Game.turns(board) > 0 do
       msg = %{
         "type" => "draw",
         "cells" => build_show(board),
-        "score" => Board.score(board),
-        "turns" => Board.turns(board)
+        "score" => Game.score(board),
+        "turns" => Game.turns(board)
       }
       {:reply, {:text, Jason.encode!(msg)}, state}
     else
@@ -265,20 +265,20 @@ defmodule Leprechaun.Websocket do
   end
 
   defp process_data(%{"type" => "restart"}, %{board: board} = state) do
-    if Board.exists?(board), do: Board.stop(board)
-    {:ok, _} = Board.start_link(board)
+    if Game.exists?(board), do: Game.stop(board)
+    {:ok, _} = Game.start_link(board)
     msg = %{
       "type" => "draw",
       "cells" => build_show(state.board),
-      "score" => Board.score(board),
-      "turns" => Board.turns(board)
+      "score" => Game.score(board),
+      "turns" => Game.turns(board)
     }
     send(self(), {:send, Jason.encode!(%{"type" => "play"})})
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
 
   defp process_data(%{"type" => "stop"}, %{board: board} = state) do
-    if Board.exists?(board), do: Board.stop(board)
+    if Game.exists?(board), do: Game.stop(board)
     {:ok, state}
   end
 

@@ -9,14 +9,14 @@ defmodule Leprechaun.Php do
   alias :ephp_array, as: EphpArray
   alias Leprechaun.Board
 
-  @behaviour :ephp_func
+  @behaviour :ephp_lib
 
-  @impl true
+  @impl :ephp_lib
   def init_config() do
     []
   end
 
-  @impl true
+  @impl :ephp_lib
   def init_func() do
     [
       {:leprechaun_check_move, [:integer, :integer, :integer, :integer]},
@@ -25,7 +25,7 @@ defmodule Leprechaun.Php do
     ]
   end
 
-  @impl true
+  @impl :ephp_lib
   def init_const() do
     []
   end
