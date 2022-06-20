@@ -13,8 +13,8 @@ defmodule Leprechaun.Websocket do
       case :cowboy_req.peer(req) do
         {{127, 0, 0, 1}, _} ->
           case :cowboy_req.header("x-forwarded-for", req) do
-            {remote_ip, _} -> remote_ip
-            _ -> "127.0.0.1"
+            remote_ip when is_binary(remote_ip) -> remote_ip
+            :undefined -> "127.0.0.1"
           end
 
         {remote_ip, _} ->
@@ -57,26 +57,26 @@ defmodule Leprechaun.Websocket do
 
   def websocket_info({:slide_new, x, piece}, state) do
     check_throttle(state.board)
-    msg = %{"type" => "slide_new", "id" => "row1-col#{x}", "piece" => img_src(piece)}
+    msg = %{"type" => "slide_new", "row" => 1, "col" => x, "piece" => img(piece)}
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
 
   def websocket_info({:slide, x, y_orig, y_dest}, state) do
     check_throttle(state.board)
-    msg = %{"type" => "slide", "orig" => "row#{y_orig}-col#{x}", "dest" => "row#{y_dest}-col#{x}"}
+    msg = %{"type" => "slide", "orig" => %{"row" => y_orig, "col" => x}, "dest" => %{"row" => y_dest, "col" => x}}
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
 
   def websocket_info({:new_kind, x, y, new_kind}, state) do
     check_throttle(state.board)
-    msg = %{"type" => "new_kind", "id" => "row#{y}-col#{x}", "piece" => img_src(new_kind)}
+    msg = %{"type" => "new_kind", "row" => y, "col" => x, "piece" => img(new_kind)}
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
 
   def websocket_info(:extra_turn, state) do
     check_throttle(state.board)
     turns = Board.turns(state.board)
-    msg = %{"type" => "extra_turn", "extra_turn" => "extra_turn", "turns" => turns}
+    msg = %{"type" => "extra_turn", "extra_turn" => true, "turns" => turns}
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
 
@@ -86,7 +86,7 @@ defmodule Leprechaun.Websocket do
     acc =
       for {_, points} <- acc do
         for {x, y} <- points do
-          "row#{y}-col#{x}"
+          %{"row" => y, "col" => x}
         end
       end
       |> List.flatten()
@@ -96,16 +96,20 @@ defmodule Leprechaun.Websocket do
       "add_score" => score,
       "score" => global_score,
       "points" => acc,
-      "html" => build_show(cells)
+      "cells" => build_show(cells)
     }
 
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
 
-  def websocket_info({:show, cells}, state) do
-    check_throttle(state.board)
-    html = build_show(cells)
-    msg = %{"type" => "draw", "html" => html}
+  def websocket_info({:show, cells}, %{board: board} = state) do
+    check_throttle(board)
+    msg = %{
+      "type" => "draw",
+      "cells" => build_show(cells),
+      "score" => Board.score(board),
+      "turns" => Board.turns(board)
+    }
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
 
@@ -122,7 +126,7 @@ defmodule Leprechaun.Websocket do
   end
 
   def websocket_info({:error, {:illegal_move, {x1, y1}, {x2, y2}}}, state) do
-    msg = %{"type" => "illegal_move", "points" => ["row#{y1}-col#{x1}", "row#{y2}-col#{x2}"]}
+    msg = %{"type" => "illegal_move", "points" => [%{"row" => y1, "col" => x1}, %{"row" => y2, "col" => x2}]}
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
 
@@ -140,8 +144,29 @@ defmodule Leprechaun.Websocket do
     :ok
   end
 
+  defp build_show(cells) when is_list(cells) do
+    for {row, y} <- Enum.with_index(cells, 1) do
+      for {cell, x} <- Enum.with_index(row, 1) do
+        %{ "image" => img(cell), "row" => y, "col" => x }
+      end
+    end
+  end
+
+  defp build_show(board_id), do: build_show(Board.show(board_id))
+
   defp send_hiscore(order \\ nil, state) do
-    msg = %{"type" => "hiscore", "top_list" => build_top_list(), "position" => order}
+    top_list =
+      HiScore.top_list()
+      |> Enum.with_index()
+      |> Enum.map(fn {%HiScore{} = hiscore, position} ->
+        %{
+          "position" => position,
+          "name" => hiscore.name,
+          "score" => hiscore.score,
+          "turns" => hiscore.turns
+        }
+      end)
+    msg = %{"type" => "hiscore", "top_list" => top_list, "position" => order}
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
 
@@ -169,8 +194,14 @@ defmodule Leprechaun.Websocket do
   end
 
   defp process_data(%{"type" => "set-hiscore-name", "name" => username}, state) do
-    Board.hiscore(state.board, username, state.remote_ip)
-    {:ok, state}
+    case Board.hiscore(state.board, username, state.remote_ip) do
+      :ok ->
+        {:ok, state}
+
+      {:error, reason} ->
+        msg = %{"type" => "set-hiscore-name-error", "reason" => "#{inspect(reason)}"}
+        {:reply, {:text, Jason.encode!(msg)}, state}
+    end
   end
 
   defp process_data(%{"type" => "create"}, state) do
@@ -218,9 +249,14 @@ defmodule Leprechaun.Websocket do
     end
   end
 
-  defp process_data(%{"type" => "show"}, state) do
-    if Board.exists?(state.board) and Board.turns(state.board) > 0 do
-      msg = %{"type" => "draw", "html" => build_show(state.board)}
+  defp process_data(%{"type" => "show"}, %{board: board} = state) do
+    if Board.exists?(board) and Board.turns(board) > 0 do
+      msg = %{
+        "type" => "draw",
+        "cells" => build_show(board),
+        "score" => Board.score(board),
+        "turns" => Board.turns(board)
+      }
       {:reply, {:text, Jason.encode!(msg)}, state}
     else
       msg = %{"type" => "gameover", "turns" => 0, "error" => true}
@@ -231,9 +267,12 @@ defmodule Leprechaun.Websocket do
   defp process_data(%{"type" => "restart"}, %{board: board} = state) do
     if Board.exists?(board), do: Board.stop(board)
     {:ok, _} = Board.start_link(board)
-    turns = Board.turns(board)
-    score = Board.score(board)
-    msg = %{"type" => "draw", "html" => build_show(board), "score" => score, "turns" => turns}
+    msg = %{
+      "type" => "draw",
+      "cells" => build_show(state.board),
+      "score" => Board.score(board),
+      "turns" => Board.turns(board)
+    }
     send(self(), {:send, Jason.encode!(%{"type" => "play"})})
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
@@ -243,63 +282,13 @@ defmodule Leprechaun.Websocket do
     {:ok, state}
   end
 
-  defp build_top_list do
-    """
-    <table class="table table-stripped table-sm" id="toplist">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Name</th>
-        <th class="text-right">Turns</th>
-        <th class="text-right">Score</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-    """
-    |> add(
-      HiScore.top_list()
-      |> Enum.with_index(1)
-      |> Enum.map(&to_top_entry/1)
-      |> Enum.join("</tr><tr>")
-    )
-    |> add("</tr></tbody></table>")
-  end
-
-  defp to_top_entry({entry, position}) do
-    """
-    <th scope="row">#{position}</td>
-    <td>#{entry.name}</td>
-    <td class="text-right">#{entry.turns}</td>
-    <td class="text-right">#{entry.score}</td>
-    """
-  end
-
-  defp build_show(cells) when is_list(cells) do
-    "<table id='board'><tr>"
-    |> add(
-      cells
-      |> Enum.with_index(1)
-      |> Enum.map(&to_img/1)
-      |> Enum.join("</tr><tr>")
-    )
-    |> add("</tr></table>")
-  end
-
-  defp build_show(board), do: build_show(Board.show(board))
-
-  defp add(str1, str2), do: str1 <> str2
-
-  defp img_src(piece), do: "img/cell_#{piece}.png"
-
-  defp img(x, y, piece) do
-    "<td><img src='#{img_src(piece)}' id='row#{y}-col#{x}' class='cell'></td>"
-  end
-
-  defp to_img({col, y}) do
-    col
-    |> Enum.with_index(1)
-    |> Enum.map(fn {src, x} -> img(x, y, src) end)
-    |> Enum.join()
-  end
+  defp img(0), do: ""
+  defp img(1), do: "bronze"
+  defp img(2), do: "silver"
+  defp img(3), do: "gold"
+  defp img(4), do: "sack"
+  defp img(5), do: "chest"
+  defp img(6), do: "big-chest"
+  defp img(7), do: "pot"
+  defp img(8), do: "rainbow-pot"
 end

@@ -1,36 +1,13 @@
-table#juego tr td,
-table#juego tr th {
-    border: solid 1px black;
-    padding: 5px;
-    margin: 0;
-    text-align: center;
+body {
+	margin: 0;
+	overflow: hidden;
+	background-color: black;
 }
-table#juego {
-    display: inline;
+		
+canvas {
+	height: 100%;
 }
-table#juego tr td.rojo {
-    color: red;
-    background-color: blue;
-}
-table#juego tr td.amarillo {
-    color: yellow;
-    background-color: blue;
-}
-table#juego tr td.vacio {
-    color: darkblue;
-    background-color: blue;
-}
-.blink_me {
-    animation: blinker 1s linear infinite;
-}
-
-@keyframes blinker {  
-    50% { opacity: 0; }
-}
-
-div#leprechaun img {
-    width: 100px;
-}
-.fas, .far {
-    font-size: 25px;
+		
+#phaser-app {
+	margin: 0 auto;
 }

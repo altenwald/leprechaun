@@ -56,7 +56,7 @@ defmodule Leprechaun.Board do
   end
 
   def hiscore(name, username, remote_ip) do
-    GenServer.cast(via(name), {:hiscore, username, remote_ip})
+    GenServer.call(via(name), {:hiscore, username, remote_ip})
   end
 
   def add_consumer(name) do
@@ -113,6 +113,25 @@ defmodule Leprechaun.Board do
     {:reply, {false, []}, board}
   end
 
+  def handle_call({:hiscore, username, remote_ip}, _from, %Board{turns: 0, username: nil} = board) do
+    case HiScore.save(username, board.score, board.played_turns, board.extra_turns, remote_ip) do
+      {:ok, hiscore} ->
+        send_to(board.consumers, {:hiscore, HiScore.get_order(hiscore.id)})
+        {:reply, :ok, %Board{board | username: username}}
+
+      {:error, changeset} ->
+        {:reply, {:error, changeset.errors}, board}
+    end
+  end
+
+  def handle_call({:hiscore, _username, _remote_ip}, _from, %Board{username: nil} = board) do
+    {:reply, {:error, :still_playing}, board}
+  end
+
+  def handle_call({:hiscore, _username, _remote_ip}, _from, board) do
+    {:reply, {:error, :already_set}, board}
+  end
+
   def handle_cast({:move, _point1, _point2}, %Board{turns: 0} = board) do
     send_to(board.consumers, {:error, :gameover})
     {:noreply, board}
@@ -129,14 +148,6 @@ defmodule Leprechaun.Board do
   def handle_cast({:move, point1, point2}, board) do
     send_to(board.consumers, {:error, {:illegal_move, point1, point2}})
     {:noreply, board}
-  end
-
-  def handle_cast({:hiscore, username, remote_ip}, %Board{turns: 0, username: nil} = board) do
-    {:ok, hiscore} =
-      HiScore.save(username, board.score, board.played_turns, board.extra_turns, remote_ip)
-
-    send_to(board.consumers, {:hiscore, HiScore.get_order(hiscore.id)})
-    {:noreply, %Board{board | username: username}}
   end
 
   def handle_cast({:consumer, from}, board) do
