@@ -63,7 +63,13 @@ defmodule Leprechaun.Websocket do
 
   def websocket_info({:slide, x, y_orig, y_dest}, state) do
     check_throttle(state.board)
-    msg = %{"type" => "slide", "orig" => %{"row" => y_orig, "col" => x}, "dest" => %{"row" => y_dest, "col" => x}}
+
+    msg = %{
+      "type" => "slide",
+      "orig" => %{"row" => y_orig, "col" => x},
+      "dest" => %{"row" => y_dest, "col" => x}
+    }
+
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
 
@@ -104,12 +110,14 @@ defmodule Leprechaun.Websocket do
 
   def websocket_info({:show, cells}, %{board: board} = state) do
     check_throttle(board)
+
     msg = %{
       "type" => "draw",
       "cells" => build_show(cells),
       "score" => Game.score(board),
       "turns" => Game.turns(board)
     }
+
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
 
@@ -126,7 +134,11 @@ defmodule Leprechaun.Websocket do
   end
 
   def websocket_info({:error, {:illegal_move, {x1, y1}, {x2, y2}}}, state) do
-    msg = %{"type" => "illegal_move", "points" => [%{"row" => y1, "col" => x1}, %{"row" => y2, "col" => x2}]}
+    msg = %{
+      "type" => "illegal_move",
+      "points" => [%{"row" => y1, "col" => x1}, %{"row" => y2, "col" => x2}]
+    }
+
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
 
@@ -147,7 +159,7 @@ defmodule Leprechaun.Websocket do
   defp build_show(cells) when is_list(cells) do
     for {row, y} <- Enum.with_index(cells, 1) do
       for {cell, x} <- Enum.with_index(row, 1) do
-        %{ "image" => img(cell), "row" => y, "col" => x }
+        %{"image" => img(cell), "row" => y, "col" => x}
       end
     end
   end
@@ -166,6 +178,7 @@ defmodule Leprechaun.Websocket do
           "turns" => hiscore.turns
         }
       end)
+
     msg = %{"type" => "hiscore", "top_list" => top_list, "position" => order}
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
@@ -257,6 +270,7 @@ defmodule Leprechaun.Websocket do
         "score" => Game.score(board),
         "turns" => Game.turns(board)
       }
+
       {:reply, {:text, Jason.encode!(msg)}, state}
     else
       msg = %{"type" => "gameover", "turns" => 0, "error" => true}
@@ -267,12 +281,14 @@ defmodule Leprechaun.Websocket do
   defp process_data(%{"type" => "restart"}, %{board: board} = state) do
     if Game.exists?(board), do: Game.stop(board)
     {:ok, _} = Game.start_link(board)
+
     msg = %{
       "type" => "draw",
       "cells" => build_show(state.board),
       "score" => Game.score(board),
       "turns" => Game.turns(board)
     }
+
     send(self(), {:send, Jason.encode!(%{"type" => "play"})})
     {:reply, {:text, Jason.encode!(msg)}, state}
   end

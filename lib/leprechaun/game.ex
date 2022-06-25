@@ -76,7 +76,7 @@ defmodule Leprechaun.Game do
   @type remote_ip() :: String.t()
   @type score() :: non_neg_integer()
   @type turns() :: non_neg_integer()
-  @type stats() :: %{ String.t() => non_neg_integer() }
+  @type stats() :: %{String.t() => non_neg_integer()}
 
   @spec start_link(game_name()) :: {:ok, pid}
   def start_link(name) do
