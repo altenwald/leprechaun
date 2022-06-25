@@ -1,8 +1,22 @@
 defmodule Leprechaun.ReleaseTasks do
-  @repos Application.get_env(:leprechaun, :ecto_repos, [])
+  @moduledoc """
+  When we perform a release we lose Mix and the possibility to use its tasks.
+  This module is a way to implement some of the needed tasks only available
+  initially in Mix like `ecto.migrate`.
 
+  The idea of this module is to be in use by commands from Distillery or the
+  release commands.
+  """
+
+  @doc """
+  Run the migrations, exactly the same as if we run `mix ecto.migrate` but
+  when Mix isn't available.
+  """
+  @spec run_migrations :: :ok
   def run_migrations do
-    Enum.each(@repos, &run_migrations_for/1)
+    Application.get_env(:leprechaun, :ecto_repos, [])
+    |> Enum.each(&run_migrations_for/1)
+    :ok
   end
 
   defp run_migrations_for(repo) do

@@ -1,4 +1,15 @@
 defmodule Leprechaun.Console do
+  @moduledoc """
+  Interface for playing the game in the console. We only need to run the game
+  using the following function:
+
+  ```elixir
+  Leprechaun.Console.run
+  ```
+
+  Note that optionally we can use an extra parameter to localize the game, by
+  default it will be the name of this module.
+  """
   alias Leprechaun.Game
 
   @time_to_wait_blink 1500
@@ -92,7 +103,7 @@ defmodule Leprechaun.Console do
         false
 
       {:error, error} ->
-        IO.inspect(error)
+        IO.puts("error: #{inspect(error)}")
         true
     end
   end

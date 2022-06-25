@@ -1,4 +1,9 @@
 defmodule Leprechaun.Application do
+  @moduledoc """
+  Creates the application and the supervision tree for the games.
+  This is in charge of running the migrations, starting the base
+  for ePHP and configure the supervision tree.
+  """
   use Application
 
   require Logger

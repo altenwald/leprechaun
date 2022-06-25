@@ -1,4 +1,14 @@
 defmodule Leprechaun.Websocket do
+  @moduledoc """
+  Implements the modules needed to attend a websocket connection from
+  cowboy. It's interacting with the websocket receiving information
+  from the websocket and from the application and acting according to
+  the message it receives from each part.
+
+  The logic of the game is kept in `Leprechaun.Game` but here we can
+  find the flow of the connection and how the client could interact
+  with the game.
+  """
   require Logger
   alias Leprechaun.{Game, Bot, HiScore}
 

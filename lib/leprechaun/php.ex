@@ -1,4 +1,17 @@
 defmodule Leprechaun.Php do
+  @moduledoc """
+  Implements functions and information needed to configure the sandbox
+  for PHP and letting handle the information for a specific game.
+
+  We can find here three functions:
+
+  - `leprechaun_check_move`: which is letting us to check what's happening
+    if we perform that move but in a dry-run.
+  - `leprechaun_move`: performs the movement.
+  - `leprechaun_get_points`: let us check the board in a specific position.
+
+  TODO: get the board as an double array instead of build it by ourselves.
+  """
   require Logger
 
   alias :ephp, as: Ephp

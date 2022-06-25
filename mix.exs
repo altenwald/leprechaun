@@ -35,7 +35,8 @@ defmodule Leprechaun.MixProject do
       {:ecto_boot_migration, "~> 0.1"},
 
       # tooling for quality check
-      {:dialyxir, ">= 0.0.0", only: :dev, runtime: false}
+      {:dialyxir, ">= 0.0.0", only: :dev, runtime: false},
+      {:credo, ">= 0.0.0", only: :dev, runtime: false}
     ]
   end
 end

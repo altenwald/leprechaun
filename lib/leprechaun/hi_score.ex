@@ -1,4 +1,7 @@
 defmodule Leprechaun.HiScore do
+  @moduledoc """
+  Stores the HighScore for the user and all of the information about its game.
+  """
   use Ecto.Schema
 
   import Ecto.Query, only: [from: 2]
@@ -19,7 +22,7 @@ defmodule Leprechaun.HiScore do
   end
 
   @required_fields [:name, :score, :turns, :extra_turns]
-  @optional_fields []
+  @optional_fields [:remote_ip]
 
   def changeset(model, params \\ %{}) do
     model
@@ -38,14 +41,14 @@ defmodule Leprechaun.HiScore do
     |> Repo.insert()
   end
 
-  defp get_order_index([]), do: {:error, :notfound}
-  defp get_order_index([{%HiScore{}, order} | _]), do: {:ok, order}
+  defp get_order_index(nil), do: {:error, :notfound}
+  defp get_order_index({%HiScore{}, order}), do: {:ok, order}
 
   def get_order(my_id) do
     from(h in HiScore, order_by: [desc: h.score])
     |> Repo.all()
     |> Enum.with_index(1)
-    |> Enum.filter(fn {%HiScore{id: id}, _} -> id == my_id end)
+    |> Enum.find(fn {%HiScore{id: id}, _} -> id == my_id end)
     |> get_order_index()
   end
 

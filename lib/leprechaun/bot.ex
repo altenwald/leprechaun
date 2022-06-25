@@ -1,4 +1,8 @@
 defmodule Leprechaun.Bot do
+  @moduledoc """
+  The bot is acting like Websocket and playing directly to the game following
+  the instructions of a PHP code.
+  """
   use GenServer
   require Logger
   alias Leprechaun.{Game, Bot, Php}

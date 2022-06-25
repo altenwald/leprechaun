@@ -1,4 +1,8 @@
 defmodule Leprechaun.Http do
+  @moduledoc """
+  Implements the functions needed to use cowboy, mainly the dispatching for the
+  static files and starting of the websocket connection.
+  """
   require Logger
 
   def child_spec(opts) do
