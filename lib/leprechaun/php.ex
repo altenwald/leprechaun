@@ -7,7 +7,7 @@ defmodule Leprechaun.Php do
   alias :ephp_context, as: EphpContext
   alias :ephp_parser, as: EphpParser
   alias :ephp_array, as: EphpArray
-  alias Leprechaun.Board
+  alias Leprechaun.Game
 
   @behaviour :ephp_lib
 
@@ -19,9 +19,9 @@ defmodule Leprechaun.Php do
   @impl :ephp_lib
   def init_func() do
     [
-      {:leprechaun_check_move, [:integer, :integer, :integer, :integer]},
-      {:leprechaun_move, [:integer, :integer, :integer, :integer]},
-      {:leprechaun_get_points, [:integer, :integer]}
+      {:leprechaun_check_move, [args: [:integer, :integer, :integer, :integer]]},
+      {:leprechaun_move, [args: [:integer, :integer, :integer, :integer]]},
+      {:leprechaun_get_points, [args: [:integer, :integer]]}
     ]
   end
 
@@ -31,12 +31,12 @@ defmodule Leprechaun.Php do
   end
 
   def leprechaun_check_move(ctx, _line, {_, x1}, {_, y1}, {_, x2}, {_, y2}) do
-    {check, matches} = Board.check_move(EphpContext.get_meta(ctx, :board_id), {x1, y1}, {x2, y2})
+    {check, matches} = Game.check_move(EphpContext.get_meta(ctx, :board_id), {x1, y1}, {x2, y2})
     tr(%{"check" => check, "matches" => matches})
   end
 
   def leprechaun_move(ctx, _line, {_, x1}, {_, y1}, {_, x2}, {_, y2}) do
-    Board.move(EphpContext.get_meta(ctx, :board_id), {x1, y1}, {x2, y2})
+    Game.move(EphpContext.get_meta(ctx, :board_id), {x1, y1}, {x2, y2})
     true
   end
 
@@ -44,7 +44,7 @@ defmodule Leprechaun.Php do
     do: false
 
   def leprechaun_get_points(ctx, _line, {_, x}, {_, y}) do
-    Board.show(EphpContext.get_meta(ctx, :board_id))
+    Game.show(EphpContext.get_meta(ctx, :board_id))
     |> Enum.at(y - 1)
     |> Enum.at(x - 1)
   end
@@ -74,7 +74,7 @@ defmodule Leprechaun.Php do
   end
 
   @filename "/bot.php"
-  @name "bot.php"
+  @name 'bot.php'
 
   def run(content, board_id, cells) do
     try do
@@ -85,7 +85,7 @@ defmodule Leprechaun.Php do
       {:ok, ctx} = Ephp.context_new(@filename)
       Logger.debug("[php] cells => #{inspect(cells)}")
       register_assigns(ctx, board: cells)
-      Ephp.register_superglobals(ctx, [@name])
+      Ephp.register_superglobals(ctx, @name, [])
       Ephp.register_module(ctx, __MODULE__)
       {:ok, output} = EphpOutput.start_link(ctx, false)
       EphpContext.set_output_handler(ctx, output)

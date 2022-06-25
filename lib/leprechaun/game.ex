@@ -65,6 +65,20 @@ defmodule Leprechaun.Game do
             username: nil,
             consumers: []
 
+  @type game_name() :: String.t() | atom()
+  @type cells() :: [[0..8]]
+  @type x_pos() :: 1..8
+  @type y_pos() :: 1..8
+  @type point() :: {x_pos(), y_pos()}
+  @type match() :: boolean()
+  @type moves() :: [{:horizontal | :vertical, [point()]}]
+  @type username() :: String.t()
+  @type remote_ip() :: String.t()
+  @type score() :: non_neg_integer()
+  @type turns() :: non_neg_integer()
+  @type stats() :: %{ String.t() => non_neg_integer() }
+
+  @spec start_link(game_name()) :: {:ok, pid}
   def start_link(name) do
     {:ok, board} = GenServer.start_link(__MODULE__, [], name: via(name))
     :ok = add_consumer(name)
@@ -75,36 +89,47 @@ defmodule Leprechaun.Game do
     {:via, Registry, {Leprechaun.Game.Registry, board}}
   end
 
+  @spec exists?(game_name()) :: boolean()
   def exists?(board) do
     Registry.lookup(Leprechaun.Game.Registry, board) != []
   end
 
+  @spec stop(game_name()) :: :ok
   def stop(name), do: GenServer.stop(via(name))
 
+  @spec show(game_name()) :: cells()
   def show(name), do: GenServer.call(via(name), :show)
 
+  @spec move(game_name(), from :: point(), to :: point()) :: :ok
   def move(name, point_from, point_to) do
     GenServer.cast(via(name), {:move, point_from, point_to})
   end
 
+  @spec check_move(game_name(), from :: point(), to :: point()) :: {match(), moves()}
   def check_move(name, point_from, point_to) do
     GenServer.call(via(name), {:check_move, point_from, point_to})
   end
 
+  @spec hiscore(game_name(), username(), remote_ip()) :: :ok | {:error, term()}
   def hiscore(name, username, remote_ip) do
     GenServer.call(via(name), {:hiscore, username, remote_ip})
   end
 
+  @spec add_consumer(game_name()) :: :ok
   def add_consumer(name) do
     GenServer.cast(via(name), {:consumer, self()})
   end
 
+  @spec score(game_name()) :: score()
   def score(name), do: GenServer.call(via(name), :score)
 
+  @spec turns(game_name()) :: turns()
   def turns(name), do: GenServer.call(via(name), :turns)
 
+  @spec stats(game_name()) :: stats()
   def stats(name), do: GenServer.call(via(name), :stats)
 
+  @impl GenServer
   def init([]) do
     cells =
       for y <- 1..@board_y, into: %{} do
@@ -116,6 +141,7 @@ defmodule Leprechaun.Game do
     {:ok, %Game{cells: gen_clean(cells)}}
   end
 
+  @impl GenServer
   def handle_call(:show, _from, %Game{cells: cells} = board) do
     {:reply, build_show(cells), board}
   end
@@ -168,6 +194,7 @@ defmodule Leprechaun.Game do
     {:reply, {:error, :already_set}, board}
   end
 
+  @impl GenServer
   def handle_cast({:move, _point1, _point2}, %Game{turns: 0} = board) do
     send_to(board.consumers, {:error, :gameover})
     {:noreply, board}
@@ -196,6 +223,7 @@ defmodule Leprechaun.Game do
     {:noreply, board}
   end
 
+  @impl GenServer
   def handle_info({:DOWN, _ref, :process, pid, _reason}, %Game{consumers: consumers} = board) do
     {:noreply, %Game{board | consumers: consumers -- [pid]}}
   end
@@ -305,10 +333,10 @@ defmodule Leprechaun.Game do
         previous
 
       {_, []} ->
-        send_to(consumers, {:extra_turn, 1}) |> IO.inspect(label: "extra_turn 1")
+        send_to(consumers, {:extra_turn, 1})
 
       _ ->
-        send_to(consumers, {:extra_turn, 2}) |> IO.inspect(label: "extra_turn 2")
+        send_to(consumers, {:extra_turn, 2})
     end
   end
 

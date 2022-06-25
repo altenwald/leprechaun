@@ -1,7 +1,7 @@
 defmodule Leprechaun.Bot do
   use GenServer
   require Logger
-  alias Leprechaun.{Board, Bot, Php}
+  alias Leprechaun.{Game, Bot, Php}
 
   defstruct board_id: nil,
             websocket_pid: nil,
@@ -31,7 +31,7 @@ defmodule Leprechaun.Bot do
 
   @impl true
   def init([board_id, websocket_pid]) do
-    Board.add_consumer(board_id)
+    Game.add_consumer(board_id)
     {:ok, %Bot{board_id: board_id, websocket_pid: websocket_pid}}
   end
 
@@ -42,7 +42,7 @@ defmodule Leprechaun.Bot do
 
   @impl true
   def handle_call({:run, code}, _from, bot) do
-    cells = Board.show(bot.board_id)
+    cells = Game.show(bot.board_id)
     result = Php.run(code, bot.board_id, cells)
     {:reply, result, %Bot{bot | code: code}}
   end
@@ -50,7 +50,7 @@ defmodule Leprechaun.Bot do
   @impl true
   def handle_info(:play, bot) do
     Process.sleep(2500)
-    cells = Board.show(bot.board_id)
+    cells = Game.show(bot.board_id)
     Php.run(bot.code, bot.board_id, cells)
     {:noreply, bot}
   end

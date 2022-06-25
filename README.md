@@ -31,7 +31,7 @@ iex -S mix run
 The Elixir shell will be running after the compilation. You can start the game using this command:
 
 ```elixir
-Leprechaun.Game.run :mygame
+Leprechaun.Console.run :mygame
 ```
 
 Follow the instructions and enjoy!

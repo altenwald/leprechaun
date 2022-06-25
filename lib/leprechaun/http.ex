@@ -50,8 +50,8 @@ defmodule Leprechaun.Http do
 
   def handle(req, state) do
     Logger.debug("Unexpected request: #{inspect(req)}")
-    headers = %{"content-Type" => "text/html"}
-    {:ok, req} = :cowboy_req.reply(404, headers)
+    headers = %{"content-type" => "text/html"}
+    req = :cowboy_req.reply(404, headers, req)
     {:ok, req, state}
   end
 
