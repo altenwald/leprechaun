@@ -52,11 +52,11 @@ defmodule Leprechaun.Game do
 
   @init_turns 10
   if Mix.env() != :test do
-  @init_symbols_prob List.duplicate(1, 15) ++
-                       List.duplicate(2, 12) ++
-                       List.duplicate(3, 9) ++
-                       List.duplicate(4, 6) ++
-                       List.duplicate(5, 1)
+    @init_symbols_prob List.duplicate(1, 15) ++
+                         List.duplicate(2, 12) ++
+                         List.duplicate(3, 9) ++
+                         List.duplicate(4, 6) ++
+                         List.duplicate(5, 1)
   end
 
   defstruct cells: [],
@@ -138,10 +138,12 @@ defmodule Leprechaun.Game do
     max_running_time = opts[:max_running_time] || :timer.hours(@max_running_hours)
     Process.send_after(self(), :stop, max_running_time)
     Logger.info("[board] started #{inspect(self())}")
-    {:ok, %Game{
-      cells: gen_clean(cells, opts[:max_tries] || @max_tries),
-      turns: opts[:turns] || @init_turns
-    }}
+
+    {:ok,
+     %Game{
+       cells: gen_clean(cells, opts[:max_tries] || @max_tries),
+       turns: opts[:turns] || @init_turns
+     }}
   end
 
   @impl GenServer
@@ -259,6 +261,7 @@ defmodule Leprechaun.Game do
         check_and_clean(cells, consumers, acc, score, turns, :decr_turn, moves)
 
       {turns, extra_turns} = update_turns(turns, extra_turns, extra_turn)
+
       if turns == 0 do
         send_to(consumers, {:gameover, score, board.username != nil})
       else
@@ -339,7 +342,7 @@ defmodule Leprechaun.Game do
     end
   end
 
-  defp check_and_clean(cells, consumers, [], score, _turns, extra_turns, _moves) do
+  defp check_and_clean(cells, _consumers, [], score, _turns, extra_turns, _moves) do
     {cells, score, extra_turns}
   end
 

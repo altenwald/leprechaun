@@ -8,7 +8,14 @@ defmodule Leprechaun.MixProject do
       elixir: "~> 1.13",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      preferred_cli_env: [
+        check: :test,
+        credo: :test,
+        dialyzer: :test,
+        doctor: :test,
+        sobelow: :test
+      ]
     ]
   end
 
@@ -40,8 +47,12 @@ defmodule Leprechaun.MixProject do
       {:ecto_boot_migration, "~> 0.1"},
 
       # tooling for quality check
-      {:dialyxir, ">= 0.0.0", only: :dev, runtime: false},
-      {:credo, ">= 0.0.0", only: :dev, runtime: false}
+      {:dialyxir, ">= 0.0.0", only: :test, runtime: false},
+      {:credo, ">= 0.0.0", only: :test, runtime: false},
+      {:doctor, ">= 0.0.0", only: :test, runtime: false},
+      {:ex_check, "~> 0.14", only: :test, runtime: false},
+      {:ex_doc, ">= 0.0.0", only: [:dev, :test], runtime: false},
+      {:sobelow, ">= 0.0.0", only: [:test], runtime: false}
     ]
   end
 end

@@ -8,6 +8,14 @@ If you love this content and want we can generate more, you can support us:
 
 [![paypal](https://www.paypalobjects.com/en_US/GB/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RC5F8STDA6AXE)
 
+## Checking code
+
+The source code has implemented different tools to ensure we are arriving to a minimal internal quality, that's because we are working to get the output of this command green:
+
+```
+mix check
+```
+
 ## Installation
 
 It's easy to install. You only needs to have [Elixir](https://elixir-lang.org/install.html) installed and run this to obtain the code:
@@ -38,14 +46,16 @@ Follow the instructions and enjoy!
 
 ### Web Interface
 
-Version 0.2.0 has a new addition and it's [cowboy][1] and [jason][2] among others to provide an HTTP
-interface to let us to play via web as you can see in the picture:
+Version 0.2 has a new addition and it's [cowboy][1] and [jason][2] among others to provide an HTTP
+interface to let us to play via web.
+
+Version 1.0 has been a rewrite of the website using [Phaser3][3] 
 
 [![Leprechaun WebGame](screenshot_web.png)](screenshot_web.png)
 
 You only need to run the project as showed above (in the previous section) and then access via this link:
 
-http://localhost:1234
+http://localhost:4012
 
 You can change the configuration to listen in another port and even to use IPv6 instead.
 
@@ -53,3 +63,4 @@ Enjoy!
 
 [1]: https://github.com/ninenines/cowboy
 [2]: https://github.com/michalmuskala/jason
+[3]: https://phaser.io/

@@ -16,6 +16,7 @@ defmodule Leprechaun.ReleaseTasks do
   def run_migrations do
     Application.get_env(:leprechaun, :ecto_repos, [])
     |> Enum.each(&run_migrations_for/1)
+
     :ok
   end
 
