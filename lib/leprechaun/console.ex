@@ -99,7 +99,6 @@ defmodule Leprechaun.Console do
 
       {:gameover, score, _has_username} ->
         show(score, 0, cells)
-        show_stats(Game.stats(board))
         false
 
       {:error, error} ->
@@ -137,16 +136,6 @@ defmodule Leprechaun.Console do
 
     if turns == 0 do
       IO.puts(" G A M E   O V E R !!")
-    end
-  end
-
-  defp humanize("played_turns"), do: "Played Turns"
-  defp humanize("extra_turns"), do: "Extra Turns"
-  defp humanize(other), do: other
-
-  defp show_stats(stats) do
-    for {key, value} <- stats do
-      IO.puts("#{humanize(key)} = #{value}")
     end
   end
 end

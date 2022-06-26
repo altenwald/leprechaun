@@ -48,14 +48,16 @@ defmodule Leprechaun.Game do
   @board_y 8
 
   @max_tries 1000
-  @max_hours_running 2
+  @max_running_hours 2
 
   @init_turns 10
+  if Mix.env() != :test do
   @init_symbols_prob List.duplicate(1, 15) ++
                        List.duplicate(2, 12) ++
                        List.duplicate(3, 9) ++
                        List.duplicate(4, 6) ++
                        List.duplicate(5, 1)
+  end
 
   defstruct cells: [],
             score: 0,
@@ -76,11 +78,11 @@ defmodule Leprechaun.Game do
   @type remote_ip() :: String.t()
   @type score() :: non_neg_integer()
   @type turns() :: non_neg_integer()
-  @type stats() :: %{String.t() => non_neg_integer()}
+  @type opts() :: [{:max_running_time, timeout()}, {:turns, turns()}]
 
-  @spec start_link(game_name()) :: {:ok, pid}
-  def start_link(name) do
-    {:ok, board} = GenServer.start_link(__MODULE__, [], name: via(name))
+  @spec start_link(game_name(), opts()) :: {:ok, pid}
+  def start_link(name, opts \\ []) do
+    {:ok, board} = GenServer.start_link(__MODULE__, opts, name: via(name))
     :ok = add_consumer(name)
     {:ok, board}
   end
@@ -126,19 +128,20 @@ defmodule Leprechaun.Game do
   @spec turns(game_name()) :: turns()
   def turns(name), do: GenServer.call(via(name), :turns)
 
-  @spec stats(game_name()) :: stats()
-  def stats(name), do: GenServer.call(via(name), :stats)
-
   @impl GenServer
-  def init([]) do
+  def init(opts) do
     cells =
       for y <- 1..@board_y, into: %{} do
         {y, for(x <- 1..@board_x, into: %{}, do: {x, new_piece()})}
       end
 
-    Process.send_after(self(), :stop, :timer.hours(@max_hours_running))
+    max_running_time = opts[:max_running_time] || :timer.hours(@max_running_hours)
+    Process.send_after(self(), :stop, max_running_time)
     Logger.info("[board] started #{inspect(self())}")
-    {:ok, %Game{cells: gen_clean(cells)}}
+    {:ok, %Game{
+      cells: gen_clean(cells, opts[:max_tries] || @max_tries),
+      turns: opts[:turns] || @init_turns
+    }}
   end
 
   @impl GenServer
@@ -152,11 +155,6 @@ defmodule Leprechaun.Game do
 
   def handle_call(:turns, _from, board) do
     {:reply, board.turns, board}
-  end
-
-  def handle_call(:stats, _from, board) do
-    stats = %{"played_turns" => board.played_turns, "extra_turns" => board.extra_turns}
-    {:reply, stats, board}
   end
 
   def handle_call({:check_move, _point1, _point2}, _from, %Game{turns: 0} = board) do
@@ -218,21 +216,18 @@ defmodule Leprechaun.Game do
     {:noreply, %Game{board | consumers: [from | board.consumers]}}
   end
 
-  def handle_cast(info, board) do
-    Logger.warn("[board] info discarded => #{inspect(info)}")
-    {:noreply, board}
-  end
-
   @impl GenServer
   def handle_info({:DOWN, _ref, :process, pid, _reason}, %Game{consumers: consumers} = board) do
     {:noreply, %Game{board | consumers: consumers -- [pid]}}
   end
 
   def handle_info(:stop, state) do
+    Logger.warn("game stopped")
     {:stop, :normal, state}
   end
 
   defp send_to(consumers, message) do
+    Logger.debug("consumers (#{inspect(consumers)}): #{inspect(message)}")
     for consumer <- consumers, do: send(consumer, message)
     message
   end
@@ -264,7 +259,11 @@ defmodule Leprechaun.Game do
         check_and_clean(cells, consumers, acc, score, turns, :decr_turn, moves)
 
       {turns, extra_turns} = update_turns(turns, extra_turns, extra_turn)
-      if turns == 0, do: send_to(consumers, {:gameover, score, board.username != nil})
+      if turns == 0 do
+        send_to(consumers, {:gameover, score, board.username != nil})
+      else
+        send_to(consumers, :play)
+      end
 
       {:noreply,
        %Game{
@@ -341,7 +340,6 @@ defmodule Leprechaun.Game do
   end
 
   defp check_and_clean(cells, consumers, [], score, _turns, extra_turns, _moves) do
-    send_to(consumers, :play)
     {cells, score, extra_turns}
   end
 
@@ -380,8 +378,6 @@ defmodule Leprechaun.Game do
       acc
     end
   end
-
-  defp gen_clean(cells, tries \\ @max_tries)
 
   defp gen_clean(_cells, 0), do: throw(:badluck)
 
@@ -491,5 +487,9 @@ defmodule Leprechaun.Game do
     end
   end
 
-  defp new_piece, do: Enum.random(@init_symbols_prob)
+  if Mix.env() == :test do
+    defp new_piece, do: Leprechaun.Support.Piece.new_piece()
+  else
+    defp new_piece, do: Enum.random(@init_symbols_prob)
+  end
 end
