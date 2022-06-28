@@ -24,7 +24,8 @@ defmodule Leprechaun.HiScore do
   @required_fields [:name, :score, :turns, :extra_turns]
   @optional_fields [:remote_ip]
 
-  def changeset(model, params \\ %{}) do
+  @doc false
+  def changeset(model, params) do
     model
     |> cast(params, @required_fields ++ @optional_fields)
     |> validate_required(@required_fields)

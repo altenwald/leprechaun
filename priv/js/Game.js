@@ -59,7 +59,6 @@ class Game extends Phaser.Scene {
         break
       case "connected":
         this.connection.setVisible(false)
-        this.input.on('pointerdown', this.startDrag, this)
         break
       default:
         if (data.cells) {
@@ -312,7 +311,9 @@ class Game extends Phaser.Scene {
       p2.x = p2.getData('x')
       p1.y = p1.getData('y')
       p2.y = p2.getData('y')
-      [ p1.texture, p2.texture ] = [ p2.texture, p1.texture ]
+      var t = p1.texture
+      p1.setTexture(p2.texture)
+      p2.setTexture(t)
 
       send({
         type: "move",

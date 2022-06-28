@@ -55,32 +55,6 @@ defmodule Leprechaun.GameTest do
       Process.sleep(100)
       refute Game.exists?(name)
     end
-
-    test "cannot setup the cells" do
-      board = [
-        [1, 2, 2, 3, 4, 3, 2, 1],
-        [1, 2, 1, 4, 3, 2, 1, 1],
-        [1, 3, 2, 3, 2, 1, 2, 2],
-        [1, 2, 3, 2, 1, 2, 1, 1],
-        [2, 3, 2, 3, 2, 3, 2, 3],
-        [3, 2, 3, 2, 3, 2, 3, 2],
-        [2, 3, 2, 3, 2, 3, 2, 3],
-        [3, 2, 3, 2, 3, 2, 3, 2]
-      ]
-
-      Piece.set_pieces(List.flatten(board))
-      Piece.add_pieces([3, 1, 1, 1])
-
-      name = :game1
-
-      {pid, ref} =
-        spawn_monitor(fn ->
-          Game.start_link(name, max_tries: 1)
-        end)
-
-      assert_receive {:DOWN, ^ref, :process, ^pid,
-                      {{:badmatch, {:error, {:bad_return_value, :badluck}}}, _stack_trace}}
-    end
   end
 
   describe "consumers" do
@@ -139,13 +113,21 @@ defmodule Leprechaun.GameTest do
       %{board: board, pid: pid, name: name}
     end
 
+    test "check correct move (3 elements, type 8)", data do
+      assert {true, MapSet.new(vertical: MapSet.new([{2, 1}, {2, 2}, {2, 3}]))} ==
+               Game.check_move(data.name, {2, 4}, {2, 3})
+
+      refute_receive _, 500
+      assert data.board == Game.show(data.name)
+    end
+
     test "correct move (3 elements, type 8)", data do
       Piece.add_pieces([3, 4])
       assert :ok = Game.move(data.name, {2, 4}, {2, 3})
 
       assert_receive {:match, 24, 24,
                       [
-                        vertical: [{2, 3}, {2, 2}, {2, 1}]
+                        vertical: [{2, 1}, {2, 2}, {2, 3}]
                       ],
                       [
                         [1, 8, 2, 3, 4, 1, 2, 1],
@@ -170,9 +152,9 @@ defmodule Leprechaun.GameTest do
       ]
 
       assert_receive {:new_kind, 2, 3, 8}
-      assert_receive {:slide_new, 2, 3}
+      assert_receive {:insert, 2, 3}
       assert_receive {:slide, 2, 1, 2}
-      assert_receive {:slide_new, 2, 4}
+      assert_receive {:insert, 2, 4}
 
       assert_receive {:show, ^new_board}
       assert_receive :play
@@ -189,7 +171,7 @@ defmodule Leprechaun.GameTest do
 
       assert_receive {:match, 4, 4,
                       [
-                        vertical: [{1, 4}, {1, 3}, {1, 2}, {1, 1}]
+                        vertical: [{1, 1}, {1, 2}, {1, 3}, {1, 4}]
                       ],
                       [
                         [1, 8, 2, 3, 4, 1, 2, 1],
@@ -203,10 +185,10 @@ defmodule Leprechaun.GameTest do
                       ]}
 
       assert_receive {:new_kind, 1, 3, 2}
-      assert_receive {:slide_new, 1, 1}
-      assert_receive {:slide_new, 1, 3}
+      assert_receive {:insert, 1, 1}
+      assert_receive {:insert, 1, 3}
       assert_receive {:slide, 1, 1, 2}
-      assert_receive {:slide_new, 1, 4}
+      assert_receive {:insert, 1, 4}
       assert_receive {:slide, 1, 3, 4}
       assert_receive {:slide, 1, 2, 3}
       assert_receive {:slide, 1, 1, 2}
@@ -237,7 +219,7 @@ defmodule Leprechaun.GameTest do
 
       assert_receive {:match, 5, 5,
                       [
-                        mixed: [{6, 4}, {6, 3}, {6, 2}, {8, 2}, {7, 2}]
+                        mixed: [{6, 2}, {6, 3}, {6, 4}, {7, 2}, {8, 2}]
                       ],
                       [
                         [1, 8, 2, 3, 4, 3, 2, 1],
@@ -252,16 +234,16 @@ defmodule Leprechaun.GameTest do
 
       assert_receive {:new_kind, 6, 2, 2}
       assert_receive {:slide, 7, 1, 2}
-      assert_receive {:slide_new, 7, 3}
+      assert_receive {:insert, 7, 3}
       assert_receive {:slide, 8, 1, 2}
-      assert_receive {:slide_new, 8, 4}
+      assert_receive {:insert, 8, 4}
       assert_receive {:slide, 6, 2, 3}
       assert_receive {:slide, 6, 1, 2}
-      assert_receive {:slide_new, 6, 1}
+      assert_receive {:insert, 6, 1}
       assert_receive {:slide, 6, 3, 4}
       assert_receive {:slide, 6, 2, 3}
       assert_receive {:slide, 6, 1, 2}
-      assert_receive {:slide_new, 6, 1}
+      assert_receive {:insert, 6, 1}
 
       new_board = [
         [1, 8, 2, 3, 4, 1, 3, 4],
@@ -282,16 +264,28 @@ defmodule Leprechaun.GameTest do
       refute_receive _, 500
     end
 
+    test "check incorrect move, no match", data do
+      assert {false, MapSet.new()} == Game.check_move(data.name, {3, 1}, {4, 1})
+      refute_receive _, 500
+      assert data.board == Game.show(data.name)
+    end
+
     test "incorrect move, no match", data do
       assert :ok = Game.move(data.name, {3, 1}, {4, 1})
-      assert_receive {:error, {:illegal_move, {3, 1}, {4, 1}}}
+      assert_receive {:error, {:illegal_move, {{3, 1}, {4, 1}}}}
       assert data.board == Game.show(data.name)
       refute_receive _, 500
     end
 
+    test "check incorrect move, illegal offset", data do
+      assert {false, MapSet.new()} == Game.check_move(data.name, {3, 1}, {5, 1})
+      refute_receive _, 500
+      assert data.board == Game.show(data.name)
+    end
+
     test "incorrect move, illegal offset", data do
       assert :ok = Game.move(data.name, {3, 1}, {5, 1})
-      assert_receive {:error, {:illegal_move, {3, 1}, {5, 1}}}
+      assert_receive {:error, {:illegal_move, {{3, 1}, {5, 1}}}}
       assert data.board == Game.show(data.name)
       refute_receive _, 500
     end
@@ -319,6 +313,63 @@ defmodule Leprechaun.GameTest do
       %{board: board, pid: pid, name: name}
     end
 
+    test "check correct move (3 elements and new match after)", data do
+      Piece.add_pieces([3, 4, 1, 1])
+      assert :ok = Game.move(data.name, {7, 1}, {7, 2})
+
+      assert_receive {:match, 3, 3, [horizontal: [{6, 1}, {7, 1}, {8, 1}]],
+                      [
+                        [1, 2, 2, 3, 4, 1, 1, 1],
+                        [1, 2, 1, 4, 3, 3, 2, 1],
+                        [3, 1, 2, 3, 2, 1, 2, 2],
+                        [4, 2, 3, 2, 1, 1, 3, 1],
+                        [2, 3, 2, 3, 2, 3, 2, 3],
+                        [3, 2, 3, 2, 3, 2, 3, 2],
+                        [2, 3, 2, 3, 2, 3, 2, 3],
+                        [3, 2, 3, 2, 3, 2, 3, 2]
+                      ]}
+
+      assert_receive {:new_kind, 7, 1, 2}
+      assert_receive {:insert, 6, 3}
+      assert_receive {:insert, 8, 4}
+
+      assert_receive {:match, 6, 9, [vertical: [{7, 1}, {7, 2}, {7, 3}]],
+                      [
+                        [1, 2, 2, 3, 4, 3, 2, 4],
+                        [1, 2, 1, 4, 3, 3, 2, 1],
+                        [3, 1, 2, 3, 2, 1, 2, 2],
+                        [4, 2, 3, 2, 1, 1, 3, 1],
+                        [2, 3, 2, 3, 2, 3, 2, 3],
+                        [3, 2, 3, 2, 3, 2, 3, 2],
+                        [2, 3, 2, 3, 2, 3, 2, 3],
+                        [3, 2, 3, 2, 3, 2, 3, 2]
+                      ]}
+
+      assert_receive {:new_kind, 7, 1, 3}
+      assert_receive {:slide, 7, 1, 2}
+      assert_receive {:slide, 7, 2, 3}
+      assert_receive {:insert, 7, 1}
+      assert_receive {:slide, 7, 1, 2}
+      assert_receive {:insert, 7, 1}
+
+      new_board = [
+        [1, 2, 2, 3, 4, 3, 1, 4],
+        [1, 2, 1, 4, 3, 3, 1, 1],
+        [3, 1, 2, 3, 2, 1, 3, 2],
+        [4, 2, 3, 2, 1, 1, 3, 1],
+        [2, 3, 2, 3, 2, 3, 2, 3],
+        [3, 2, 3, 2, 3, 2, 3, 2],
+        [2, 3, 2, 3, 2, 3, 2, 3],
+        [3, 2, 3, 2, 3, 2, 3, 2]
+      ]
+
+      assert_receive {:show, ^new_board}
+      assert_receive {:gameover, 9, false}
+      assert {false, MapSet.new()} == Game.check_move(data.name, {2, 4}, {2, 3})
+      refute_receive _, 500
+      assert new_board == Game.show(data.name)
+    end
+
     test "receive game over", data do
       Piece.add_pieces([3, 4])
       assert {:error, :still_playing} = Game.hiscore(data.name, "Manuel Rubio", "127.0.0.1")
@@ -326,7 +377,7 @@ defmodule Leprechaun.GameTest do
 
       assert_receive {:match, 3, 3,
                       [
-                        vertical: [{1, 3}, {1, 2}, {1, 1}]
+                        vertical: [{1, 1}, {1, 2}, {1, 3}]
                       ],
                       [
                         [1, 2, 2, 3, 4, 1, 2, 1],
@@ -340,9 +391,9 @@ defmodule Leprechaun.GameTest do
                       ]}
 
       assert_receive {:new_kind, 1, 3, 2}
-      assert_receive {:slide_new, 1, 3}
+      assert_receive {:insert, 1, 3}
       assert_receive {:slide, 1, 1, 2}
-      assert_receive {:slide_new, 1, 4}
+      assert_receive {:insert, 1, 4}
 
       new_board = [
         [4, 2, 2, 3, 4, 1, 2, 1],

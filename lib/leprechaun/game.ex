@@ -41,25 +41,17 @@ defmodule Leprechaun.Game do
   column.
   """
   use GenServer
-  alias Leprechaun.{Game, HiScore}
+  alias Leprechaun.{Board, Game, HiScore}
   require Logger
 
   @board_x 8
   @board_y 8
 
-  @max_tries 1000
   @max_running_hours 2
 
   @init_turns 10
-  if Mix.env() != :test do
-    @init_symbols_prob List.duplicate(1, 15) ++
-                         List.duplicate(2, 12) ++
-                         List.duplicate(3, 9) ++
-                         List.duplicate(4, 6) ++
-                         List.duplicate(5, 1)
-  end
 
-  defstruct cells: [],
+  defstruct board: nil,
             score: 0,
             turns: @init_turns,
             played_turns: 0,
@@ -68,17 +60,13 @@ defmodule Leprechaun.Game do
             consumers: []
 
   @type game_name() :: String.t() | atom()
-  @type cells() :: [[0..8]]
-  @type x_pos() :: 1..8
-  @type y_pos() :: 1..8
-  @type point() :: {x_pos(), y_pos()}
   @type match() :: boolean()
-  @type moves() :: [{:horizontal | :vertical, [point()]}]
   @type username() :: String.t()
   @type remote_ip() :: String.t()
   @type score() :: non_neg_integer()
   @type turns() :: non_neg_integer()
   @type opts() :: [{:max_running_time, timeout()}, {:turns, turns()}]
+  @type cells() :: [[Board.piece()]]
 
   @spec start_link(game_name(), opts()) :: {:ok, pid}
   def start_link(name, opts \\ []) do
@@ -102,12 +90,13 @@ defmodule Leprechaun.Game do
   @spec show(game_name()) :: cells()
   def show(name), do: GenServer.call(via(name), :show)
 
-  @spec move(game_name(), from :: point(), to :: point()) :: :ok
+  @spec move(game_name(), from :: Board.cell_pos(), to :: Board.cell_pos()) :: :ok
   def move(name, point_from, point_to) do
     GenServer.cast(via(name), {:move, point_from, point_to})
   end
 
-  @spec check_move(game_name(), from :: point(), to :: point()) :: {match(), moves()}
+  @spec check_move(game_name(), from :: Board.cell_pos(), to :: Board.cell_pos()) ::
+          {match(), Board.matches()}
   def check_move(name, point_from, point_to) do
     GenServer.call(via(name), {:check_move, point_from, point_to})
   end
@@ -130,97 +119,73 @@ defmodule Leprechaun.Game do
 
   @impl GenServer
   def init(opts) do
-    cells =
-      for y <- 1..@board_y, into: %{} do
-        {y, for(x <- 1..@board_x, into: %{}, do: {x, new_piece()})}
-      end
+    board = Board.new(@board_x, @board_y)
 
     max_running_time = opts[:max_running_time] || :timer.hours(@max_running_hours)
     Process.send_after(self(), :stop, max_running_time)
     Logger.info("[board] started #{inspect(self())}")
 
-    {:ok,
-     %Game{
-       cells: gen_clean(cells, opts[:max_tries] || @max_tries),
-       turns: opts[:turns] || @init_turns
-     }}
+    {:ok, %Game{board: board, turns: opts[:turns] || @init_turns}}
   end
 
   @impl GenServer
-  def handle_call(:show, _from, %Game{cells: cells} = board) do
-    {:reply, build_show(cells), board}
+  def handle_call(:show, _from, %Game{} = game) do
+    {:reply, Board.show(game.board), game}
   end
 
-  def handle_call(:score, _from, board) do
-    {:reply, board.score, board}
+  def handle_call(:score, _from, game) do
+    {:reply, game.score, game}
   end
 
-  def handle_call(:turns, _from, board) do
-    {:reply, board.turns, board}
+  def handle_call(:turns, _from, game) do
+    {:reply, game.turns, game}
   end
 
-  def handle_call({:check_move, _point1, _point2}, _from, %Game{turns: 0} = board) do
-    {:reply, {false, []}, board}
+  def handle_call({:check_move, _point1, _point2}, _from, %Game{turns: 0} = game) do
+    {:reply, {false, MapSet.new()}, game}
   end
 
-  def handle_call({:check_move, {x1, y}, {x2, y}}, _from, board) when abs(x1 - x2) == 1 do
-    check_swap({x1, y}, {x2, y}, board)
+  def handle_call({:check_move, point1, point2}, _from, game) do
+    {:reply, check_swap(point1, point2, game), game}
   end
 
-  def handle_call({:check_move, {x, y1}, {x, y2}}, _from, board) when abs(y1 - y2) == 1 do
-    check_swap({x, y1}, {x, y2}, board)
-  end
-
-  def handle_call({:check_move, _point1, _point2}, _from, board) do
-    {:reply, {false, []}, board}
-  end
-
-  def handle_call({:hiscore, username, remote_ip}, _from, %Game{turns: 0, username: nil} = board) do
-    case HiScore.save(username, board.score, board.played_turns, board.extra_turns, remote_ip) do
+  def handle_call({:hiscore, username, remote_ip}, _from, %Game{turns: 0, username: nil} = game) do
+    case HiScore.save(username, game.score, game.played_turns, game.extra_turns, remote_ip) do
       {:ok, hiscore} ->
-        send_to(board.consumers, {:hiscore, HiScore.get_order(hiscore.id)})
-        {:reply, :ok, %Game{board | username: username}}
+        send_to(game.consumers, {:hiscore, HiScore.get_order(hiscore.id)})
+        {:reply, :ok, %Game{game | username: username}}
 
       {:error, changeset} ->
-        {:reply, {:error, changeset.errors}, board}
+        {:reply, {:error, changeset.errors}, game}
     end
   end
 
-  def handle_call({:hiscore, _username, _remote_ip}, _from, %Game{username: nil} = board) do
-    {:reply, {:error, :still_playing}, board}
+  def handle_call({:hiscore, _username, _remote_ip}, _from, %Game{username: nil} = game) do
+    {:reply, {:error, :still_playing}, game}
   end
 
-  def handle_call({:hiscore, _username, _remote_ip}, _from, board) do
-    {:reply, {:error, :already_set}, board}
+  def handle_call({:hiscore, _username, _remote_ip}, _from, game) do
+    {:reply, {:error, :already_set}, game}
   end
 
   @impl GenServer
-  def handle_cast({:move, _point1, _point2}, %Game{turns: 0} = board) do
-    send_to(board.consumers, {:error, :gameover})
-    {:noreply, board}
+  def handle_cast({:move, _point1, _point2}, %Game{turns: 0} = game) do
+    send_to(game.consumers, {:error, :gameover})
+    {:noreply, game}
   end
 
-  def handle_cast({:move, {x1, y}, {x2, y}}, board) when abs(x1 - x2) == 1 do
-    swap({x1, y}, {x2, y}, board)
+  def handle_cast({:move, point1, point2}, game) do
+    {:noreply, swap(point1, point2, game)}
   end
 
-  def handle_cast({:move, {x, y1}, {x, y2}}, board) when abs(y1 - y2) == 1 do
-    swap({x, y1}, {x, y2}, board)
-  end
-
-  def handle_cast({:move, point1, point2}, board) do
-    send_to(board.consumers, {:error, {:illegal_move, point1, point2}})
-    {:noreply, board}
-  end
-
-  def handle_cast({:consumer, from}, board) do
+  def handle_cast({:consumer, from}, game) do
     Process.monitor(from)
-    {:noreply, %Game{board | consumers: [from | board.consumers]}}
+    {:noreply, %Game{game | consumers: [from | game.consumers]}}
   end
 
   @impl GenServer
-  def handle_info({:DOWN, _ref, :process, pid, _reason}, %Game{consumers: consumers} = board) do
-    {:noreply, %Game{board | consumers: consumers -- [pid]}}
+  def handle_info({:DOWN, _ref, :process, pid, _reason}, %Game{consumers: consumers} = game) do
+    {:noreply, %Game{game | consumers: consumers -- [pid]}}
   end
 
   def handle_info(:stop, state) do
@@ -234,265 +199,108 @@ defmodule Leprechaun.Game do
     message
   end
 
-  defp swap(
-         {x1, y1},
-         {x2, y2},
-         %Game{
-           cells: cells,
-           consumers: consumers,
-           score: score,
-           turns: turns,
-           extra_turns: extra_turns
-         } = board
-       ) do
-    e1 = cells[y1][x1]
-    e2 = cells[y2][x2]
+  defp update_turns(_matches, 1), do: 1
 
-    {cells, acc} =
-      cells
-      |> put_in([y1, x1], e2)
-      |> put_in([y2, x2], e1)
-      |> check()
+  defp update_turns(matches, turns_mod) do
+    matches
+    |> Enum.map(fn {_dir, points} -> MapSet.size(points) end)
+    |> Enum.filter(&(&1 > 3))
+    |> Enum.split_with(&(&1 == 4))
+    |> case do
+      {[], []} -> turns_mod
+      {_, []} -> 0
+      {_, _} -> 1
+    end
+  end
 
-    moves = [{x1, y1}, {x2, y2}]
+  defp swap(point1, point2, game) do
+    Logger.info("swap #{inspect(point1)} to #{inspect(point2)}")
 
-    if acc != [] do
-      {cells, score, extra_turn} =
-        check_and_clean(cells, consumers, acc, score, turns, :decr_turn, moves)
+    case Board.move(game.board, point1, point2) do
+      {:error, _} = error ->
+        send_to(game.consumers, error)
+        game
 
-      {turns, extra_turns} = update_turns(turns, extra_turns, extra_turn)
+      moved_board ->
+        moves = MapSet.new([point1, point2])
+        find_and_apply_matches(game, moved_board, moves, -1)
+    end
+  end
 
-      if turns == 0 do
-        send_to(consumers, {:gameover, score, board.username != nil})
+  defp find_and_apply_matches(game, board, moves, turns_mod) do
+    matches = Board.find_matches(board)
+
+    if MapSet.size(matches) == 0 do
+      if MapSet.size(moves) > 0 do
+        [point1, point2] = Enum.to_list(moves)
+        send_to(game.consumers, {:error, {:illegal_move, {point1, point2}}})
+        game
       else
-        send_to(consumers, :play)
-      end
+        case turns_mod do
+          -1 -> :ok
+          0 -> send_to(game.consumers, {:extra_turn, 1})
+          1 -> send_to(game.consumers, {:extra_turn, 2})
+        end
 
-      {:noreply,
-       %Game{
-         board
-         | cells: cells,
-           score: score,
-           extra_turns: extra_turns,
-           played_turns: board.played_turns + 1,
-           turns: turns
-       }}
+        send_to(game.consumers, {:show, Board.show(board)})
+
+        turns = game.turns + turns_mod
+
+        if turns == 0 do
+          send_to(game.consumers, {:gameover, game.score, game.username != nil})
+        else
+          send_to(game.consumers, :play)
+        end
+
+        %Game{
+          game
+          | board: board,
+            turns: turns,
+            extra_turns: if(turns_mod == 1, do: game.extra_turns + 1, else: game.extra_turns),
+            played_turns: game.played_turns + 1
+        }
+      end
     else
-      send_to(consumers, {:error, {:illegal_move, {x1, y1}, {x2, y2}}})
-      {:noreply, board}
+      turns_mod = update_turns(matches, turns_mod)
+
+      score =
+        board
+        |> Board.get_matched_cells(matches)
+        |> Enum.sum()
+
+      send_match_events(game.consumers, board, matches, game.score)
+
+      board =
+        Enum.reduce(matches, board, fn match, board ->
+          Board.apply_matches(board, MapSet.new([match]), moves, &send_to(game.consumers, &1))
+        end)
+
+      %Game{game | score: game.score + score}
+      |> find_and_apply_matches(board, MapSet.new(), turns_mod)
     end
   end
 
-  defp check_swap({x1, y1}, {x2, y2}, %Game{cells: cells} = board)
-       when x1 >= 1 and x1 <= 8 and y1 >= 1 and y1 <= 8 and
-              x2 >= 1 and x2 <= 8 and y2 >= 1 and y2 <= 8 do
-    e1 = cells[y1][x1]
-    e2 = cells[y2][x2]
+  defp send_match_events(consumers, moved_board, matches, score) do
+    pieces = Board.show(moved_board)
 
-    {_cells, acc} =
-      cells
-      |> put_in([y1, x1], e2)
-      |> put_in([y2, x2], e1)
-      |> check()
+    Enum.reduce(matches, score, fn {dir, cells} = match, current_score ->
+      new_score = Enum.sum(Board.get_matched_cells(moved_board, MapSet.new([match])))
+      total_score = current_score + new_score
+      cells = Enum.to_list(cells)
 
-    {:reply, {acc != [], acc}, board}
-  end
-
-  defp update_turns(turns, extra, :decr_turn), do: {turns - 1, extra}
-  defp update_turns(turns, extra, {:extra_turn, n}), do: {turns + (n - 1), extra + (n - 1)}
-
-  defp build_show(cells) do
-    for y <- 1..8 do
-      for x <- 1..8 do
-        cells[y][x]
-      end
-    end
-  end
-
-  defp add_moves(acc, moves) do
-    Enum.reduce(acc, moves, fn {_, points}, acc_moves ->
-      if points -- points -- moves != [] do
-        acc_moves
-      else
-        point =
-          points
-          |> Enum.sort_by(fn {x, y} -> {y, x} end)
-          |> List.first()
-
-        [point | acc_moves]
-      end
+      send_to(consumers, {:match, new_score, total_score, [{dir, cells}], pieces})
+      total_score
     end)
   end
 
-  defp check_extra_turns(_consumers, {:extra_turn, n}, _) when n > 1, do: {:extra_turn, n}
+  defp check_swap(point1, point2, %Game{} = game) do
+    case Board.move(game.board, point1, point2) do
+      {:error, _} ->
+        {false, MapSet.new()}
 
-  defp check_extra_turns(consumers, previous, acc) do
-    acc
-    |> Enum.filter(fn {_, p} -> length(p) >= 4 end)
-    |> Enum.split_with(fn {_, p} -> length(p) == 4 end)
-    |> case do
-      {[], []} ->
-        previous
-
-      {_, []} ->
-        send_to(consumers, {:extra_turn, 1})
-
-      _ ->
-        send_to(consumers, {:extra_turn, 2})
+      moved_board ->
+        matches = Board.find_matches(moved_board)
+        {MapSet.size(matches) > 0, matches}
     end
-  end
-
-  defp check_and_clean(cells, _consumers, [], score, _turns, extra_turns, _moves) do
-    {cells, score, extra_turns}
-  end
-
-  defp check_and_clean(cells, consumers, acc, score, turns, extra_turns, moves) do
-    new_score =
-      acc
-      |> Enum.flat_map(fn {_dir, points} -> points end)
-      |> Enum.map(fn {x, y} -> cells[y][x] end)
-      |> Enum.sum()
-
-    extra_turns = check_extra_turns(consumers, extra_turns, acc)
-    total_score = new_score + score
-    send_to(consumers, {:match, new_score, total_score, acc, build_show(cells)})
-    moves = add_moves(acc, moves)
-
-    {cells, acc} =
-      cells
-      |> clean(consumers, acc, moves)
-      |> check()
-
-    send_to(consumers, {:show, build_show(cells)})
-    check_and_clean(cells, consumers, acc, total_score, turns, extra_turns, [])
-  end
-
-  defp check(cells, n, acc, x, y, inc_x, inc_y) do
-    if cells[y][x] == n do
-      new_x = inc_x + x
-      new_y = inc_y + y
-
-      if new_x >= 1 and new_x <= @board_x and new_y >= 1 and new_y <= @board_y do
-        check(cells, n, [{x, y} | acc], new_x, new_y, inc_x, inc_y)
-      else
-        [{x, y} | acc]
-      end
-    else
-      acc
-    end
-  end
-
-  defp gen_clean(_cells, 0), do: throw(:badluck)
-
-  defp gen_clean(cells, tries) do
-    {cells, acc} =
-      cells
-      |> check()
-      |> clean()
-      |> check()
-
-    if acc != [] do
-      gen_clean(cells, tries - 1)
-    else
-      Logger.debug("[gen_clean] achieved! in try #{tries}")
-      cells
-    end
-  end
-
-  defp incr_kind(8), do: 8
-  defp incr_kind(i), do: i + 1
-
-  defp clean({cells, acc}), do: clean(cells, [], acc)
-
-  defp clean(cells, consumers, acc, moves \\ []) do
-    points = Enum.flat_map(acc, fn {_, elems} -> elems end)
-    move_points = moves -- moves -- points
-
-    cells =
-      move_points
-      |> Enum.reduce(cells, fn {x, y}, cells ->
-        new_kind = incr_kind(cells[y][x])
-        Logger.debug("[clean] add #{new_kind} to (#{x},#{y})")
-        send_to(consumers, {:new_kind, x, y, new_kind})
-        put_in(cells[y][x], new_kind)
-      end)
-
-    (points -- move_points)
-    |> Enum.filter(fn elem -> elem not in moves end)
-    |> Enum.sort_by(fn {x, y} -> {y, x} end)
-    |> Enum.reduce(cells, fn {x, y}, cells -> slide(cells, consumers, x, y) end)
-  end
-
-  defp slide(cells, consumers, x, 1) do
-    new_piece = new_piece()
-    send_to(consumers, {:slide_new, x, new_piece})
-    put_in(cells[1][x], new_piece)
-  end
-
-  defp slide(cells, consumers, x, y) do
-    send_to(consumers, {:slide, x, y - 1, y})
-
-    cells[y][x]
-    |> put_in(cells[y - 1][x])
-    |> slide(consumers, x, y - 1)
-  end
-
-  defp check(cells, acc \\ [], x \\ 1, y \\ 1)
-
-  defp check(cells, acc, x, y) when x > @board_x, do: check(cells, acc, 1, y + 1)
-
-  defp check(cells, acc, _x, y) when y > @board_y do
-    acc =
-      acc
-      |> Enum.filter(fn {_, elems} -> length(elems) >= 3 end)
-      |> Enum.sort_by(fn {dir, elems} -> {dir, length(elems)} end, &>=/2)
-      |> Enum.reduce([], &remove_dups/2)
-      |> Enum.reduce([], &find_mixed/2)
-
-    {cells, acc}
-  end
-
-  defp check(cells, acc, x, y) do
-    n = cells[y][x]
-
-    checks = [
-      {:horizontal, check(cells, n, [], x, y, 1, 0)},
-      {:vertical, check(cells, n, [], x, y, 0, 1)}
-    ]
-
-    check(cells, acc ++ checks, x + 1, y)
-  end
-
-  defp remove_dups({dir, elems} = entry, entries) do
-    Logger.debug("[remove_dups] #{inspect(entry)} in #{inspect(entries)}")
-
-    if Enum.any?(entries, fn {d, elems0} -> d == dir and elems -- elems0 == [] end) do
-      entries
-    else
-      [entry | entries]
-    end
-  end
-
-  defp find_mixed({_dir, elems} = entry, entries) do
-    mixed = Enum.filter(entries, fn {_, elems0} -> elems -- elems -- elems0 != [] end)
-
-    if mixed != [] do
-      entries = entries -- mixed
-
-      elems =
-        [entry | mixed]
-        |> Enum.flat_map(fn {_, e} -> e end)
-        |> Enum.uniq()
-
-      [{:mixed, elems} | entries]
-    else
-      [entry | entries]
-    end
-  end
-
-  if Mix.env() == :test do
-    defp new_piece, do: Leprechaun.Support.Piece.new_piece()
-  else
-    defp new_piece, do: Enum.random(@init_symbols_prob)
   end
 end

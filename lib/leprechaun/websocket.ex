@@ -65,7 +65,7 @@ defmodule Leprechaun.Websocket do
     {:reply, {:text, Jason.encode!(%{"type" => "play", "turns" => turns})}, state}
   end
 
-  def websocket_info({:slide_new, x, piece}, state) do
+  def websocket_info({:insert, x, piece}, state) do
     check_throttle(state.board)
     msg = %{"type" => "slide_new", "row" => 1, "col" => x, "piece" => img(piece)}
     {:reply, {:text, Jason.encode!(msg)}, state}
@@ -143,7 +143,7 @@ defmodule Leprechaun.Websocket do
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
 
-  def websocket_info({:error, {:illegal_move, {x1, y1}, {x2, y2}}}, state) do
+  def websocket_info({:error, {:illegal_move, {{x1, y1}, {x2, y2}}}}, state) do
     msg = %{
       "type" => "illegal_move",
       "points" => [%{"row" => y1, "col" => x1}, %{"row" => y2, "col" => x2}]
@@ -191,6 +191,10 @@ defmodule Leprechaun.Websocket do
 
     msg = %{"type" => "hiscore", "top_list" => top_list, "position" => order}
     {:reply, {:text, Jason.encode!(msg)}, state}
+  end
+
+  defp process_data(%{"type" => "ping"}, state) do
+    {:reply, {:text, Jason.encode!(%{"type" => "pong"})}, state}
   end
 
   defp process_data(%{"type" => "run", "code" => code} = info, state) do

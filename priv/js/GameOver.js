@@ -42,7 +42,7 @@ class GameOver extends Phaser.Scene {
   
     // this.load.setBaseURL('https://leprechaun.altenwald.com')
     this.load.image('cell-background', '/img/cell_0_background.png')
-    this.load.image('start', '/img/start.png')
+    this.load.image('restart', '/img/restart.png')
 
     this.load.image('bronze', '/img/cell_1.png')
     this.load.image('silver', '/img/cell_2.png')
@@ -139,8 +139,8 @@ class GameOver extends Phaser.Scene {
     send({type: "hiscore"})
 
     this.add
-      .image(450, 220, 'start')
-      .setDisplaySize(100, 95)
+      .image(475, 220, 'restart')
+      .setDisplaySize(66, 53)
       .setDepth(2)
       .setInteractive({ useHandCursor: true })
       .on('pointerdown', () => {

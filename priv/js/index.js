@@ -47,7 +47,8 @@ var
     sceneRunning = '',
     ws,
     game_id,
-    vsn
+    vsn,
+    ping_timer
 
 game.screenBaseSize = {
     maxWidth: MAX_SIZE_WIDTH_SCREEN,
@@ -127,4 +128,10 @@ function connect() {
                 break
         }
     }
+    if (ping_timer) {
+        clearInterval(ping_timer);
+    }
+    ping_timer = setInterval(function(){
+        send({type: "ping"});
+    }, 10000);
 }

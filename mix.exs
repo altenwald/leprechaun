@@ -48,22 +48,15 @@ defmodule Leprechaun.MixProject do
       {:ecto_boot_migration, "~> 0.1"},
 
       # tooling for quality check
-      {:dialyxir, ">= 0.0.0", only: :test, runtime: false},
-      {:credo, ">= 0.0.0", only: :test, runtime: false},
+      {:dialyxir, ">= 0.0.0", only: [:dev, :test], runtime: false},
+      {:credo, ">= 0.0.0", only: [:dev, :test], runtime: false},
       {:doctor, ">= 0.0.0", only: :test, runtime: false},
       {:ex_check, "~> 0.14", only: :test, runtime: false},
-      {:ex_doc, ">= 0.0.0", only: [:dev, :test], runtime: false},
-      {:sobelow, ">= 0.0.0", only: [:test], runtime: false}
+      {:ex_doc, ">= 0.0.0", only: [:dev, :test], runtime: false}
     ]
   end
 
   defp aliases do
-    [
-      "check": [
-        "ecto.create",
-        "ecto.migrate",
-        "check"
-      ]
-    ]
+    []
   end
 end

@@ -83,7 +83,7 @@ defmodule Leprechaun.Console do
       :play ->
         true
 
-      {:slide_new, _x, _symbol} ->
+      {:insert, _x, _symbol} ->
         recv_all(global_score, board, cells)
 
       {:slide, _x, _y1, _y2} ->

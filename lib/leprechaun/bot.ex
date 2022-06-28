@@ -71,7 +71,7 @@ defmodule Leprechaun.Bot do
     {:noreply, state}
   end
 
-  def handle_info({:slide_new, _x, _piece}, state) do
+  def handle_info({:insert, _x, _piece}, state) do
     {:noreply, state}
   end
 
