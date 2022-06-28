@@ -57,6 +57,12 @@ defmodule Leprechaun.MixProject do
   end
 
   defp aliases do
-    []
+    [
+      check: [
+        "ecto.create",
+        "ecto.migrate",
+        "check"
+      ]
+    ]
   end
 end
