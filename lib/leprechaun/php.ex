@@ -10,7 +10,13 @@ defmodule Leprechaun.Php do
   - `leprechaun_move`: performs the movement.
   - `leprechaun_get_points`: let us check the board in a specific position.
 
-  TODO: get the board as an double array instead of build it by ourselves.
+  We have also different global variables registered like:
+
+  - `$board` is an array of arrays including the content of the board.
+
+  IMPORTANT: The PHP code is only running for one turn. It's intended to
+  perform a move and finnish. See the `Leprechaun.Bot` to see how it's
+  implementing its usage.
   """
   require Logger
 
@@ -24,11 +30,13 @@ defmodule Leprechaun.Php do
 
   @behaviour :ephp_lib
 
+  @doc false
   @impl :ephp_lib
   def init_config() do
     []
   end
 
+  @doc false
   @impl :ephp_lib
   def init_func() do
     [
@@ -38,26 +46,55 @@ defmodule Leprechaun.Php do
     ]
   end
 
+  @doc false
   @impl :ephp_lib
   def init_const() do
     []
   end
 
+  @doc """
+  Perform a `Game.check_move/3` based on the data passed to the PHP function
+  and translates the output to be handled by PHP:
+
+  ```php
+  var_dump(leprechaun_check_move(1, 1, 2, 1))
+  # [true, [[1, 1], [1, 2], [1, 3]]
+
+  var_dump(leprechaun_check_move(1, 1, 3, 1))
+  # [false, []]
+  ```
+  """
   def leprechaun_check_move(ctx, _line, {_, x1}, {_, y1}, {_, x2}, {_, y2}) do
-    {check, matches} = Game.check_move(EphpContext.get_meta(ctx, :board_id), {x1, y1}, {x2, y2})
+    {check, matches} = Game.check_move(EphpContext.get_meta(ctx, :game_id), {x1, y1}, {x2, y2})
     tr(%{"check" => check, "matches" => matches})
   end
 
+  @doc """
+  Perform a `Game.move/3` based on the data passed to the PHP function:
+
+  ```php
+  var_dump(leprechaun_move(1, 1, 2, 1))
+  # true
+  ```
+  """
   def leprechaun_move(ctx, _line, {_, x1}, {_, y1}, {_, x2}, {_, y2}) do
-    Game.move(EphpContext.get_meta(ctx, :board_id), {x1, y1}, {x2, y2})
+    Game.move(EphpContext.get_meta(ctx, :game_id), {x1, y1}, {x2, y2})
     true
   end
 
+  @doc """
+  Retrieves data for a specific cell from the board:
+
+  ```php
+  var_dump(leprechaun_get_points(1, 1))
+  # 3
+  ```
+  """
   def leprechaun_get_points(_ctx, _line, {_, x}, {_, y}) when x < 1 or x > 8 or y < 1 or y > 8,
     do: false
 
   def leprechaun_get_points(ctx, _line, {_, x}, {_, y}) do
-    Game.show(EphpContext.get_meta(ctx, :board_id))
+    Game.show(EphpContext.get_meta(ctx, :game_id))
     |> Enum.at(y - 1)
     |> Enum.at(x - 1)
   end
@@ -79,8 +116,10 @@ defmodule Leprechaun.Php do
   defp tr(nil), do: :undefined
   defp tr(atom) when is_atom(atom), do: to_string(atom)
   defp tr(tuple) when is_tuple(tuple), do: tr(Tuple.to_list(tuple))
-  defp tr(other), do: other
+  defp tr(list) when is_list(list), do: list
+  defp tr(other), do: Enum.to_list(other)
 
+  @doc false
   def register_assigns(context, assigns) do
     data = Enum.map(assigns, fn {k, v} -> {to_string(k), tr(v)} end)
     EphpContext.set_bulk(context, data)
@@ -89,7 +128,17 @@ defmodule Leprechaun.Php do
   @filename "/bot.php"
   @name 'bot.php'
 
-  def run(content, board_id, cells) do
+  @doc """
+  Perform the running of a certain PHP code, it's passing as parameters:
+
+  - `content` the PHP code to be running.
+  - `game_id` the ID for the process game.
+  - `cells` the board content.
+
+  Every time it's called we have to provide a fresh board representation which
+  we could obtain using `Leprechaun.Game.show/1`.
+  """
+  def run(content, game_id, cells) do
     try do
       parsed = EphpParser.parse(content)
       Logger.debug("[php] content => #{inspect(content)}")
@@ -102,7 +151,7 @@ defmodule Leprechaun.Php do
       Ephp.register_module(ctx, __MODULE__)
       {:ok, output} = EphpOutput.start_link(ctx, false)
       EphpContext.set_output_handler(ctx, output)
-      EphpContext.set_meta(ctx, :board_id, board_id)
+      EphpContext.set_meta(ctx, :game_id, game_id)
 
       try do
         Ephp.eval(@filename, ctx, parsed)

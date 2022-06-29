@@ -124,6 +124,7 @@ defmodule Leprechaun.GameTest do
     test "correct move (3 elements, type 8)", data do
       Piece.add_pieces([3, 4])
       assert :ok = Game.move(data.name, {2, 4}, {2, 3})
+      assert_receive {:move, {2, 4}, {2, 3}}
 
       assert_receive {:match, 24, 24,
                       [
@@ -167,6 +168,7 @@ defmodule Leprechaun.GameTest do
     test "correct move (4 elements + extra_turn 1)", data do
       Piece.add_pieces([3, 4, 1])
       assert :ok = Game.move(data.name, {1, 3}, {2, 3})
+      assert_receive {:move, {1, 3}, {2, 3}}
       assert_receive {:extra_turn, 1}
 
       assert_receive {:match, 4, 4,
@@ -215,6 +217,7 @@ defmodule Leprechaun.GameTest do
     test "correct move (5 elements + extra_turn 2)", data do
       Piece.add_pieces([3, 4, 1, 1])
       assert :ok = Game.move(data.name, {6, 1}, {6, 2})
+      assert_receive {:move, {6, 1}, {6, 2}}
       assert_receive {:extra_turn, 2}
 
       assert_receive {:match, 5, 5,
@@ -272,6 +275,7 @@ defmodule Leprechaun.GameTest do
 
     test "incorrect move, no match", data do
       assert :ok = Game.move(data.name, {3, 1}, {4, 1})
+      assert_receive {:move, {3, 1}, {4, 1}}
       assert_receive {:error, {:illegal_move, {{3, 1}, {4, 1}}}}
       assert data.board == Game.show(data.name)
       refute_receive _, 500
@@ -285,6 +289,7 @@ defmodule Leprechaun.GameTest do
 
     test "incorrect move, illegal offset", data do
       assert :ok = Game.move(data.name, {3, 1}, {5, 1})
+      assert_receive {:move, {3, 1}, {5, 1}}
       assert_receive {:error, {:illegal_move, {{3, 1}, {5, 1}}}}
       assert data.board == Game.show(data.name)
       refute_receive _, 500
@@ -316,6 +321,7 @@ defmodule Leprechaun.GameTest do
     test "check correct move (3 elements and new match after)", data do
       Piece.add_pieces([3, 4, 1, 1])
       assert :ok = Game.move(data.name, {7, 1}, {7, 2})
+      assert_receive {:move, {7, 1}, {7, 2}}
 
       assert_receive {:match, 3, 3, [horizontal: [{6, 1}, {7, 1}, {8, 1}]],
                       [
@@ -374,6 +380,7 @@ defmodule Leprechaun.GameTest do
       Piece.add_pieces([3, 4])
       assert {:error, :still_playing} = Game.hiscore(data.name, "Manuel Rubio", "127.0.0.1")
       assert :ok = Game.move(data.name, {1, 3}, {2, 3})
+      assert_receive {:move, {1, 3}, {2, 3}}
 
       assert_receive {:match, 3, 3,
                       [
@@ -410,7 +417,7 @@ defmodule Leprechaun.GameTest do
       assert_receive {:gameover, 3, false}
       assert :ok = Game.hiscore(data.name, "Manuel Rubio", "127.0.0.1")
       assert {:error, :already_set} = Game.hiscore(data.name, "Manuel Rubio", "127.0.0.1")
-      assert_receive {:hiscore, {:ok, 1}}
+      assert_receive {:hiscore, 1}
       assert :ok = Game.move(data.name, {1, 3}, {2, 3})
       assert_receive {:error, :gameover}
       refute_receive _, 500

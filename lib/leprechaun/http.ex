@@ -5,6 +5,7 @@ defmodule Leprechaun.Http do
   """
   require Logger
 
+  @doc false
   def child_spec(opts) do
     %{
       id: __MODULE__,
@@ -38,20 +39,26 @@ defmodule Leprechaun.Http do
     ])
   end
 
+  @doc """
+  Start the HTTP server for the port and family (IPv4 or IPv6) indicated by the options.
+  """
   def start_link([port_number, family]) do
     opts = %{env: %{dispatch: dispatch()}}
     port = [{:port, port_number}, family]
     {:ok, _} = :cowboy.start_clear(__MODULE__, port, opts)
   end
 
+  @doc false
   def code_upgrade do
     :cowboy.set_env(__MODULE__, :dispatch, dispatch())
   end
 
+  @doc false
   def init(req, opts) do
     {:cowboy_websocket, req, opts}
   end
 
+  @doc false
   def handle(req, state) do
     Logger.debug("Unexpected request: #{inspect(req)}")
     headers = %{"content-type" => "text/html"}
@@ -59,6 +66,7 @@ defmodule Leprechaun.Http do
     {:ok, req, state}
   end
 
+  @doc false
   def terminate(_reason, _req, _state) do
     Logger.info("terminate (#{inspect(self())})")
     :ok

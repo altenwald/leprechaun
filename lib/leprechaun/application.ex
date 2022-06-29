@@ -11,8 +11,7 @@ defmodule Leprechaun.Application do
   @port 1234
   @family :inet
 
-  # See https://hexdocs.pm/elixir/Application.html
-  # for more information on OTP Applications
+  @doc false
   def start(_type, _args) do
     port = Application.get_env(:leprechaun, :port, @port)
     family = Application.get_env(:leprechaun, :family, @family)

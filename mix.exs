@@ -50,8 +50,8 @@ defmodule Leprechaun.MixProject do
       # tooling for quality check
       {:dialyxir, ">= 0.0.0", only: [:dev, :test], runtime: false},
       {:credo, ">= 0.0.0", only: [:dev, :test], runtime: false},
-      {:doctor, ">= 0.0.0", only: :test, runtime: false},
-      {:ex_check, "~> 0.14", only: :test, runtime: false},
+      {:doctor, ">= 0.0.0", only: [:dev, :test], runtime: false},
+      {:ex_check, "~> 0.14", only: [:dev, :test], runtime: false},
       {:ex_doc, ">= 0.0.0", only: [:dev, :test], runtime: false}
     ]
   end

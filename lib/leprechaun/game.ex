@@ -1,44 +1,23 @@
 defmodule Leprechaun.Game do
   @moduledoc """
-  Leprechaun Game is controlling the progression of the game and the
-  interface between all of the elements.
+  Leprechaun Game is controlling the progression of the game and the interface
+  between all of the elements.
 
-  The board have different pieces inside. It cannot be empty. When we choose
-  move one piece to achieve 3 or more connected similar symbols it needed
-  to include new pieces going from top and filling down the gaps.
+  The game is responsible to start a new process with all of the information
+  for the game. In addition, it's also:
 
-  The board is a 8x8 matrix where we are placing numbers from 1 until 8.
-  If we can find 3 or more adjacent pieces in a row we are consider that
-  a match and get points based on the numbers.
+  - acting as an interface between the Board and the player applying the game
+    rules and updating the internal data for the game: score, turns,
+    extra_turns, and played_turns among others.
+  - notify consumers about the progression of the game using events. But
+    indeed the notifications are side-effects provoked by actions of the
+    user and part of the interface.
 
-  A small example with a 4x4 matrix:
-
-  ```
-  [
-    [ 1, 1, 1, 2 ],
-    [ 1, 2, 3, 3 ],
-    [ 1, 2, 3, 4 ],
-    [ 2, 3, 4, 5 ]
-  ]
-  ```
-
-  You can see that we have one match of 1s which is conformed by 5 pieces,
-  this is because we have an horizontal adjacent line of 3 pieces and
-  connected to that another adjacent line of 3 pieces (in a L form). That's
-  meaning we have a match of 5 elements. That's going to be removed:
-
-  ```
-  [
-    [ 0, 0, 0, 2 ],
-    [ 0, 2, 3, 3 ],
-    [ 0, 2, 3, 4 ],
-    [ 2, 3, 4, 5 ]
-  ]
-  ```
-
-  And then, there are 3 pieces which are going to be included in the first
-  column, 1 piece more for the second column and 1 piece more for the third
-  column.
+  The game can be started using the function `start_link/1`, the only parameter
+  required is the ID to localize the game. It could be a string or an atom.
+  Usually from console it's more common to use an atom and from the web
+  interface, based on security, it's better use strings. We are using
+  `Registry` to register these names. Check the private `via/1` function.
   """
   use GenServer
   alias Leprechaun.{Board, Game, HiScore}
@@ -51,6 +30,80 @@ defmodule Leprechaun.Game do
 
   @init_turns 10
 
+  @typedoc """
+  Name of the game. It's going to be in use to register the name inside of
+  the Registry.
+  """
+  @type game_name() :: String.t() | atom()
+
+  @typedoc """
+  It's telling if a match was or not found.
+  """
+  @type match?() :: boolean()
+
+  @typedoc """
+  The name provided for the high score.
+  """
+  @type username() :: String.t()
+
+  @typedoc """
+  The IP where the user is playing from.
+  """
+  @type remote_ip() :: String.t()
+
+  @typedoc """
+  The amount of points achieved by the user.
+  """
+  @type score() :: non_neg_integer()
+
+  @typedoc """
+  The representation of the turns. It could be in use for indicating the
+  number of turns played, remained or extra.
+  """
+  @type turns() :: non_neg_integer()
+
+  @typedoc """
+  Options passed for the starting of the game process. The possible
+  options are:
+
+  - `max_running_time` is the amount of time the game could be running.
+    Based on security we are configuring by default a game of 2 hours,
+    if the player is playing for more than 2 hours, the game is
+    automatically terminated. But even if the player leaves the game
+    the game is terminated at that point. For testing purposes we could
+    configure a smaller size.
+  - `turns` is the amount of turns the game starts with. The default
+    value is 10.
+  """
+  @type opts() :: [{:max_running_time, timeout()}, {:turns, turns()}]
+
+  @typedoc """
+  The internal storage for the game. We use an opaque term to avoid this
+  could be handle from outside. Use the functions from this module to
+  modify or retrieve information from this structure.
+
+  The internal information stored is:
+
+  - `board` is a representation of `Leprechaun.Board`.
+  - `score` is the amount of points the user is getting from its turns.
+  - `turns` is the amount of turns remaining in the game.
+  - `played_turns` the amount of turns the user played.
+  - `extra_turns` the amount of extra turns the user achieved. It's
+    only counting the match of 5 or more pieces together.
+  - `username` is the name of the user when it's provided for the
+    high score table, see `Leprechaun.HiScore`.
+  - `consumers` is the list of PIDs where we have to send the events.
+  """
+  @opaque t() :: %__MODULE__{
+            board: Board.t() | nil,
+            score: score(),
+            turns: turns(),
+            played_turns: turns(),
+            extra_turns: turns(),
+            username: username() | nil,
+            consumers: [pid()]
+          }
+
   defstruct board: nil,
             score: 0,
             turns: @init_turns,
@@ -59,15 +112,10 @@ defmodule Leprechaun.Game do
             username: nil,
             consumers: []
 
-  @type game_name() :: String.t() | atom()
-  @type match() :: boolean()
-  @type username() :: String.t()
-  @type remote_ip() :: String.t()
-  @type score() :: non_neg_integer()
-  @type turns() :: non_neg_integer()
-  @type opts() :: [{:max_running_time, timeout()}, {:turns, turns()}]
-  @type cells() :: [[Board.piece()]]
-
+  @doc """
+  Start the game process. It's providing options based on the `opts()` type.
+  It's also adding the current process launching this new game as a consumer.
+  """
   @spec start_link(game_name(), opts()) :: {:ok, pid}
   def start_link(name, opts \\ []) do
     {:ok, board} = GenServer.start_link(__MODULE__, opts, name: via(name))
@@ -79,44 +127,90 @@ defmodule Leprechaun.Game do
     {:via, Registry, {Leprechaun.Game.Registry, board}}
   end
 
+  @doc """
+  Check if the game process exists.
+  """
   @spec exists?(game_name()) :: boolean()
   def exists?(board) do
     Registry.lookup(Leprechaun.Game.Registry, board) != []
   end
 
+  @doc """
+  Stop the game process.
+  """
   @spec stop(game_name()) :: :ok
   def stop(name), do: GenServer.stop(via(name))
 
-  @spec show(game_name()) :: cells()
+  @doc """
+  Retrieve a representation of the board as a list of lists which is
+  including numbers as the representation of the pieces, see
+  `Leprechaun.Board.piece()`.
+  """
+  @spec show(game_name()) :: [[Board.piece()]]
   def show(name), do: GenServer.call(via(name), :show)
 
+  @doc """
+  Perform a move. If you have still turns the system is trying to perform
+  this move. The result is always `:ok` but the game process will be triggering
+  different events according to if the move was legit or not.
+  """
   @spec move(game_name(), from :: Board.cell_pos(), to :: Board.cell_pos()) :: :ok
   def move(name, point_from, point_to) do
     GenServer.cast(via(name), {:move, point_from, point_to})
   end
 
+  @doc """
+  Check a move (dry-run). It's similar to `move/3` but it's not performing
+  the move in the board, or the game data, it's only giving information about
+  if there's a match and what will be the matches returning a tuple with two
+  elements:
+
+  - `match?` as the boolean information about if there is a match or not
+    performing this move.
+  - `matches` the detailed information for these matches, see
+    `Leprechaun.Board.matches()`.
+
+  Note that this function is useful for the implementation of bots.
+  """
   @spec check_move(game_name(), from :: Board.cell_pos(), to :: Board.cell_pos()) ::
-          {match(), Board.matches()}
+          {match?(), Board.matches()}
   def check_move(name, point_from, point_to) do
     GenServer.call(via(name), {:check_move, point_from, point_to})
   end
 
+  @doc """
+  Register a name for the High Score. This function is providing the name and
+  the remote IP to be registered with the score in the High Score table. It's
+  an action only valid when the game is in `:gameover` state, it means the
+  number of turns are 0 and it could be only performed once.
+  """
   @spec hiscore(game_name(), username(), remote_ip()) :: :ok | {:error, term()}
   def hiscore(name, username, remote_ip) do
     GenServer.call(via(name), {:hiscore, username, remote_ip})
   end
 
+  @doc """
+  Add a consumer to listen for the events coming from the game. These events
+  are referred above in the Events section.
+  """
   @spec add_consumer(game_name()) :: :ok
   def add_consumer(name) do
     GenServer.cast(via(name), {:consumer, self()})
   end
 
+  @doc """
+  Retrieve the score for the indicated game process.
+  """
   @spec score(game_name()) :: score()
   def score(name), do: GenServer.call(via(name), :score)
 
+  @doc """
+  Retrieve the remaining turns for the indicated game process.
+  """
   @spec turns(game_name()) :: turns()
   def turns(name), do: GenServer.call(via(name), :turns)
 
+  @doc false
   @impl GenServer
   def init(opts) do
     board = Board.new(@board_x, @board_y)
@@ -128,6 +222,7 @@ defmodule Leprechaun.Game do
     {:ok, %Game{board: board, turns: opts[:turns] || @init_turns}}
   end
 
+  @doc false
   @impl GenServer
   def handle_call(:show, _from, %Game{} = game) do
     {:reply, Board.show(game.board), game}
@@ -168,6 +263,7 @@ defmodule Leprechaun.Game do
     {:reply, {:error, :already_set}, game}
   end
 
+  @doc false
   @impl GenServer
   def handle_cast({:move, _point1, _point2}, %Game{turns: 0} = game) do
     send_to(game.consumers, {:error, :gameover})
@@ -183,6 +279,7 @@ defmodule Leprechaun.Game do
     {:noreply, %Game{game | consumers: [from | game.consumers]}}
   end
 
+  @doc false
   @impl GenServer
   def handle_info({:DOWN, _ref, :process, pid, _reason}, %Game{consumers: consumers} = game) do
     {:noreply, %Game{game | consumers: consumers -- [pid]}}
@@ -215,6 +312,7 @@ defmodule Leprechaun.Game do
 
   defp swap(point1, point2, game) do
     Logger.info("swap #{inspect(point1)} to #{inspect(point2)}")
+    send_to(game.consumers, {:move, point1, point2})
 
     case Board.move(game.board, point1, point2) do
       {:error, _} = error ->

@@ -37,22 +37,108 @@ defmodule Leprechaun.Board do
   end
 
   @piece_max 8
+
+  @typedoc """
+  The piece is represented by a number, we have 8 different representations at
+  the moment. Depending on the interface these could be:
+
+  - 0 empty, when there's a gap, it's not usual and it should happen only
+    during slides.
+  - 1 bronze or 💰 on brown color.
+  - 2 silver or 💰 on gray color.
+  - 3 gold or 💰 on yellow color.
+  - 4 sack or 💶 on brown color.
+  - 5 chest or 💶 on gray color.
+  - 6 big-chest or 💶 on yellow color.
+  - 7 pot or MX on gray color.
+  - 8 rainbow-pot or MX on yellow color.
+
+  Note that the representation is responsibility of `Leprechaun.Board` and
+  `Leprechaun.Console` and the information represented above could change.
+  """
   @type piece() :: 1..8
+
+  @typedoc """
+  The X position on the board. It's in use for representing the position of
+  a cell on the board.
+  """
   @type pos_x :: pos_integer()
+
+  @typedoc """
+  The Y position on the board. It's in use for representing the position of
+  a cell on the board.
+  """
   @type pos_y :: pos_integer()
+
+  @typedoc """
+  The `(x, y)` position on the board. It's in use for representing the
+  complete position of a cell on the board.
+  """
   @type cell_pos :: {pos_x(), pos_y()}
+
+  @typedoc """
+  The X size of the board. It's in use for representing the size of the board.
+  """
   @type size_x :: pos_integer()
+
+  @typedoc """
+  The Y size of the board. It's in use for representing the size of the board.
+  """
   @type size_y :: pos_integer()
+
+  @typedoc """
+  Indicate the orientation of a match, we could find:
+
+  - `vertical` when the match is in the Y axis.
+  - `horizontal` when the match is in the X axis.
+  - `mixed` when we process the matches and find adjacent `vertical` and
+    `horizontal` we merge them to create a `mixed` one.
+  """
   @type match_direction :: :vertical | :horizontal | :mixed
+
+  @typedoc """
+  The return for the function `find_matches/1` uses this type as the return
+  type. The composition is a `MapSet` where we are including all of the
+  matches found in the board (if any). Each element inside is a 2-element
+  tuple where the first element is a `match_direction()` and the second
+  element is another `MapSet` with the `cell_pos()` for the cells
+  performing the match.
+  """
   @type matches :: MapSet.t({match_direction(), MapSet.t(cell_pos())})
+
+  @typedoc """
+  The events which could be triggered. This will be in use as the only
+  one parameter passed to the optional anonymous function for the
+  function `apply_matches/4`.
+  """
   @type event ::
           {:insert, pos_x(), piece()}
           | {:new_kind, pos_x(), pos_y(), piece()}
           | {:slide, pos_x(), pos_y(), pos_y()}
 
+  @typedoc """
+  The composition of a row inside of the cells which are used as board.
+  This is based on the index as a `size_x()` type and the content as
+  the `piece()`.
+  """
   @type row :: %{size_x() => piece()}
+
+  @typedoc """
+  The cells are the board. It's a map where the index is the number of
+  row using the type `size_y()` and the content is a `row()`.
+  """
   @type cells :: %{size_y() => row()}
 
+  @typedoc """
+  The internal storage of the board is opaque, it's meaning it mustn't be in
+  use outside of this module. The internal elements of this structure are:
+
+  - `cells`: a map of maps where see the type `cells`.
+  - `size_x`: the size of the map in X axis.
+  - `size_y`: the size of the map in Y axis.
+
+  Check the module functions to get information from this data type.
+  """
   @opaque t() :: %__MODULE__{
             cells: cells(),
             size_x: size_x(),

@@ -7,24 +7,53 @@ defmodule Leprechaun.Bot do
   require Logger
   alias Leprechaun.{Game, Bot, Php}
 
-  defstruct board_id: nil,
+  @wait_between_moves 2_500
+
+  @typedoc """
+  The opaque type for the internal state of the bot.
+  """
+  @opaque t() :: %__MODULE__{
+            game_name: Game.game_name(),
+            websocket_pid: pid() | nil,
+            code: String.t()
+          }
+
+  defstruct game_name: nil,
             websocket_pid: nil,
             code: ""
 
-  def start_link(name, board_id) do
-    GenServer.start_link(__MODULE__, [board_id, self()], name: via(name))
+  @doc """
+  Start the bot using a name to register the bot and requesting the name
+  of the game the bot have to play with.
+  """
+  def start_link(name, game_name) do
+    GenServer.start_link(__MODULE__, [game_name, self()], name: via(name))
   end
 
+  @doc """
+  Check if the bot exists.
+  """
   def exists?(bot) do
     Registry.lookup(Leprechaun.Bot.Registry, bot) != []
   end
 
+  @doc """
+  Stop the bot.
+  """
   def stop(bot), do: GenServer.stop(via(bot))
 
-  def join(bot) do
-    GenServer.cast(via(bot), {:join, self()})
+  @doc """
+  Configure the websocket PID to the caller PID. It's intended to run
+  this from the websocket code.
+  """
+  def set_websocket_pid(bot) do
+    GenServer.cast(via(bot), {:set_websocket_pid, self()})
   end
 
+  @doc """
+  Order the bot to run a specific PHP code. This is using
+  `Leprechaun.Php.run/3` and returning the result to the caller.
+  """
   def run(bot, code) do
     GenServer.call(via(bot), {:run, code})
   end
@@ -33,29 +62,33 @@ defmodule Leprechaun.Bot do
     {:via, Registry, {Leprechaun.Bot.Registry, bot}}
   end
 
+  @doc false
   @impl true
-  def init([board_id, websocket_pid]) do
-    Game.add_consumer(board_id)
-    {:ok, %Bot{board_id: board_id, websocket_pid: websocket_pid}}
+  def init([game_name, websocket_pid]) do
+    Game.add_consumer(game_name)
+    {:ok, %Bot{game_name: game_name, websocket_pid: websocket_pid}}
   end
 
+  @doc false
   @impl true
   def handle_cast({:join, websocket_pid}, bot) do
     {:noreply, %Bot{bot | websocket_pid: websocket_pid}}
   end
 
+  @doc false
   @impl true
   def handle_call({:run, code}, _from, bot) do
-    cells = Game.show(bot.board_id)
-    result = Php.run(code, bot.board_id, cells)
+    cells = Game.show(bot.game_name)
+    result = Php.run(code, bot.game_name, cells)
     {:reply, result, %Bot{bot | code: code}}
   end
 
+  @doc false
   @impl true
   def handle_info(:play, bot) do
-    Process.sleep(2500)
-    cells = Game.show(bot.board_id)
-    Php.run(bot.code, bot.board_id, cells)
+    Process.sleep(@wait_between_moves)
+    cells = Game.show(bot.game_name)
+    Php.run(bot.code, bot.game_name, cells)
     {:noreply, bot}
   end
 
@@ -87,7 +120,11 @@ defmodule Leprechaun.Bot do
     {:stop, :normal, state}
   end
 
-  def handle_info({:hiscore, {:ok, _order}}, state) do
+  def handle_info({:hiscore, _position}, state) do
+    {:noreply, state}
+  end
+
+  def handle_info({:move, _point1, _point2}, state) do
     {:noreply, state}
   end
 

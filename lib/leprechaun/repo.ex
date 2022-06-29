@@ -1,8 +1,10 @@
 defmodule Leprechaun.Repo do
+  @moduledoc false
   use Ecto.Repo,
     otp_app: :leprechaun,
     adapter: EctoMnesia.Adapter
 
+  @doc false
   def child_spec(opts) do
     %{
       id: __MODULE__,

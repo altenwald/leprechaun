@@ -16,7 +16,10 @@ defmodule Leprechaun.Websocket do
 
   defp check_throttle(_id), do: Process.sleep(@throttle_time_to_wait)
 
-  def init(req, opts) do
+  @doc false
+  @spec init(:cowboy_req.req(), []) ::
+          {:cowboy_websocket, :cowboy_req.req(), [{:remote_ip, Game.remote_ip()}]}
+  def init(req, []) do
     Logger.info("[websocket] init req => #{inspect(req)}")
 
     remote_ip =
@@ -31,15 +34,17 @@ defmodule Leprechaun.Websocket do
           to_string(:inet.ntoa(remote_ip))
       end
 
-    {:cowboy_websocket, req, [{:remote_ip, remote_ip} | opts]}
+    {:cowboy_websocket, req, [{:remote_ip, remote_ip}]}
   end
 
+  @doc false
   def websocket_init(remote_ip: remote_ip) do
     vsn = to_string(Application.spec(:leprechaun)[:vsn])
     send(self(), {:send, Jason.encode!(%{"type" => "vsn", "vsn" => vsn})})
     {:ok, %{board: nil, remote_ip: remote_ip}}
   end
 
+  @doc false
   def websocket_handle({:text, msg}, state) do
     msg
     |> Jason.decode!()
@@ -50,6 +55,7 @@ defmodule Leprechaun.Websocket do
     {:reply, {:text, "eh?"}, state}
   end
 
+  @doc false
   def websocket_info({:send, data}, state) do
     check_throttle(state.board)
     {:reply, {:text, data}, state}
@@ -152,8 +158,8 @@ defmodule Leprechaun.Websocket do
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
 
-  def websocket_info({:hiscore, {:ok, order}}, state) do
-    send_hiscore(order, state)
+  def websocket_info({:hiscore, order}, state) do
+    if order, do: send_hiscore(order, state)
   end
 
   def websocket_info(info, state) do
@@ -161,6 +167,7 @@ defmodule Leprechaun.Websocket do
     {:ok, state}
   end
 
+  @doc false
   def websocket_terminate(reason, _state) do
     Logger.info("reason => #{inspect(reason)}")
     :ok
@@ -246,7 +253,7 @@ defmodule Leprechaun.Websocket do
         Game.add_consumer(id)
 
         if info["bot_id"] != nil do
-          Bot.join(info["bot_id"])
+          Bot.set_websocket_pid(info["bot_id"])
           {:ok, Map.put(state, :bot_id, info["bot_id"])}
         else
           {:ok, state}
