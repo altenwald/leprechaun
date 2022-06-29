@@ -34,7 +34,6 @@
   "ranch": {:hex, :ranch, "1.8.0", "8c7a100a139fd57f17327b6413e4167ac559fbc04ca7448e9be9057311597a1d", [:make, :rebar3], [], "hexpm", "49fbcfd3682fab1f5d109351b61257676da1a2fdbe295904176d5e521a2ddfe5"},
   "recon": {:hex, :recon, "2.3.2", "4444c879be323b1b133eec5241cb84bd3821ea194c740d75617e106be4744318", [:rebar3], [], "hexpm", "a6fcfbdabe1aef9119b871304846b1ce282d9a4124bcddafc7616c1a256c7596"},
   "telemetry": {:hex, :telemetry, "1.1.0", "a589817034a27eab11144ad24d5c0f9fab1f58173274b1e9bae7074af9cbee51", [:rebar3], [], "hexpm", "b727b2a1f75614774cff2d7565b64d0dfa5bd52ba517f16543e6fc7efcc0df48"},
-  "throttle": {:hex, :lambda_throttle, "0.3.0", "5f50ac593092b71d85dd1061b9673895532d34c8b4836a5c04a9f8395e183e27", [:rebar3], [], "hexpm", "ee7009525fadc5179d1214d1eb1fc26779a3bbef1fde28a772d04b41eadf5fba"},
   "unistring": {:hex, :unistring, "0.1.0", "f1d07520c0a92bdf9a1d46f4a45ba424f27fa2d081f7c0aba1f665c16a26b6c8", [:rebar3], [], "hexpm", "7dd7ffc8b2cbcb98a27bd6eebb40f0328ee273f64e8b804c3bdf3d0f3dc41d76"},
   "uuid": {:hex, :uuid, "1.1.8", "e22fc04499de0de3ed1116b770c7737779f226ceefa0badb3592e64d5cfb4eb9", [:mix], [], "hexpm", "c790593b4c3b601f5dc2378baae7efaf5b3d73c4c6456ba85759905be792f2ac"},
   "zucchini": {:hex, :zucchini, "0.1.0", "93f8508fdef86395bb071bd582e4d844bb012f2af3e986c4e49804e90e2b2b9f", [:rebar3], [], "hexpm", "a5f239aef6f2b80927ed825b20c843f0a1b9e83cefc29d2d2960a2c7c56f5bcd"},

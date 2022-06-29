@@ -4,8 +4,6 @@ config :leprechaun,
   port: 4012,
   family: :inet
 
-config :throttle, rates: [{:websocket, 1, :per_second}]
-
 config :leprechaun, ecto_repos: [Leprechaun.Repo]
 
 config :ecto_mnesia,

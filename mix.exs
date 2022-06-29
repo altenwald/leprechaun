@@ -38,7 +38,6 @@ defmodule Leprechaun.MixProject do
       {:jason, "~> 1.3"},
       {:plug, "~> 1.13"},
       {:plug_cowboy, "~> 2.5"},
-      {:throttle, "~> 0.3", hex: :lambda_throttle},
       {:uuid, "~> 1.1"},
       {:ecto_mnesia, "~> 0.9"},
       {:ephp, "~> 0.3"},
