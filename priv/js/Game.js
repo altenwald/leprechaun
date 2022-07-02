@@ -2,17 +2,17 @@ class Game extends Phaser.Scene {
   constructor(scene) {
     super('Game')
     this.scene = scene
+    this.state = 'idle'
   }
 
   init() {
     this.addScore = 0
-    this.extraTurns = 0
     this.remainTurns = 10
+    this.moves = []
     eventsCenter.on('ws', this.on_event, this)
   }
 
   on_event(data) {
-    console.log(data.type)
     switch(data.type) {
       case "new_kind":
         this.new_kind(data.row, data.col, data.piece)
@@ -34,6 +34,7 @@ class Game extends Phaser.Scene {
         eventsCenter.off('ws', this.on_event, this)
         this.scene.start('GameOver')
         this.scene.get('GameOver').score = data.score
+        this.gameState = 'gameover'
         break
       case "draw":
         this.save_board(data.cells)
@@ -43,16 +44,18 @@ class Game extends Phaser.Scene {
         break
       case "extra_turn":
         this.update_info(data)
+        this.extraTurnInit(data.extra_turns)
         break
       case "play":
         this.update_info(data)
         this.addScore = 0
-        this.extraTurns = 0
         this.input.on('pointerdown', this.startDrag, this)
+        this.gameState = 'idle'
         break
       case "illegal_move":
         this.undoMove()
         this.input.on('pointerdown', this.startDrag, this)
+        this.gameState = 'idle'
         break
       case "disconnected":
         this.connection.setVisible(true)
@@ -78,16 +81,17 @@ class Game extends Phaser.Scene {
   }
 
   slide(row1, col1, row2, col2) {
-    // TODO: animation?
     var p1 = this.board[row1][col1], p2 = this.board[row2][col2]
-    p2.setTexture(p1.texture)
-    p1.setTexture('blank')
+    p1.setDepth(3)
+    this.moves.push([p1, p2, p1.texture])
   }
 
   preload() {
     // this.load.setBaseURL('https://leprechaun.altenwald.com')
     this.load.image('blank', '/img/cell_0.png')
     this.load.image('cell-background', '/img/cell_0_background.png')
+    this.load.image('extra-turn', '/img/extra_turn.png')
+    this.load.image('keep-turn', '/img/keep_turn.png')
 
     this.load.image('bronze', '/img/cell_1.png')
     this.load.image('silver', '/img/cell_2.png')
@@ -189,6 +193,19 @@ class Game extends Phaser.Scene {
       }
     }
     this.input.on('pointerdown', this.startDrag, this)
+    this.gameState = 'idle'
+
+    this.extraTurn = this.add
+      .image(width, height, 'extra-turn')
+      .setDisplaySize(300, 159)
+      .setOrigin(1, 0)
+      .setDepth(5)
+
+    this.keepTurn = this.add
+      .image(width, height, 'keep-turn')
+      .setDisplaySize(300, 175)
+      .setOrigin(1, 0)
+      .setDepth(5)
   }
 
   blink(points) {
@@ -212,7 +229,10 @@ class Game extends Phaser.Scene {
       this.dragObjectDir = ''
       this.input.on('pointermove', this.doDrag, this)
       this.input.on('pointerup', this.stopDrag, this)
+      this.gameState = 'moving'
     }
+    this.dragObjectSwap = undefined
+    this.dragObjectValid = false
   }
 
   offset(value) {
@@ -322,7 +342,7 @@ class Game extends Phaser.Scene {
         x2: p2.getData("col"),
         y2: p2.getData("row")
       })
-      this.extraTurns --
+      this.gameState = 'matching'
     } else if (this.dragObjectSwap) {
       // TODO: animation?
       var p1 = this.dragObject, p2 = this.dragObjectSwap
@@ -331,8 +351,10 @@ class Game extends Phaser.Scene {
       p1.y = p1.getData('y')
       p2.y = p2.getData('y')
       this.input.on('pointerdown', this.startDrag, this)
+      this.gameState = 'idle'
     } else {
       this.input.on('pointerdown', this.startDrag, this)
+      this.gameState = 'idle'
     }
   }
 
@@ -362,29 +384,79 @@ class Game extends Phaser.Scene {
       }
       this.score.setText(text)
     }
-    if (data.extra_turns) {
-      this.extraTurns += data.extra_turns
-    }
     if (data.turns) {
       this.remainTurns = data.turns
     }
     var text = 'Turns: ' + this.remainTurns
-    switch (this.extraTurns) {
-      case -1:
-        text += " (-1)"
-        break
-      case 0:
-        text += " (keep)"
-        break
-      default:
-        text += " (+" + this.extraTurns + ")"
-    }
     this.turns.setText(text)
   }
 
   update(time, delta) {
     if (this.vsn != vsn) {
       this.vsnText.setText('Leprechaun v' + vsn + ' - https://altenwald.com')
+    }
+    this.extraTurnUpdate(time)
+    if (this.moves && this.moves.length > 0) {
+      var moves = [], p1, p2, texture
+      while (this.moves && this.moves.length > 0) {
+        [p1, p2, texture] = this.moves.pop()
+        if (p1.y >= p2.y) {
+          p2.setTexture(texture)
+          p1.setY(p1.getData('y'))
+          p1.setDepth(2)
+        } else {
+          p1.setY(p1.y + 10)
+          moves.push([p1, p2, texture])
+        }
+      }
+      this.moves = moves
+    }
+  }
+
+  extraTurnInit(turns) {
+    switch (turns) {
+      case 2:
+        if (this.extraTurnRun) {
+          this.extraTurnImg.setVisible(false)
+          this.extraTurnImg.setY(this.height)
+        }
+        this.extraTurnImg = this.extraTurn
+        this.extraTurnImg.setVisible(true)
+        this.extraTurnSpeed = -10
+        this.extraTurnTime = Number.MAX_VALUE
+        this.extraTurnRun = true
+        break
+      case 1:
+        if (this.extraTurnRun) {
+          this.extraTurnImg.setVisible(false)
+          this.extraTurnImg.setY(this.height)
+        }
+        this.extraTurnImg = this.keepTurn
+        this.extraTurnImg.setVisible(true)
+        this.extraTurnSpeed = -10
+        this.extraTurnTime = Number.MAX_VALUE
+        this.extraTurnRun = true
+        break
+    }
+  }
+
+  extraTurnUpdate(time) {
+    if (this.extraTurnRun) {
+      console.log("running", this.extraTurnSpeed)
+      var currY = this.extraTurnImg.y
+      this.extraTurnImg.setY(currY + this.extraTurnSpeed)
+      if (currY < this.height - (this.extraTurnImg.height / 2) - 50) {
+        if (this.extraTurnTime < time) {
+          this.extraTurnSpeed = 10
+        } else if (this.extraTurnTime == Number.MAX_VALUE) {
+          this.extraTurnTime = time + 1500
+          this.extraTurnSpeed = 0
+        }
+      } else if (currY > this.height) {
+        this.extraTurnSpeed = 0
+        this.extraTurnRun = false
+        this.extraTurnImg.setY(this.height)
+      }
     }
   }
 }

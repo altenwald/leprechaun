@@ -46,9 +46,9 @@ var
     eventsCenter = new Phaser.Events.EventEmitter(),
     sceneRunning = '',
     ws,
-    game_id,
+    gameId,
     vsn,
-    ping_timer
+    pingTimer
 
 game.screenBaseSize = {
     maxWidth: MAX_SIZE_WIDTH_SCREEN,
@@ -76,7 +76,7 @@ function send(message) {
 }
 
 function restart_game() {
-    game_id = undefined
+    gameId = undefined
     send({type: "create"})
     send({type: "show"})
 }
@@ -95,8 +95,8 @@ function connect() {
     const schema = (location.href.split(":")[0] == "https") ? "wss" : "ws"
     ws = new WebSocket(schema + "://" + hostname + "/websession")
     ws.onopen = function(){
-        if (game_id) {
-            send({type: "join", id: game_id})
+        if (gameId) {
+            send({type: "join", id: gameId})
         } else {
             send({type: "create"})
         }
@@ -117,8 +117,8 @@ function connect() {
 
         switch(data.type) {
             case "id":
-                game_id = data.id
-                console.log("game_id", game_id)
+                gameId = data.id
+                console.log("gameId", gameId)
                 break
             case "vsn":
                 vsn = data.vsn
@@ -128,10 +128,10 @@ function connect() {
                 break
         }
     }
-    if (ping_timer) {
-        clearInterval(ping_timer);
+    if (pingTimer) {
+        clearInterval(pingTimer);
     }
-    ping_timer = setInterval(function(){
+    pingTimer = setInterval(function(){
         send({type: "ping"});
     }, 10000);
 }

@@ -157,6 +157,7 @@ defmodule Leprechaun.GameTest do
       assert_receive {:slide, 2, 1, 2}
       assert_receive {:insert, 2, 4}
 
+      assert_receive {:extra_turn, -1}
       assert_receive {:show, ^new_board}
       assert_receive :play
       assert new_board == Game.show(data.name)
@@ -369,6 +370,7 @@ defmodule Leprechaun.GameTest do
         [3, 2, 3, 2, 3, 2, 3, 2]
       ]
 
+      assert_receive {:extra_turn, -1}
       assert_receive {:show, ^new_board}
       assert_receive {:gameover, 9, false}
       assert {false, MapSet.new()} == Game.check_move(data.name, {2, 4}, {2, 3})
@@ -413,6 +415,7 @@ defmodule Leprechaun.GameTest do
         [3, 2, 3, 2, 3, 2, 3, 2]
       ]
 
+      assert_receive {:extra_turn, -1}
       assert_receive {:show, ^new_board}
       assert_receive {:gameover, 3, false}
       assert :ok = Game.hiscore(data.name, "Manuel Rubio", "127.0.0.1")

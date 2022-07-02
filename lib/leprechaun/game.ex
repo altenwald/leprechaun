@@ -334,11 +334,7 @@ defmodule Leprechaun.Game do
         send_to(game.consumers, {:error, {:illegal_move, {point1, point2}}})
         game
       else
-        case turns_mod do
-          -1 -> :ok
-          0 -> send_to(game.consumers, {:extra_turn, 1})
-          1 -> send_to(game.consumers, {:extra_turn, 2})
-        end
+        if turns_mod == -1, do: send_to(game.consumers, {:extra_turn, -1})
 
         send_to(game.consumers, {:show, Board.show(board)})
 
@@ -359,7 +355,19 @@ defmodule Leprechaun.Game do
         }
       end
     else
-      turns_mod = update_turns(matches, turns_mod)
+      turns_mod =
+        case update_turns(matches, turns_mod) do
+          0 when turns_mod < 0 ->
+            send_to(game.consumers, {:extra_turn, 1})
+            0
+
+          1 when turns_mod < 1 ->
+            send_to(game.consumers, {:extra_turn, 2})
+            1
+
+          turns_mod ->
+            turns_mod
+        end
 
       score =
         board
