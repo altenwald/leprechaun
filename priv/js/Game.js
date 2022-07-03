@@ -92,6 +92,8 @@ class Game extends Phaser.Scene {
     this.load.image('cell-background', '/img/cell_0_background.png')
     this.load.image('extra-turn', '/img/extra_turn.png')
     this.load.image('keep-turn', '/img/keep_turn.png')
+    this.load.image('music-on', '/img/music_on.png')
+    this.load.image('music-off', '/img/music_off.png')
 
     this.load.image('bronze', '/img/cell_1.png')
     this.load.image('silver', '/img/cell_2.png')
@@ -206,6 +208,21 @@ class Game extends Phaser.Scene {
       .setDisplaySize(300, 175)
       .setOrigin(1, 0)
       .setDepth(5)
+
+    this.musicIcon = this.add
+      .image(width, 50, musicStatus)
+      .setOrigin(1, 0)
+      .setDisplaySize(78, 78)
+      .setInteractive({ useHandCursor: true })
+      .on('pointerdown', () => {
+        if (this.musicIcon.texture.key == 'music-on') {
+          musicCenter.emit('stop', {})
+          this.musicIcon.setTexture('music-off')
+        } else {
+          musicCenter.emit('play', {})
+          this.musicIcon.setTexture('music-on')
+        }
+      })
   }
 
   blink(points) {
@@ -442,7 +459,6 @@ class Game extends Phaser.Scene {
 
   extraTurnUpdate(time) {
     if (this.extraTurnRun) {
-      console.log("running", this.extraTurnSpeed)
       var currY = this.extraTurnImg.y
       this.extraTurnImg.setY(currY + this.extraTurnSpeed)
       if (currY < this.height - (this.extraTurnImg.height / 2) - 50) {

@@ -44,11 +44,13 @@ var
     },
     game = new Phaser.Game(config),
     eventsCenter = new Phaser.Events.EventEmitter(),
+    musicCenter = new Phaser.Events.EventEmitter(),
     sceneRunning = '',
     ws,
     gameId,
     vsn,
-    pingTimer
+    pingTimer,
+    musicStatus = 'music-on'
 
 game.screenBaseSize = {
     maxWidth: MAX_SIZE_WIDTH_SCREEN,

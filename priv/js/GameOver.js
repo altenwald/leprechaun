@@ -43,6 +43,8 @@ class GameOver extends Phaser.Scene {
     // this.load.setBaseURL('https://leprechaun.altenwald.com')
     this.load.image('cell-background', '/img/cell_0_background.png')
     this.load.image('restart', '/img/restart.png')
+    this.load.image('music-on', '/img/music_on.png')
+    this.load.image('music-off', '/img/music_off.png')
 
     this.load.image('bronze', '/img/cell_1.png')
     this.load.image('silver', '/img/cell_2.png')
@@ -148,6 +150,21 @@ class GameOver extends Phaser.Scene {
         eventsCenter.off('ws', this.on_event, this)
         this.scene.start('Game')
         restart_game()
+      })
+
+    this.musicIcon = this.add
+      .image(width, 50, musicStatus)
+      .setOrigin(1, 0)
+      .setDisplaySize(78, 78)
+      .setInteractive({ useHandCursor: true })
+      .on('pointerdown', () => {
+        if (this.musicIcon.texture.key == 'music-on') {
+          musicCenter.emit('stop', {})
+          this.musicIcon.setTexture('music-off')
+        } else {
+          musicCenter.emit('play', {})
+          this.musicIcon.setTexture('music-on')
+        }
       })
   }
 

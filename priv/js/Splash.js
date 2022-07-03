@@ -12,6 +12,9 @@ class Splash extends Phaser.Scene {
     this.load.image('rainbow-pot', '/img/cell_8.png')
     this.load.image('start', '/img/start.png')
     this.load.image('background', '/img/background.jpeg')
+    this.load.audio('music', '/audio/music.mp3')
+    this.load.image('music-on', '/img/music_on.png')
+    this.load.image('music-off', '/img/music_off.png')
 
     this.sceneStopped = false
     this.width = this.game.screenBaseSize.width
@@ -48,6 +51,34 @@ class Splash extends Phaser.Scene {
         sceneRunning = 'Game'
         this.scene.start('Game')
       })
+
+    this.musicIcon = this.add
+      .image(width, 50, musicStatus)
+      .setOrigin(1, 0)
+      .setDisplaySize(78, 78)
+      .setInteractive({ useHandCursor: true })
+      .on('pointerdown', () => {
+        if (this.musicIcon.texture.key == 'music-on') {
+          musicCenter.emit('stop', {})
+          this.musicIcon.setTexture('music-off')
+        } else {
+          musicCenter.emit('play', {})
+          this.musicIcon.setTexture('music-on')
+        }
+      })
+
+    musicCenter.on('play', (data) => {
+      musicStatus = 'music-on'
+      this.music.play({ loop: true })
+    })
+
+    musicCenter.on('stop', (data) => {
+      musicStatus = 'music-off'
+      this.music.stop()
+    })
+
+    this.music = this.sound.add('music')
+    this.music.play({ loop: true })
   }
 
   update(time, delta) {}
