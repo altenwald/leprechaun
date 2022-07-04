@@ -2,6 +2,7 @@ class Splash extends Phaser.Scene {
   constructor(scene) {
     super('Splash')
     this.scene = scene
+    this.music = []
   }
 
   init() {}
@@ -12,9 +13,11 @@ class Splash extends Phaser.Scene {
     this.load.image('rainbow-pot', '/img/cell_8.png')
     this.load.image('start', '/img/start.png')
     this.load.image('background', '/img/background.jpeg')
-    this.load.audio('music', '/audio/music.mp3')
+    this.load.audio('music-01', ['/audio/music01.mp3', '/audio/music01.ogg'])
+    this.load.audio('music-02', ['/audio/music02.mp3', '/audio/music02.ogg'])
     this.load.image('music-on', '/img/music_on.png')
     this.load.image('music-off', '/img/music_off.png')
+    this.load.image('hi-score', '/img/hi_score.png')
 
     this.sceneStopped = false
     this.width = this.game.screenBaseSize.width
@@ -67,19 +70,34 @@ class Splash extends Phaser.Scene {
         }
       })
 
+    this.add
+      .image(0, 50, 'hi-score')
+      .setOrigin(0, 0)
+      .setDisplaySize(78, 78)
+      .setInteractive({ useHandCursor: true })
+      .on('pointerdown', () => {
+        sceneRunning = 'HighScore'
+        this.scene.start('HighScore')
+      })
+
     musicCenter.on('play', (data) => {
       musicStatus = 'music-on'
-      this.music.play({ loop: true })
+      this.music[0].resume()
     })
 
     musicCenter.on('stop', (data) => {
       musicStatus = 'music-off'
-      this.music.stop()
+      this.music[0].pause()
     })
 
-    this.music = this.sound.add('music')
-    this.music.play({ loop: true })
+    this.music.push(this.sound.add('music-01').on('complete', (music) => { this.djbox(music) }))
+    this.music.push(this.sound.add('music-02').on('complete', (music) => { this.djbox(music) }))
+    this.music[0].play()
   }
 
-  update(time, delta) {}
+  djbox(music) {
+    var prev = this.music.shift()
+    this.music.push(prev)
+    this.music[0].play()
+  }
 }

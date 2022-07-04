@@ -9,7 +9,7 @@ defmodule Leprechaun.HiScore do
 
   alias Leprechaun.{Game, HiScore, Repo}
 
-  @top_num 20
+  @top_num 99
 
   @typedoc """
   The position a player achieved inside of the High Score table.

@@ -9,19 +9,31 @@ class Game extends Phaser.Scene {
     this.addScore = 0
     this.remainTurns = 10
     this.moves = []
+    this.movesRunning = []
     eventsCenter.on('ws', this.on_event, this)
   }
 
   on_event(data) {
     switch(data.type) {
       case "new_kind":
-        this.new_kind(data.row, data.col, data.piece)
+        this.moves.push({type: "new_kind", row: data.row, col: data.col, piece: data.piece})
         break
       case "slide_new":
-        this.slide_new(data.row, data.col, data.piece)
+        this.moves.push({type: "slide_new", row: data.row, col: data.col, piece: data.piece})
         break
       case "slide":
-        this.slide(data.orig["row"], data.orig["col"], data.dest["row"], data.dest["col"])
+        var row1 = data.orig["row"], row2 = data.dest["row"],
+            col1 = data.orig["col"], col2 = data.dest["col"],
+            p1 = this.board[row1][col1],
+            p2 = this.board[row2][col2],
+            move
+        p1.setDepth(3)
+        move = {type: "slide", p1: p1, p2: p2, texture: p1.texture}
+        if (this.moves.length == 0) {
+          this.movesRunning.push(move)
+        } else {
+          this.moves.push(move)
+        }
         break
       case "match":
         this.save_board(data.cells)
@@ -72,28 +84,18 @@ class Game extends Phaser.Scene {
     }
   }
 
-  new_kind(row, col, piece) {
-    this.board[row][col].setTexture(piece)
-  }
-
-  slide_new(row, col, piece) {
-    this.board[row][col].setTexture(piece)
-  }
-
-  slide(row1, col1, row2, col2) {
-    var p1 = this.board[row1][col1], p2 = this.board[row2][col2]
-    p1.setDepth(3)
-    this.moves.push([p1, p2, p1.texture])
-  }
-
   preload() {
     // this.load.setBaseURL('https://leprechaun.altenwald.com')
+    this.load.image('background', '/img/background.jpeg')
     this.load.image('blank', '/img/cell_0.png')
     this.load.image('cell-background', '/img/cell_0_background.png')
     this.load.image('extra-turn', '/img/extra_turn.png')
     this.load.image('keep-turn', '/img/keep_turn.png')
+
     this.load.image('music-on', '/img/music_on.png')
     this.load.image('music-off', '/img/music_off.png')
+
+    this.load.audio('extra-turn-voice', ['/audio/extra_turn.mp3', '/audio/extra_turn.ogg'])
 
     this.load.image('bronze', '/img/cell_1.png')
     this.load.image('silver', '/img/cell_2.png')
@@ -223,6 +225,8 @@ class Game extends Phaser.Scene {
           this.musicIcon.setTexture('music-on')
         }
       })
+
+    this.extraTurnFx = this.sound.add('extra-turn-voice')
   }
 
   blink(points) {
@@ -413,20 +417,34 @@ class Game extends Phaser.Scene {
       this.vsnText.setText('Leprechaun v' + vsn + ' - https://altenwald.com')
     }
     this.extraTurnUpdate(time)
-    if (this.moves && this.moves.length > 0) {
-      var moves = [], p1, p2, texture
-      while (this.moves && this.moves.length > 0) {
-        [p1, p2, texture] = this.moves.pop()
-        if (p1.y >= p2.y) {
-          p2.setTexture(texture)
-          p1.setY(p1.getData('y'))
-          p1.setDepth(2)
-        } else {
-          p1.setY(p1.y + 10)
-          moves.push([p1, p2, texture])
+    if (this.movesRunning && this.movesRunning.length > 0) {
+      var moves = []
+      while (this.movesRunning && this.movesRunning.length > 0) {
+        var move = this.movesRunning.shift()
+        switch (move.type) {
+          case "slide":
+            if (move.p1.y >= move.p2.y) {
+              move.p2.setTexture(move.texture)
+              move.p1.setY(move.p1.getData('y'))
+              move.p1.setDepth(2)
+            } else {
+              move.p1.setY(move.p1.y + 10)
+              moves.push(move)
+            }
+            break
+          case "slide_new":
+            this.board[move.row][move.col].setTexture(move.piece)
+            break
+          case "new_kind":
+            this.board[move.row][move.col].setTexture(move.piece)
+            break
         }
       }
-      this.moves = moves
+      this.movesRunning = moves
+    } else if (this.moves && this.moves.length > 0) {
+      do {
+        this.movesRunning.push(this.moves.shift())
+      } while (this.moves && this.moves.length > 0 && this.moves[0].type == "slide")
     }
   }
 
@@ -436,6 +454,9 @@ class Game extends Phaser.Scene {
         if (this.extraTurnRun) {
           this.extraTurnImg.setVisible(false)
           this.extraTurnImg.setY(this.height)
+        }
+        if (this.musicIcon.texture.key == 'music-on') {
+          this.extraTurnFx.play()
         }
         this.extraTurnImg = this.extraTurn
         this.extraTurnImg.setVisible(true)

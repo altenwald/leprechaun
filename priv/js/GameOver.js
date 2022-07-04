@@ -4,32 +4,7 @@ class GameOver extends Phaser.Scene {
     this.scene = scene
   }
 
-  init() {
-    eventsCenter.on('ws', this.on_event, this)
-  }
-
-  on_event(data) {
-    console.log(data.type)
-    switch(data.type) {
-      case "hiscore":
-        this.show_hiscore(data.top_list, data.position)
-        break;
-      default:
-        console.log(data)
-        break;
-    }
-  }
-
-  show_hiscore(top_list, position) {
-    for (var i=0; i<10; i++) {
-      const entry = top_list[i]
-      if (entry) {
-        var position = this.hiscore[i]
-        position.name.setText(entry.name)
-        position.score.setText(entry.score)
-      }
-    }
-  }
+  init() {}
 
   preload() {
     this.load.scenePlugin({
@@ -41,6 +16,7 @@ class GameOver extends Phaser.Scene {
     this.load.plugin('rextexteditplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rextexteditplugin.min.js', true)
   
     // this.load.setBaseURL('https://leprechaun.altenwald.com')
+    this.load.image('background', '/img/background.jpeg')
     this.load.image('cell-background', '/img/cell_0_background.png')
     this.load.image('restart', '/img/restart.png')
     this.load.image('music-on', '/img/music_on.png')
@@ -72,8 +48,8 @@ class GameOver extends Phaser.Scene {
       .setDisplaySize(612 * 2, 436 * 2)
 
     this.add
-      .image(270, 475, 'cell-background')
-      .setDisplaySize(555, 700)
+      .image(270, 225, 'cell-background')
+      .setDisplaySize(555, 150)
       .setActive(false)
       .setDepth(1)
 
@@ -114,31 +90,77 @@ class GameOver extends Phaser.Scene {
         })
       })
 
-    const fontNameOptions = {
-      fontSize: 24,
-      color: '#000'
-    }
-    const fontScoreOptions = {
-      fontSize: 24,
-      color: '#000',
-      align: 'right',
-      fixedWidth: 100
-    }
-    this.hiscore = []
-    for (var i=0; i<10; i++) {
-      const icon = this.img(i + 1)
-      if (icon) {
-        this.add
-          .image(60, 310 + (i * 50), icon)
-          .setDisplaySize(30, 30)
-          .setDepth(2)
+    var scrollMode = 0 // 0: vertical
+    this.gridTable = this.rexUI.add.gridTable({
+      x: 0,
+      y: 325,
+      width: this.width,
+      height: Math.floor(this.height * 0.575),
+      scrollMode: scrollMode,
+      background: this.rexUI.add.roundRectangle(0, 0, 20, 10, 10, COLOR_PRIMARY),
+      table: {
+        cellWidth: (scrollMode === 0) ? undefined : 60,
+        cellHeight: (scrollMode === 0) ? 60 : undefined,
+        columns: 2,
+        mask: {
+          padding: 2,
+        },
+        reuseCellContainer: false,
+      },
+      slider: {
+        track: this.rexUI.add.roundRectangle(0, 0, 20, 10, 10, COLOR_DARK),
+        thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, 13, COLOR_LIGHT),
+      },
+      mouseWheelScroller: {
+        focus: false,
+        speed: 0.2
+      },
+      header: this.rexUI.add.label({
+        width: (scrollMode === 0) ? undefined : 30,
+        height: (scrollMode === 0) ? 30 : undefined,
+        background: this.rexUI.add.roundRectangle(0, 0, 20, 20, 0, COLOR_DARK),
+        text: this.add.text(0, 0, 'High Score'),
+        space: {
+          left: 20
+        }
+      }),
+      space: {
+          left: 20,
+          right: 20,
+          top: 20,
+          bottom: 20,
+
+          table: 10,
+          header: 10,
+          footer: 10,
+      },
+      createCellContainerCallback: function(cell, cellContainer) {
+        return cell.scene.rexUI.add.label({
+          width: cell.width,
+          height: cell.height,
+          background: cell.scene.rexUI.add.roundRectangle(0, 0, 20, 20, 0).setStrokeStyle(2, COLOR_DARK).setDepth(0),
+          text: cell.scene.add.text(0, 0, (cell.item.type === 'score') ? cell.item.score : cell.item.name, {color: COLOR_TEXT}),
+          space: cell.item.type === 'score' ? { right: 25 } : { left: 25 },
+          align: cell.item.type === 'score' ? 'right' : 'left'
+        })
       }
-      this.hiscore[i] = {
-        name: this.add.text(120, 300 + (i * 50), 'Unnamed', fontNameOptions).setDepth(2),
-        score: this.add.text(400, 300 + (i * 50), '0', fontScoreOptions).setDepth(2)
-      }
-    }
+    })
+      .setOrigin(0, 0)
+      .layout()
+
     send({type: "hiscore"})
+
+    eventsCenter.on('ws', (data) => {
+      console.log("received", data)
+      switch(data.type) {
+        case 'connected':
+          send({type: "hiscore"})
+          break
+        case 'hiscore':
+          this.update_hiscore(data.top_list)
+          break
+      }
+    })
 
     this.add
       .image(475, 220, 'restart')
@@ -168,22 +190,14 @@ class GameOver extends Phaser.Scene {
       })
   }
 
-  img(i) {
-    switch(i) {
-      case 1: return 'leprechaun-head'
-      case 2: return 'clover'
-      case 3: return 'rainbow-pot'
-      case 4: return 'pot'
-      case 5: return 'big-chest'
-      case 6: return 'chest'
-      case 7: return 'sack'
-      case 8: return 'gold'
-      case 9: return 'silver'
-      case 10: return 'bronze'
-      default: return false
+  update_hiscore(top_list) {
+    var leadership = []
+    for (var i=0; i<top_list.length; i++) {
+      leadership.push({type: 'name', name: top_list[i].name.slice(0, 20)})
+      leadership.push({type: 'score', score: String(top_list[i].score) + ' | ' + String(top_list[i].position + 1).padStart(2)})
     }
+    this.gridTable.setItems(leadership)
   }
 
-  update(time, delta) {
-  }
+  update(time, delta) {}
 }

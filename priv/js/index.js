@@ -6,6 +6,11 @@ const MIN_SIZE_HEIGHT_SCREEN = 480
 const SIZE_WIDTH_SCREEN = 540
 const SIZE_HEIGHT_SCREEN = 960
 
+const COLOR_PRIMARY = 0xffffff
+const COLOR_LIGHT = 0xdfdfdf
+const COLOR_DARK = 0x9f9f9f
+const COLOR_TEXT = 0x010101
+
 var
     config = {
         type: Phaser.AUTO,
@@ -35,9 +40,11 @@ var
         },
         scene: [
             Splash,
+            HighScore,
             Game,
             GameOver,
             SplashResizer,
+            HighScoreResizer,
             GameResizer,
             GameOverResizer
         ]
