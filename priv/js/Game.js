@@ -96,6 +96,7 @@ class Game extends Phaser.Scene {
     this.load.image('music-off', '/img/music_off.png')
 
     this.load.audio('extra-turn-voice', ['/audio/extra_turn.mp3', '/audio/extra_turn.ogg'])
+    this.load.audio('keep-turn-voice', ['/audio/keep_turn.mp3', '/audio/keep_turn.ogg'])
 
     this.load.image('bronze', '/img/cell_1.png')
     this.load.image('silver', '/img/cell_2.png')
@@ -227,6 +228,7 @@ class Game extends Phaser.Scene {
       })
 
     this.extraTurnFx = this.sound.add('extra-turn-voice')
+    this.keepTurnFx = this.sound.add('keep-turn-voice')
   }
 
   blink(points) {
@@ -468,6 +470,9 @@ class Game extends Phaser.Scene {
         if (this.extraTurnRun) {
           this.extraTurnImg.setVisible(false)
           this.extraTurnImg.setY(this.height)
+        }
+        if (this.musicIcon.texture.key == 'music-on') {
+          this.keepTurnFx.play()
         }
         this.extraTurnImg = this.keepTurn
         this.extraTurnImg.setVisible(true)
