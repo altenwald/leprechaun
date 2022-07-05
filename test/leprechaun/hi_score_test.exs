@@ -15,12 +15,12 @@ defmodule Leprechaun.HiScoreTest do
 
     test "top 5" do
       assert [
-        %HiScore{name: "User1"},
-        %HiScore{name: "User2"},
-        %HiScore{name: "User3"},
-        %HiScore{name: "User4"},
-        %HiScore{name: "User5"},
-      ] = HiScore.top_list()
+               %HiScore{name: "User1"},
+               %HiScore{name: "User2"},
+               %HiScore{name: "User3"},
+               %HiScore{name: "User4"},
+               %HiScore{name: "User5"}
+             ] = HiScore.top_list()
     end
   end
 end
