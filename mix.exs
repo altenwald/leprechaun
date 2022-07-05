@@ -39,7 +39,7 @@ defmodule Leprechaun.MixProject do
       {:plug, "~> 1.13"},
       {:plug_cowboy, "~> 2.5"},
       {:uuid, "~> 1.1"},
-      {:ecto_mnesia, "~> 0.9"},
+      {:ecto_mnesia, github: "manuel-rubio/ecto_mnesia", branch: "support_for_ecto3"},
       {:ephp, "~> 0.3"},
 
       # for releases

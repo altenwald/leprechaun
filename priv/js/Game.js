@@ -36,8 +36,6 @@ class Game extends Phaser.Scene {
         }
         break
       case "match":
-        this.save_board(data.cells)
-        this.update_info(data)
         this.blink(data.points)
         break
       case "gameover":
@@ -55,7 +53,6 @@ class Game extends Phaser.Scene {
       case "hiscore":
         break
       case "extra_turn":
-        this.update_info(data)
         this.extraTurnInit(data.extra_turns)
         break
       case "play":
