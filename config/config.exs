@@ -11,6 +11,10 @@ config :ecto_mnesia,
   storage_type: {:system, :atom, "MNESIA_STORAGE_TYPE", :disc_copies}
 
 # Make sure this directory exists
-config :mnesia, dir: 'priv/data/mnesia'
+if Mix.env() == :test do
+  config :mnesia, dir: '/tmp/mnesia'
+else
+  config :mnesia, dir: 'priv/data/mnesia'
+end
 
 config :leprechaun, Leprechaun.Repo, adapter: EctoMnesia.Adapter

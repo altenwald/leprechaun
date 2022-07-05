@@ -215,6 +215,84 @@ defmodule Leprechaun.GameTest do
       refute_receive _, 500
     end
 
+    test "correct move (4 elements + extra_turn 1, and then 5 elements + extra_turn 2)", data do
+      Piece.add_pieces([2, 2, 2, 1, 2, 1, 1])
+      assert :ok = Game.move(data.name, {1, 3}, {2, 3})
+      assert_receive {:move, {1, 3}, {2, 3}}
+      assert_receive {:extra_turn, 1}
+
+      assert_receive {:match, 4, 4,
+                      [
+                        vertical: [{1, 1}, {1, 2}, {1, 3}, {1, 4}]
+                      ],
+                      [
+                        [1, 8, 2, 3, 4, 1, 2, 1],
+                        [1, 8, 1, 4, 3, 3, 1, 1],
+                        [1, 3, 2, 3, 2, 1, 2, 2],
+                        [1, 8, 3, 2, 1, 1, 3, 1],
+                        [2, 3, 2, 3, 2, 3, 2, 3],
+                        [3, 2, 3, 2, 3, 2, 3, 2],
+                        [2, 3, 2, 3, 2, 3, 2, 3],
+                        [3, 2, 3, 2, 3, 2, 3, 2]
+                      ]}
+
+      assert_receive {:new_kind, 1, 3, 2}
+      assert_receive {:insert, 1, 2}
+      assert_receive {:slide, 1, 1, 2}
+      assert_receive {:insert, 1, 2}
+      assert_receive {:slide, 1, 3, 4}
+      assert_receive {:slide, 1, 2, 3}
+      assert_receive {:slide, 1, 1, 2}
+      assert_receive {:insert, 1, 2}
+      assert_receive {:extra_turn, 2}
+
+      assert_receive {:match, 10, 14, [vertical: [{1, 1}, {1, 2}, {1, 3}, {1, 4}, {1, 5}]],
+                      [
+                        [2, 8, 2, 3, 4, 1, 2, 1],
+                        [2, 8, 1, 4, 3, 3, 1, 1],
+                        [2, 3, 2, 3, 2, 1, 2, 2],
+                        [2, 8, 3, 2, 1, 1, 3, 1],
+                        [2, 3, 2, 3, 2, 3, 2, 3],
+                        [3, 2, 3, 2, 3, 2, 3, 2],
+                        [2, 3, 2, 3, 2, 3, 2, 3],
+                        [3, 2, 3, 2, 3, 2, 3, 2]
+                      ]}
+
+      assert_receive {:new_kind, 1, 1, 3}
+      assert_receive {:slide, 1, 1, 2}
+      assert_receive {:insert, 1, 1}
+      assert_receive {:slide, 1, 2, 3}
+      assert_receive {:slide, 1, 1, 2}
+      assert_receive {:insert, 1, 2}
+      assert_receive {:slide, 1, 3, 4}
+      assert_receive {:slide, 1, 2, 3}
+      assert_receive {:slide, 1, 1, 2}
+      assert_receive {:insert, 1, 1}
+      assert_receive {:slide, 1, 4, 5}
+      assert_receive {:slide, 1, 3, 4}
+      assert_receive {:slide, 1, 2, 3}
+      assert_receive {:slide, 1, 1, 2}
+      assert_receive {:insert, 1, 1}
+
+      new_board = [
+        [1, 8, 2, 3, 4, 1, 2, 1],
+        [1, 8, 1, 4, 3, 3, 1, 1],
+        [2, 3, 2, 3, 2, 1, 2, 2],
+        [1, 8, 3, 2, 1, 1, 3, 1],
+        [3, 3, 2, 3, 2, 3, 2, 3],
+        [3, 2, 3, 2, 3, 2, 3, 2],
+        [2, 3, 2, 3, 2, 3, 2, 3],
+        [3, 2, 3, 2, 3, 2, 3, 2]
+      ]
+
+      assert_receive {:show, ^new_board}
+      assert_receive :play
+      assert new_board == Game.show(data.name)
+      assert 14 == Game.score(data.name)
+      assert 11 == Game.turns(data.name)
+      refute_receive _, 500
+    end
+
     test "correct move (5 elements + extra_turn 2)", data do
       Piece.add_pieces([3, 4, 1, 1])
       assert :ok = Game.move(data.name, {6, 1}, {6, 2})
