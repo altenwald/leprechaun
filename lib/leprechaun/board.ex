@@ -163,13 +163,22 @@ defmodule Leprechaun.Board do
   """
   @spec new(size_x(), size_y()) :: t()
   def new(size_x, size_y) do
+    bare_new(size_x, size_y)
+    |> clean()
+  end
+
+  @doc """
+  Generates a board without reduce it if a match is found. It's
+  intended to be in use for specific tests and internal usage.
+  """
+  @spec bare_new(size_x, size_y) :: t()
+  def bare_new(size_x, size_y) do
     cells =
       for y <- 1..size_y, into: %{} do
         {y, for(x <- 1..size_x, into: %{}, do: {x, new_piece()})}
       end
 
     %Board{cells: cells, size_x: size_x, size_y: size_y}
-    |> clean()
   end
 
   defp clean(board) do
@@ -357,12 +366,21 @@ defmodule Leprechaun.Board do
         moved_cells \\ MapSet.new(),
         f \\ fn _ -> :ok end
       ) do
-    matched_cells =
-      matches
-      |> Enum.reduce(MapSet.new(), fn {_dir, points}, acc_points ->
-        MapSet.union(points, acc_points)
+    {removed_cells, board} =
+      Enum.reduce(matches, {MapSet.new(), board}, fn {_dir, matched_cells},
+                                                     {removed_cells, board} ->
+        {more_removed_cells, board} =
+          marked_and_new_kind_cells(board, matched_cells, moved_cells, f)
+
+        {MapSet.union(removed_cells, more_removed_cells), board}
       end)
 
+    removed_cells
+    |> Enum.sort_by(fn {x, y} -> {y, x} end)
+    |> Enum.reduce(board, fn {x, y}, board -> slide(board, x, y, f) end)
+  end
+
+  defp marked_and_new_kind_cells(board, matched_cells, moved_cells, f) do
     new_kind_cells = MapSet.intersection(matched_cells, moved_cells)
 
     new_kind_cells =
@@ -380,10 +398,7 @@ defmodule Leprechaun.Board do
         put_in(board[y][x], new_kind)
       end)
 
-    matched_cells
-    |> MapSet.difference(new_kind_cells)
-    |> Enum.sort_by(fn {x, y} -> {y, x} end)
-    |> Enum.reduce(board, fn {x, y}, board -> slide(board, x, y, f) end)
+    {MapSet.difference(matched_cells, new_kind_cells), board}
   end
 
   defp incr_kind(@piece_max), do: @piece_max

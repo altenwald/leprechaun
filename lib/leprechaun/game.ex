@@ -376,10 +376,7 @@ defmodule Leprechaun.Game do
 
       send_match_events(game.consumers, board, matches, game.score)
 
-      board =
-        Enum.reduce(matches, board, fn match, board ->
-          Board.apply_matches(board, MapSet.new([match]), moves, &send_to(game.consumers, &1))
-        end)
+      board = Board.apply_matches(board, matches, moves, &send_to(game.consumers, &1))
 
       %Game{game | score: game.score + score}
       |> find_and_apply_matches(board, MapSet.new(), turns_mod)

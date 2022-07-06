@@ -16,7 +16,7 @@ class Game extends Phaser.Scene {
   on_event(data) {
     switch(data.type) {
       case "new_kind":
-        this.moves.push({type: "new_kind", row: data.row, col: data.col, piece: data.piece})
+        this.movesRunning.push({type: "new_kind", row: data.row, col: data.col, piece: data.piece})
         break
       case "slide_new":
         this.moves.push({type: "slide_new", row: data.row, col: data.col, piece: data.piece})
@@ -441,9 +441,7 @@ class Game extends Phaser.Scene {
       }
       this.movesRunning = moves
     } else if (this.moves && this.moves.length > 0) {
-      do {
-        this.movesRunning.push(this.moves.shift())
-      } while (this.moves && this.moves.length > 0 && this.moves[0].type == "slide")
+      this.movesRunning.push(this.moves.shift())
     }
   }
 
