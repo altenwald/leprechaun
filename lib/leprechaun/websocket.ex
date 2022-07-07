@@ -71,7 +71,6 @@ defmodule Leprechaun.Websocket do
   end
 
   def websocket_info({:slide, x, y_orig, y_dest}, state) do
-
     msg = %{
       "type" => "slide",
       "orig" => %{"row" => y_orig, "col" => x},
@@ -93,7 +92,6 @@ defmodule Leprechaun.Websocket do
   end
 
   def websocket_info({:match, score, global_score, acc, cells}, state) do
-
     acc =
       for {_, points} <- acc do
         for {x, y} <- points do
@@ -114,7 +112,6 @@ defmodule Leprechaun.Websocket do
   end
 
   def websocket_info({:show, cells}, %{board: board} = state) do
-
     msg = %{
       "type" => "draw",
       "cells" => build_show(cells),
