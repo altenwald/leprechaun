@@ -15,51 +15,7 @@ class Game extends Phaser.Scene {
 
   on_event(data) {
     switch(data.type) {
-      case "new_kind":
-        this.movesRunning.push({type: "new_kind", row: data.row, col: data.col, piece: data.piece})
-        break
-      case "slide_new":
-        this.moves.push({type: "slide_new", row: data.row, col: data.col, piece: data.piece})
-        break
-      case "slide":
-        var row1 = data.orig["row"], row2 = data.dest["row"],
-            col1 = data.orig["col"], col2 = data.dest["col"],
-            p1 = this.board[row1][col1],
-            p2 = this.board[row2][col2],
-            move
-        p1.setDepth(3)
-        move = {type: "slide", p1: p1, p2: p2, texture: p1.texture}
-        if (this.moves.length == 0) {
-          this.movesRunning.push(move)
-        } else {
-          this.moves.push(move)
-        }
-        break
-      case "match":
-        this.blink(data.points)
-        break
-      case "gameover":
-        sceneRunning = 'GameOver'
-        this.input.off('pointerdown', this.startDrag, this)
-        eventsCenter.off('ws', this.on_event, this)
-        this.scene.start('GameOver')
-        this.scene.get('GameOver').score = data.score
-        this.gameState = 'gameover'
-        break
-      case "draw":
-        this.save_board(data.cells)
-        this.update_info(data)
-        break
       case "hiscore":
-        break
-      case "extra_turn":
-        this.extraTurnInit(data.extra_turns)
-        break
-      case "play":
-        this.update_info(data)
-        this.addScore = 0
-        this.input.on('pointerdown', this.startDrag, this)
-        this.gameState = 'idle'
         break
       case "illegal_move":
         this.undoMove()
@@ -73,10 +29,7 @@ class Game extends Phaser.Scene {
         this.connection.setVisible(false)
         break
       default:
-        if (data.cells) {
-          this.save_board(data.cells)
-        }
-        this.update_info(data)
+        this.moves.push(data)
         break
     }
   }
@@ -423,7 +376,8 @@ class Game extends Phaser.Scene {
         switch (move.type) {
           case "slide":
             if (move.p1.y >= move.p2.y) {
-              move.p2.setTexture(move.texture)
+              move.p2.setTexture(move.p1.texture)
+              move.p1.setTexture('blank')
               move.p1.setY(move.p1.getData('y'))
               move.p1.setDepth(2)
             } else {
@@ -437,11 +391,46 @@ class Game extends Phaser.Scene {
           case "new_kind":
             this.board[move.row][move.col].setTexture(move.piece)
             break
+          case "match":
+            this.blink(move.points)
+            break
+          case "gameover":
+            sceneRunning = 'GameOver'
+            this.input.off('pointerdown', this.startDrag, this)
+            eventsCenter.off('ws', this.on_event, this)
+            this.scene.start('GameOver')
+            this.scene.get('GameOver').score = move.score
+            this.gameState = 'gameover'
+            break
+          case "draw":
+            this.save_board(move.cells)
+            this.update_info(move)
+            break
+          case "extra_turn":
+            this.extraTurnInit(move.extra_turns)
+            break
+          case "play":
+            this.update_info(move)
+            this.addScore = 0
+            this.input.on('pointerdown', this.startDrag, this)
+            this.gameState = 'idle'    
         }
       }
       this.movesRunning = moves
     } else if (this.moves && this.moves.length > 0) {
-      this.movesRunning.push(this.moves.shift())
+      var move = this.moves.shift()
+      switch(move.type) {
+        case "slide":
+          var row1 = move.orig["row"], row2 = move.dest["row"],
+              col1 = move.orig["col"], col2 = move.dest["col"],
+              p1 = this.board[row1][col1],
+              p2 = this.board[row2][col2]
+          move = {type: "slide", p1: p1, p2: p2}
+          move.p1.setDepth(3)
+          move.p2.setTexture('blank')
+          break
+      }
+      this.movesRunning.push(move)
     }
   }
 

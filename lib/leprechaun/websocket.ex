@@ -12,10 +12,6 @@ defmodule Leprechaun.Websocket do
   require Logger
   alias Leprechaun.{Game, Bot, HiScore}
 
-  @wait_before_send 100
-
-  defp wait_before_send, do: Process.sleep(@wait_before_send)
-
   @doc false
   @spec init(:cowboy_req.req(), []) ::
           {:cowboy_websocket, :cowboy_req.req(), [{:remote_ip, Game.remote_ip()}]}
@@ -57,7 +53,6 @@ defmodule Leprechaun.Websocket do
 
   @doc false
   def websocket_info({:send, data}, state) do
-    wait_before_send()
     {:reply, {:text, data}, state}
   end
 
@@ -66,19 +61,16 @@ defmodule Leprechaun.Websocket do
   end
 
   def websocket_info(:play, state) do
-    wait_before_send()
     turns = Game.turns(state.board)
     {:reply, {:text, Jason.encode!(%{"type" => "play", "turns" => turns})}, state}
   end
 
   def websocket_info({:insert, x, piece}, state) do
-    wait_before_send()
     msg = %{"type" => "slide_new", "row" => 1, "col" => x, "piece" => img(piece)}
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
 
   def websocket_info({:slide, x, y_orig, y_dest}, state) do
-    wait_before_send()
 
     msg = %{
       "type" => "slide",
@@ -90,20 +82,17 @@ defmodule Leprechaun.Websocket do
   end
 
   def websocket_info({:new_kind, x, y, new_kind}, state) do
-    wait_before_send()
     msg = %{"type" => "new_kind", "row" => y, "col" => x, "piece" => img(new_kind)}
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
 
   def websocket_info({:extra_turn, extra_turns}, state) do
-    wait_before_send()
     turns = Game.turns(state.board)
     msg = %{"type" => "extra_turn", "extra_turns" => extra_turns, "turns" => turns}
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
 
   def websocket_info({:match, score, global_score, acc, cells}, state) do
-    wait_before_send()
 
     acc =
       for {_, points} <- acc do
@@ -125,7 +114,6 @@ defmodule Leprechaun.Websocket do
   end
 
   def websocket_info({:show, cells}, %{board: board} = state) do
-    wait_before_send()
 
     msg = %{
       "type" => "draw",
@@ -138,7 +126,6 @@ defmodule Leprechaun.Websocket do
   end
 
   def websocket_info({:gameover, score, has_username}, state) do
-    wait_before_send()
     msg = %{"type" => "gameover", "score" => score, "turns" => 0, "has_username" => has_username}
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
