@@ -1,7 +1,6 @@
 defmodule Leprechaun.GameTest do
   use ExUnit.Case
   alias Leprechaun.Game
-  alias Leprechaun.Support.Piece
 
   describe "starting" do
     test "correct start and stoping manually" do
@@ -16,10 +15,10 @@ defmodule Leprechaun.GameTest do
         [3, 2, 3, 2, 3, 2, 3, 2]
       ]
 
-      Piece.set_pieces(List.flatten(board))
+      opts = [pieces: List.flatten(board)]
 
       name = :game1
-      assert {:ok, pid} = Game.start_link(name)
+      assert {:ok, pid} = Game.start_link(name, opts)
       assert Game.exists?(name)
       assert is_pid(pid) and Process.alive?(pid)
       assert board == Game.show(name)
@@ -41,10 +40,10 @@ defmodule Leprechaun.GameTest do
         [3, 2, 3, 2, 3, 2, 3, 2]
       ]
 
-      Piece.set_pieces(List.flatten(board))
+      opts = [pieces: List.flatten(board), max_running_time: 250]
 
       name = :game1
-      assert {:ok, pid} = Game.start_link(name, max_running_time: 250)
+      assert {:ok, pid} = Game.start_link(name, opts)
       Process.monitor(pid)
       assert Game.exists?(name)
       assert is_pid(pid) and Process.alive?(pid)
@@ -70,10 +69,10 @@ defmodule Leprechaun.GameTest do
         [3, 2, 3, 2, 3, 2, 3, 2]
       ]
 
-      Piece.set_pieces(List.flatten(board))
+      opts = [pieces: List.flatten(board)]
 
       name = :gameC
-      assert {:ok, pid} = Game.start_link(name)
+      assert {:ok, pid} = Game.start_link(name, opts)
       assert Game.exists?(name)
       assert is_pid(pid) and Process.alive?(pid)
       assert board == Game.show(name)
@@ -106,10 +105,10 @@ defmodule Leprechaun.GameTest do
         [3, 2, 3, 2, 3, 2, 3, 2]
       ]
 
-      Piece.set_pieces(List.flatten(board))
+      opts = [pieces: List.flatten(board)]
 
       name = :game2
-      {:ok, pid} = Game.start_link(name)
+      {:ok, pid} = Game.start_link(name, opts)
       %{board: board, pid: pid, name: name}
     end
 
@@ -122,7 +121,7 @@ defmodule Leprechaun.GameTest do
     end
 
     test "correct move (3 elements, type 8)", data do
-      Piece.add_pieces([3, 4])
+      Game.push_pieces(data.name, [3, 4])
       assert :ok = Game.move(data.name, {2, 4}, {2, 3})
       assert_receive {:move, {2, 4}, {2, 3}}
 
@@ -167,7 +166,7 @@ defmodule Leprechaun.GameTest do
     end
 
     test "correct move (4 elements + extra_turn 1)", data do
-      Piece.add_pieces([3, 4, 1])
+      Game.push_pieces(data.name, [3, 4, 1])
       assert :ok = Game.move(data.name, {1, 3}, {2, 3})
       assert_receive {:move, {1, 3}, {2, 3}}
       assert_receive {:extra_turn, 1}
@@ -216,7 +215,7 @@ defmodule Leprechaun.GameTest do
     end
 
     test "correct move (4 elements + extra_turn 1, and then 5 elements + extra_turn 2)", data do
-      Piece.add_pieces([2, 2, 2, 1, 2, 1, 1])
+      Game.push_pieces(data.name, [2, 2, 2, 1, 2, 1, 1])
       assert :ok = Game.move(data.name, {1, 3}, {2, 3})
       assert_receive {:move, {1, 3}, {2, 3}}
       assert_receive {:extra_turn, 1}
@@ -294,7 +293,7 @@ defmodule Leprechaun.GameTest do
     end
 
     test "correct move (5 elements + extra_turn 2)", data do
-      Piece.add_pieces([3, 4, 1, 1])
+      Game.push_pieces(data.name, [3, 4, 1, 1])
       assert :ok = Game.move(data.name, {6, 1}, {6, 2})
       assert_receive {:move, {6, 1}, {6, 2}}
       assert_receive {:extra_turn, 2}
@@ -390,15 +389,15 @@ defmodule Leprechaun.GameTest do
         [3, 2, 3, 2, 3, 2, 3, 2]
       ]
 
-      Piece.set_pieces(List.flatten(board))
+      opts = [pieces: List.flatten(board), turns: 1]
 
       name = :game2
-      {:ok, pid} = Game.start_link(name, turns: 1)
+      {:ok, pid} = Game.start_link(name, opts)
       %{board: board, pid: pid, name: name}
     end
 
     test "check correct move (3 elements and new match after)", data do
-      Piece.add_pieces([3, 4, 1, 1])
+      Game.push_pieces(data.name, [3, 4, 1, 1])
       assert :ok = Game.move(data.name, {7, 1}, {7, 2})
       assert_receive {:move, {7, 1}, {7, 2}}
 
@@ -457,7 +456,7 @@ defmodule Leprechaun.GameTest do
     end
 
     test "receive game over", data do
-      Piece.add_pieces([3, 4])
+      Game.push_pieces(data.name, [3, 4])
       assert {:error, :still_playing} = Game.hiscore(data.name, "Manuel Rubio", "127.0.0.1")
       assert :ok = Game.move(data.name, {1, 3}, {2, 3})
       assert_receive {:move, {1, 3}, {2, 3}}

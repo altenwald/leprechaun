@@ -21,6 +21,7 @@ defmodule Leprechaun.Game do
   """
   use GenServer
   alias Leprechaun.{Board, Game, HiScore}
+  alias Leprechaun.Board.Piece
   require Logger
 
   @board_x 8
@@ -74,8 +75,14 @@ defmodule Leprechaun.Game do
     configure a smaller size.
   - `turns` is the amount of turns the game starts with. The default
     value is 10.
+  - `pieces` the starting pieces to be used when a new piece is requested
+    to be inserted in the board.
   """
-  @type opts() :: [{:max_running_time, timeout()}, {:turns, turns()}]
+  @type opts() :: [
+          {:max_running_time, timeout()},
+          {:turns, turns()},
+          {:pieces, [Piece.t()]}
+        ]
 
   @typedoc """
   The internal storage for the game. We use an opaque term to avoid this
@@ -144,9 +151,9 @@ defmodule Leprechaun.Game do
   @doc """
   Retrieve a representation of the board as a list of lists which is
   including numbers as the representation of the pieces, see
-  `Leprechaun.Board.piece()`.
+  `Leprechaun.Board.Piece.t()`.
   """
-  @spec show(game_name()) :: [[Board.piece()]]
+  @spec show(game_name()) :: [[Piece.t()]]
   def show(name), do: GenServer.call(via(name), :show)
 
   @doc """
@@ -210,9 +217,19 @@ defmodule Leprechaun.Game do
   @spec turns(game_name()) :: turns()
   def turns(name), do: GenServer.call(via(name), :turns)
 
+  @doc """
+  Push pieces to be retrieved or inserted in the board when new
+  pieces are needed.
+  """
+  @spec push_pieces(game_name(), [Piece.t()]) :: :ok
+  def push_pieces(name, pieces) when is_list(pieces) do
+    GenServer.cast(via(name), {:push_pieces, pieces})
+  end
+
   @doc false
   @impl GenServer
   def init(opts) do
+    if pieces = opts[:pieces], do: Piece.set(pieces)
     board = Board.new(@board_x, @board_y)
 
     max_running_time = opts[:max_running_time] || :timer.hours(@max_running_hours)
@@ -277,6 +294,11 @@ defmodule Leprechaun.Game do
   def handle_cast({:consumer, from}, game) do
     Process.monitor(from)
     {:noreply, %Game{game | consumers: [from | game.consumers]}}
+  end
+
+  def handle_cast({:push_pieces, pieces}, game) do
+    Piece.push(pieces)
+    {:noreply, game}
   end
 
   @doc false

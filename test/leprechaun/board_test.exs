@@ -2,7 +2,7 @@ defmodule Leprechaun.BoardTest do
   use ExUnit.Case
 
   alias Leprechaun.Board
-  alias Leprechaun.Support.Piece
+  alias Leprechaun.Board.Piece
 
   describe "new" do
     test "correct new default board" do
@@ -17,11 +17,56 @@ defmodule Leprechaun.BoardTest do
         [3, 2, 3, 2, 3, 2, 3, 2]
       ]
 
-      Piece.set_pieces(List.flatten(pieces))
+      Piece.set(List.flatten(pieces))
 
       assert %Board{} = board = Board.new()
       assert pieces == Board.show(board)
       assert {8, 8} == Board.get_size(board)
+    end
+
+    test "clean" do
+      pieces = [
+        [1, 2, 2, 2, 4, 3, 2, 1],
+        [1, 2, 1, 4, 3, 2, 1, 1],
+        [3, 1, 2, 3, 2, 1, 2, 2],
+        [1, 2, 3, 2, 1, 2, 1, 1],
+        [2, 3, 2, 3, 2, 3, 2, 3],
+        [3, 2, 3, 2, 3, 2, 3, 2],
+        [2, 3, 2, 3, 2, 3, 2, 3],
+        [3, 2, 3, 2, 3, 2, 3, 2],
+        3,
+        1
+      ]
+
+      new_board = [
+        [1, 3, 3, 1, 4, 3, 2, 1],
+        [1, 2, 1, 4, 3, 2, 1, 1],
+        [3, 1, 2, 3, 2, 1, 2, 2],
+        [1, 2, 3, 2, 1, 2, 1, 1],
+        [2, 3, 2, 3, 2, 3, 2, 3],
+        [3, 2, 3, 2, 3, 2, 3, 2],
+        [2, 3, 2, 3, 2, 3, 2, 3],
+        [3, 2, 3, 2, 3, 2, 3, 2]
+      ]
+
+      Piece.set(List.flatten(pieces))
+
+      assert %Board{} = board = Board.new()
+      assert new_board == Board.show(board)
+      assert {8, 8} == Board.get_size(board)
+    end
+  end
+
+  describe "access behaviour" do
+    test "incorrect position" do
+      assert %Board{} = board = Board.new(2, 2)
+      assert is_nil(board[0])
+      assert is_nil(board[3])
+    end
+
+    test "pop" do
+      assert %Board{} = board = Board.new(2, 2)
+      assert {%{1 => _, 2 => _}, ^board} = Access.pop(board, 1)
     end
   end
 
@@ -38,14 +83,14 @@ defmodule Leprechaun.BoardTest do
         [3, 2, 3, 2, 3, 2, 3, 2]
       ]
 
-      Piece.set_pieces(List.flatten(pieces))
+      Piece.set(List.flatten(pieces))
 
       board = Board.new()
       %{board: board, pieces: pieces}
     end
 
     test "correct move (3 elements, type 8)", data do
-      Piece.add_pieces([3, 4])
+      Piece.push([3, 4])
       assert moved_board = Board.move(data.board, {2, 4}, {2, 3})
 
       assert Board.show(moved_board) == [
@@ -88,7 +133,7 @@ defmodule Leprechaun.BoardTest do
     end
 
     test "correct move (4 elements + extra_turn 1)", data do
-      Piece.add_pieces([3, 4, 1])
+      Piece.push([3, 4, 1])
       assert moved_board = Board.move(data.board, {1, 3}, {2, 3})
 
       assert Board.show(moved_board) == [
@@ -135,7 +180,7 @@ defmodule Leprechaun.BoardTest do
     end
 
     test "correct move (5 elements + extra_turn 2)", data do
-      Piece.add_pieces([3, 4, 1, 1])
+      Piece.push([3, 4, 1, 1])
       assert moved_board = Board.move(data.board, {6, 1}, {6, 2})
 
       assert Board.show(moved_board) == [
@@ -222,7 +267,7 @@ defmodule Leprechaun.BoardTest do
         [7, 8, 1]
       ]
 
-      Piece.set_pieces(List.flatten(pieces ++ [2, 4, 1, 3]))
+      Piece.set(List.flatten(pieces ++ [2, 4, 1, 3]))
 
       board = Board.bare_new(3, 6)
 
@@ -280,7 +325,7 @@ defmodule Leprechaun.BoardTest do
         [7, 8, 1, 4]
       ]
 
-      Piece.set_pieces(List.flatten(pieces ++ [3, 1, 2, 1]))
+      Piece.set(List.flatten(pieces ++ [3, 1, 2, 1]))
 
       board = Board.bare_new(4, 6)
 

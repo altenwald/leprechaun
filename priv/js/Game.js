@@ -392,6 +392,7 @@ class Game extends Phaser.Scene {
             this.board[move.row][move.col].setTexture(move.piece)
             break
           case "match":
+            this.update_info(move)
             this.blink(move.points)
             break
           case "gameover":

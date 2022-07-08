@@ -23,40 +23,11 @@ defmodule Leprechaun.Board do
   new kind expressed by `new_kind`.
   """
   alias Leprechaun.Board
+  alias Leprechaun.Board.Piece
   @behaviour Access
 
   @board_size_y 8
   @board_size_x 8
-
-  if Mix.env() != :test do
-    @init_symbols_prob List.duplicate(1, 15) ++
-                         List.duplicate(2, 12) ++
-                         List.duplicate(3, 9) ++
-                         List.duplicate(4, 6) ++
-                         List.duplicate(5, 1)
-  end
-
-  @piece_max 8
-
-  @typedoc """
-  The piece is represented by a number, we have 8 different representations at
-  the moment. Depending on the interface these could be:
-
-  - 0 empty, when there's a gap, it's not usual and it should happen only
-    during slides.
-  - 1 bronze or 💰 on brown color.
-  - 2 silver or 💰 on gray color.
-  - 3 gold or 💰 on yellow color.
-  - 4 sack or 💶 on brown color.
-  - 5 chest or 💶 on gray color.
-  - 6 big-chest or 💶 on yellow color.
-  - 7 pot or MX on gray color.
-  - 8 rainbow-pot or MX on yellow color.
-
-  Note that the representation is responsibility of `Leprechaun.Board` and
-  `Leprechaun.Console` and the information represented above could change.
-  """
-  @type piece() :: 1..8
 
   @typedoc """
   The X position on the board. It's in use for representing the position of
@@ -112,16 +83,16 @@ defmodule Leprechaun.Board do
   function `apply_matches/4`.
   """
   @type event ::
-          {:insert, pos_x(), piece()}
-          | {:new_kind, pos_x(), pos_y(), piece()}
+          {:insert, pos_x(), Piece.t()}
+          | {:new_kind, pos_x(), pos_y(), Piece.t()}
           | {:slide, pos_x(), pos_y(), pos_y()}
 
   @typedoc """
   The composition of a row inside of the cells which are used as board.
   This is based on the index as a `size_x()` type and the content as
-  the `piece()`.
+  the `Piece.t()`.
   """
-  @type row :: %{size_x() => piece()}
+  @type row :: %{size_x() => Piece.t()}
 
   @typedoc """
   The cells are the board. It's a map where the index is the number of
@@ -171,11 +142,11 @@ defmodule Leprechaun.Board do
   Generates a board without reduce it if a match is found. It's
   intended to be in use for specific tests and internal usage.
   """
-  @spec bare_new(size_x, size_y) :: t()
+  @spec bare_new(size_x(), size_y()) :: t()
   def bare_new(size_x, size_y) do
     cells =
       for y <- 1..size_y, into: %{} do
-        {y, for(x <- 1..size_x, into: %{}, do: {x, new_piece()})}
+        {y, for(x <- 1..size_x, into: %{}, do: {x, Piece.new()})}
       end
 
     %Board{cells: cells, size_x: size_x, size_y: size_y}
@@ -195,9 +166,10 @@ defmodule Leprechaun.Board do
 
   @doc """
   Return a representation of the board in list of lists form. Each
-  cell is represented by a number from 1 to #{@piece_max}.
+  cell is represented by a number from 1 to the max number represented by
+  the pieces (see `Piece` module).
   """
-  @spec show(t()) :: [[piece()]]
+  @spec show(t()) :: [[Piece.t()]]
   def show(%__MODULE__{} = board) do
     for y <- 1..board.size_y do
       for x <- 1..board.size_x do
@@ -249,14 +221,8 @@ defmodule Leprechaun.Board do
     {:error, {:illegal_move, {{x1, y1}, {x2, y2}}}}
   end
 
-  if Mix.env() == :test do
-    defp new_piece, do: Leprechaun.Support.Piece.new_piece()
-  else
-    defp new_piece, do: Enum.random(@init_symbols_prob)
-  end
-
   defp slide(%Board{} = board, x, 1, f) do
-    new_piece = new_piece()
+    new_piece = Piece.new()
     f.({:insert, x, new_piece})
     put_in(board[1][x], new_piece)
   end
@@ -393,7 +359,7 @@ defmodule Leprechaun.Board do
     board =
       new_kind_cells
       |> Enum.reduce(board, fn {x, y}, board ->
-        new_kind = incr_kind(board.cells[y][x])
+        new_kind = Piece.incr_kind(board.cells[y][x])
         f.({:new_kind, x, y, new_kind})
         put_in(board[y][x], new_kind)
       end)
@@ -401,13 +367,10 @@ defmodule Leprechaun.Board do
     {MapSet.difference(matched_cells, new_kind_cells), board}
   end
 
-  defp incr_kind(@piece_max), do: @piece_max
-  defp incr_kind(i), do: i + 1
-
   @doc """
   Get the matched cells from a board.
   """
-  @spec get_matched_cells(t(), matches()) :: [piece()]
+  @spec get_matched_cells(t(), matches()) :: [Piece.t()]
   def get_matched_cells(board, matches) do
     matches
     |> Enum.flat_map(fn {_dir, points} -> Enum.to_list(points) end)
