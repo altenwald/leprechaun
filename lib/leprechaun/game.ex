@@ -467,18 +467,9 @@ defmodule Leprechaun.Game do
       {0, _, false, false} ->
         illegal_move(game, moves)
 
-      # TODO: clover + leprechaun move!
-      # {_, _, true, true} ->
-
-      # TODO: leprechaun where moved_cells are leprechaun_piece x 2
-      # {_, _, false, true} when moved_cells == [leprechaun_piece, leprechaun_piece] ->
-
       #  single leprechaun
       {_, _, false, true} ->
         apply_single_leprechaun_matches(game, board, moves, turns_mod)
-
-      # TODO: clover where moved_cells are clover_piece x 2
-      # {_, _, true, false} when moved_cells == [clover_piece, clover_piece] ->
 
       # single clover
       {_, _, true, false} ->
