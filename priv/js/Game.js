@@ -41,6 +41,8 @@ class Game extends Phaser.Scene {
     this.load.image('cell-background', '/img/cell_0_background.png')
     this.load.image('extra-turn', '/img/extra_turn.png')
     this.load.image('keep-turn', '/img/keep_turn.png')
+    this.load.image('my-gold', '/img/my_gold.png')
+    this.load.image('stonks', '/img/stonks.png')
 
     this.load.image('music-on', '/img/music_on.png')
     this.load.image('music-off', '/img/music_off.png')
@@ -158,6 +160,18 @@ class Game extends Phaser.Scene {
 
     this.keepTurn = this.add
       .image(width, height, 'keep-turn')
+      .setDisplaySize(300, 175)
+      .setOrigin(1, 0)
+      .setDepth(5)
+
+    this.cloverMatch = this.add
+      .image(width, height, 'stonks')
+      .setDisplaySize(300, 175)
+      .setOrigin(1, 0)
+      .setDepth(5)
+
+    this.leprechaunMatch = this.add
+      .image(width, height, 'my-gold')
       .setDisplaySize(300, 175)
       .setOrigin(1, 0)
       .setDepth(5)
@@ -410,6 +424,12 @@ class Game extends Phaser.Scene {
           case "extra_turn":
             this.extraTurnInit(move.extra_turns)
             break
+          case "clover":
+            this.cloverInit()
+            break
+          case "leprechaun":
+            this.LeprechaunInit()
+            break
           case "play":
             this.update_info(move)
             this.addScore = 0
@@ -433,6 +453,32 @@ class Game extends Phaser.Scene {
       }
       this.movesRunning.push(move)
     }
+  }
+
+  cloverInit() {
+    if (this.extraTurnRun) {
+      this.extraTurnImg.setVisible(false)
+      this.extraTurnImg.setY(this.height)
+    }
+    // TODO: fx audio
+    this.extraTurnImg = this.cloverMatch
+    this.extraTurnImg.setVisible(true)
+    this.extraTurnSpeed = -10
+    this.extraTurnTime = Number.MAX_VALUE
+    this.extraTurnRun = true
+  }
+
+  LeprechaunInit() {
+    if (this.extraTurnRun) {
+      this.extraTurnImg.setVisible(false)
+      this.extraTurnImg.setY(this.height)
+    }
+    // TODO: fx audio
+    this.extraTurnImg = this.leprechaunMatch
+    this.extraTurnImg.setVisible(true)
+    this.extraTurnSpeed = -10
+    this.extraTurnTime = Number.MAX_VALUE
+    this.extraTurnRun = true
   }
 
   extraTurnInit(turns) {

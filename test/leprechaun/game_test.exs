@@ -143,7 +143,7 @@ defmodule Leprechaun.GameTest do
       new_board = [
         [1, 4, 2, 3, 4, 1, 2, 1],
         [1, 3, 1, 4, 3, 3, 1, 1],
-        [3, 8, 2, 3, 2, 1, 2, 2],
+        [3, 9, 2, 3, 2, 1, 2, 2],
         [1, 1, 3, 2, 1, 1, 3, 1],
         [2, 3, 2, 3, 2, 3, 2, 3],
         [3, 2, 3, 2, 3, 2, 3, 2],
@@ -151,7 +151,7 @@ defmodule Leprechaun.GameTest do
         [3, 2, 3, 2, 3, 2, 3, 2]
       ]
 
-      assert_receive {:new_kind, 2, 3, 8}
+      assert_receive {:new_kind, 2, 3, 9}
       assert_receive {:insert, 2, 3}
       assert_receive {:slide, 2, 1, 2}
       assert_receive {:insert, 2, 4}

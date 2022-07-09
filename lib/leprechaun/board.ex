@@ -338,10 +338,27 @@ defmodule Leprechaun.Board do
         {more_removed_cells, board} =
           marked_and_new_kind_cells(board, matched_cells, moved_cells, f)
 
+        if MapSet.size(matched_cells) >= 5 and MapSet.size(moved_cells) > 0 do
+          Piece.push([Piece.clover()])
+        end
+
         {MapSet.union(removed_cells, more_removed_cells), board}
       end)
 
     removed_cells
+    |> Enum.sort_by(fn {x, y} -> {y, x} end)
+    |> Enum.reduce(board, fn {x, y}, board -> slide(board, x, y, f) end)
+  end
+
+  @doc """
+  Remove the match cells from the board.
+  """
+  @spec remove_matches(t(), matches()) :: t()
+  @spec remove_matches(t(), matches(), (event -> any)) :: t()
+  def remove_matches(%__MODULE__{} = board, matches, f \\ fn _ -> :ok end) do
+    Enum.reduce(matches, MapSet.new(), fn {_dir, matched_cells}, removed_cells ->
+      MapSet.union(removed_cells, matched_cells)
+    end)
     |> Enum.sort_by(fn {x, y} -> {y, x} end)
     |> Enum.reduce(board, fn {x, y}, board -> slide(board, x, y, f) end)
   end
@@ -368,13 +385,60 @@ defmodule Leprechaun.Board do
   end
 
   @doc """
+  Return matches `mixed` for all of the cells matching the kind passed as
+  second parameter.
+  """
+  @spec match_kind(t(), Piece.t()) :: matches()
+  def match_kind(board, kind) do
+    matched_cells =
+      for y <- 1..board.size_y, x <- 1..board.size_x, reduce: MapSet.new() do
+        matched_cells ->
+          if board[y][x] == kind do
+            MapSet.put(matched_cells, {x, y})
+          else
+            matched_cells
+          end
+      end
+
+    MapSet.new([{:mixed, matched_cells}])
+  end
+
+  @spec incr_kind(t(), Piece.t()) :: t()
+  @spec incr_kind(t(), Piece.t(), (event -> any)) :: t()
+  def incr_kind(board, old_kind, f \\ fn _ -> :ok end) do
+    new_kind = Piece.incr_kind(old_kind)
+
+    if new_kind != old_kind do
+      for y <- 1..board.size_y, x <- 1..board.size_x, reduce: board do
+        board ->
+          if board[y][x] == old_kind do
+            f.({:new_kind, x, y, new_kind})
+            put_in(board[y][x], new_kind)
+          else
+            board
+          end
+      end
+    else
+      board
+    end
+  end
+
+  @doc """
   Get the matched cells from a board.
   """
   @spec get_matched_cells(t(), matches()) :: [Piece.t()]
   def get_matched_cells(board, matches) do
     matches
     |> Enum.flat_map(fn {_dir, points} -> Enum.to_list(points) end)
-    |> Enum.map(fn {x, y} -> board[y][x] end)
+    |> then(&get_cells(board, MapSet.new(&1)))
+  end
+
+  @doc """
+  Retrieve the content of the specified cells.
+  """
+  @spec get_cells(t(), MapSet.t(cell_pos())) :: [Piece.t()]
+  def get_cells(board, positions) do
+    Enum.map(positions, fn {x, y} -> board[y][x] end)
   end
 
   @doc false

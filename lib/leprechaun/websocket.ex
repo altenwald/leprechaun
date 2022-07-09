@@ -91,6 +91,16 @@ defmodule Leprechaun.Websocket do
     {:reply, {:text, Jason.encode!(msg)}, state}
   end
 
+  def websocket_info({:leprechaun, cell}, state) do
+    msg = %{"type" => "leprechaun", "cell" => cell}
+    {:reply, {:text, Jason.encode!(msg)}, state}
+  end
+
+  def websocket_info({:clover, cell}, state) do
+    msg = %{"type" => "clover", "cell" => cell}
+    {:reply, {:text, Jason.encode!(msg)}, state}
+  end
+
   def websocket_info({:match, score, global_score, acc, cells}, state) do
     acc =
       for {_, points} <- acc do
@@ -312,4 +322,6 @@ defmodule Leprechaun.Websocket do
   defp img(6), do: "big-chest"
   defp img(7), do: "pot"
   defp img(8), do: "rainbow-pot"
+  defp img(9), do: "leprechaun-head"
+  defp img(10), do: "clover"
 end

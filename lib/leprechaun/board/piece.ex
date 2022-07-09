@@ -17,13 +17,16 @@ defmodule Leprechaun.Board.Piece do
   - 6 big-chest or 💶 on yellow color.
   - 7 pot or MX on gray color.
   - 8 rainbow-pot or MX on yellow color.
-  - 9 clover or 🍀
-  - 10 leprechaun 🧚‍♀️
+  - 9 leprechaun 🧚‍♀️
+  - 10 clover or 🍀
 
   Note that the representation is responsibility of `Leprechaun.Board` and
   `Leprechaun.Console` and the information represented above could change.
   """
   @type t() :: 1..10
+
+  @clover_piece 10
+  @leprechaun_piece 9
 
   @init_symbols_prob List.duplicate(1, 15) ++
                        List.duplicate(2, 12) ++
@@ -78,7 +81,10 @@ defmodule Leprechaun.Board.Piece do
     :ok
   end
 
-  @piece_max 8
+  @piece_max 10
+
+  def clover, do: @clover_piece
+  def leprechaun, do: @leprechaun_piece
 
   @doc """
   Increase the current piece generating the following level or deciding what

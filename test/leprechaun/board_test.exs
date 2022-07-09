@@ -116,7 +116,7 @@ defmodule Leprechaun.BoardTest do
       assert Board.show(new_board) == [
                [1, 4, 2, 3, 4, 1, 2, 1],
                [1, 3, 1, 4, 3, 3, 1, 1],
-               [3, 8, 2, 3, 2, 1, 2, 2],
+               [3, 9, 2, 3, 2, 1, 2, 2],
                [1, 1, 3, 2, 1, 1, 3, 1],
                [2, 3, 2, 3, 2, 3, 2, 3],
                [3, 2, 3, 2, 3, 2, 3, 2],
@@ -124,7 +124,7 @@ defmodule Leprechaun.BoardTest do
                [3, 2, 3, 2, 3, 2, 3, 2]
              ]
 
-      assert_receive {:new_kind, 2, 3, 8}
+      assert_receive {:new_kind, 2, 3, 9}
       assert_receive {:insert, 2, 3}
       assert_receive {:slide, 2, 1, 2}
       assert_receive {:insert, 2, 4}
@@ -335,7 +335,7 @@ defmodule Leprechaun.BoardTest do
           horizontal: MapSet.new([{2, 2}, {3, 2}, {4, 2}])
         )
 
-      assert [1, 1, 1, 2, 2, 2] = Board.get_matched_cells(board, matches)
+      assert [1, 1, 1, 2, 2, 2] = Enum.sort(Board.get_matched_cells(board, matches))
       assert matches == Board.find_matches(board)
 
       moved = MapSet.new()

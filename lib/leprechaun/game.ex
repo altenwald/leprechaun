@@ -347,61 +347,148 @@ defmodule Leprechaun.Game do
     end
   end
 
+  defp apply_no_matches_ending(game, board, turns_mod) do
+    if turns_mod == -1, do: send_to(game.consumers, {:extra_turn, -1})
+
+    send_to(game.consumers, {:show, Board.show(board)})
+
+    turns = game.turns + turns_mod
+
+    if turns == 0 do
+      send_to(game.consumers, {:gameover, game.score, game.username != nil})
+    else
+      send_to(game.consumers, :play)
+    end
+
+    %Game{
+      game
+      | board: board,
+        turns: turns,
+        extra_turns: if(turns_mod == 1, do: game.extra_turns + 1, else: game.extra_turns),
+        played_turns: game.played_turns + 1
+    }
+  end
+
+  defp apply_single_leprechaun_matches(game, board, moves, turns_mod) do
+    [cell1, cell2] = Board.get_cells(board, moves)
+    [pos1, pos2] = Enum.to_list(moves)
+
+    {leprechaun_pos, leprechaun_cell, cell} =
+      if cell1 == Piece.leprechaun(), do: {pos1, cell1, cell2}, else: {pos2, cell2, cell1}
+
+    send_to(game.consumers, {:leprechaun, leprechaun_cell})
+    f = &send_to(game.consumers, &1)
+
+    matches =
+      board
+      |> Board.match_kind(cell)
+      |> MapSet.union(MapSet.new(mixed: MapSet.new([leprechaun_pos])))
+
+    send_match_events(game.consumers, board, matches, game.score)
+
+    score =
+      board
+      |> Board.get_matched_cells(matches)
+      |> Enum.sum()
+
+    board = Board.remove_matches(board, matches, f)
+
+    %Game{game | score: game.score + score}
+    |> find_and_apply_matches(board, MapSet.new(), turns_mod)
+  end
+
+  defp apply_single_clover_matches(game, board, moves, turns_mod) do
+    moved_cells = Board.get_cells(board, moves)
+    [pos1, pos2] = Enum.to_list(moves)
+    [cell1, cell2] = Board.get_cells(board, moves)
+
+    {no_clover_moved_piece, cell} =
+      if cell1 == Piece.clover() do
+        {MapSet.new([pos2]), cell2}
+      else
+        {MapSet.new([pos1]), cell1}
+      end
+
+    send_to(game.consumers, {:clover, cell})
+    matches = MapSet.new([{:mixed, moves}])
+    f = &send_to(game.consumers, &1)
+
+    board =
+      board
+      |> Board.apply_matches(matches, no_clover_moved_piece, f)
+      |> Board.incr_kind(cell, f)
+
+    %Game{game | score: game.score + Enum.sum(moved_cells)}
+    |> find_and_apply_matches(board, MapSet.new(), turns_mod)
+  end
+
+  defp illegal_move(game, moves) do
+    [point1, point2] = Enum.to_list(moves)
+    send_to(game.consumers, {:error, {:illegal_move, {point1, point2}}})
+    game
+  end
+
+  defp apply_found_matches_recursive(game, board, matches, moves, turns_mod) do
+    turns_mod =
+      case update_turns(matches, turns_mod) do
+        new_turns_mod when turns_mod < new_turns_mod ->
+          send_to(game.consumers, {:extra_turn, new_turns_mod + 1})
+          new_turns_mod
+
+        turns_mod ->
+          turns_mod
+      end
+
+    score =
+      board
+      |> Board.get_matched_cells(matches)
+      |> Enum.sum()
+
+    send_match_events(game.consumers, board, matches, game.score)
+
+    board = Board.apply_matches(board, matches, moves, &send_to(game.consumers, &1))
+
+    %Game{game | score: game.score + score}
+    |> find_and_apply_matches(board, MapSet.new(), turns_mod)
+  end
+
   defp find_and_apply_matches(game, board, moves, turns_mod) do
     matches = Board.find_matches(board)
+    moved_cells = Board.get_cells(board, moves)
+    clover_piece = Piece.clover()
+    leprechaun_piece = Piece.leprechaun()
+    is_clover? = clover_piece in moved_cells
+    is_leprechaun? = leprechaun_piece in moved_cells
 
-    if MapSet.size(matches) == 0 do
-      if MapSet.size(moves) > 0 do
-        [point1, point2] = Enum.to_list(moves)
-        send_to(game.consumers, {:error, {:illegal_move, {point1, point2}}})
-        game
-      else
-        if turns_mod == -1, do: send_to(game.consumers, {:extra_turn, -1})
+    case {MapSet.size(matches), MapSet.size(moves), is_clover?, is_leprechaun?} do
+      {0, 0, false, false} ->
+        apply_no_matches_ending(game, board, turns_mod)
 
-        send_to(game.consumers, {:show, Board.show(board)})
+      {0, _, false, false} ->
+        illegal_move(game, moves)
 
-        turns = game.turns + turns_mod
+      # TODO: clover + leprechaun move!
+      # {_, _, true, true} ->
 
-        if turns == 0 do
-          send_to(game.consumers, {:gameover, game.score, game.username != nil})
-        else
-          send_to(game.consumers, :play)
-        end
+      # TODO: leprechaun where moved_cells are leprechaun_piece x 2
+      # {_, _, false, true} when moved_cells == [leprechaun_piece, leprechaun_piece] ->
 
-        %Game{
-          game
-          | board: board,
-            turns: turns,
-            extra_turns: if(turns_mod == 1, do: game.extra_turns + 1, else: game.extra_turns),
-            played_turns: game.played_turns + 1
-        }
-      end
-    else
-      turns_mod =
-        case update_turns(matches, turns_mod) do
-          0 when turns_mod < 0 ->
-            send_to(game.consumers, {:extra_turn, 1})
-            0
+      #  single leprechaun
+      {_, _, false, true} ->
+        apply_single_leprechaun_matches(game, board, moves, turns_mod)
 
-          1 when turns_mod < 1 ->
-            send_to(game.consumers, {:extra_turn, 2})
-            1
+      # TODO: clover where moved_cells are clover_piece x 2
+      # {_, _, true, false} when moved_cells == [clover_piece, clover_piece] ->
 
-          turns_mod ->
-            turns_mod
-        end
+      # single clover
+      {_, _, true, false} ->
+        apply_single_clover_matches(game, board, moves, turns_mod)
 
-      score =
-        board
-        |> Board.get_matched_cells(matches)
-        |> Enum.sum()
+      {_, _, false, false} ->
+        apply_found_matches_recursive(game, board, matches, moves, turns_mod)
 
-      send_match_events(game.consumers, board, matches, game.score)
-
-      board = Board.apply_matches(board, matches, moves, &send_to(game.consumers, &1))
-
-      %Game{game | score: game.score + score}
-      |> find_and_apply_matches(board, MapSet.new(), turns_mod)
+      _ ->
+        illegal_move(game, moves)
     end
   end
 
