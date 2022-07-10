@@ -339,7 +339,8 @@ defmodule Leprechaun.Board do
           marked_and_new_kind_cells(board, matched_cells, moved_cells, f)
 
         if MapSet.size(matched_cells) >= 5 and MapSet.size(moved_cells) > 0 do
-          Piece.push([Piece.clover()])
+          # gives a clover only 1/3 of times
+          Enum.random(-9..5) > 0 && Piece.push([Piece.clover()])
         end
 
         {MapSet.union(removed_cells, more_removed_cells), board}

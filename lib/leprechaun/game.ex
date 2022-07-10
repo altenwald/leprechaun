@@ -18,6 +18,60 @@ defmodule Leprechaun.Game do
   Usually from console it's more common to use an atom and from the web
   interface, based on security, it's better use strings. We are using
   `Registry` to register these names. Check the private `via/1` function.
+
+  ## Matches
+
+  The game consist on match 3 or more pieces together in vertical or horizontal
+  way. If two (or more) matches are adjacent, they are merged in a "mixed"
+  match which is including all of the points which are matching. For example:
+
+  ```
+  1 1 1 2 3 4
+  1 2 2 3 4 5
+  1 2 3 4 5 4
+  2 3 4 5 4 3
+  ```
+
+  For this board (6x4) we can find two matches:
+
+  - `horizontal` in the first row, we can see three 1s from the point (1, 1).
+    It is going to generate a match including the points: (1, 1), (2, 1), and
+    (3, 1).
+  - `vertical` in the first column, we can see three 1s from the point (1, 1).
+    It is going to generate a match including the points: (1, 1), (1, 2), and
+    (1, 3).
+
+  Because these matches has a common point (1, 1), they are `mixed` which mean
+  the system is going to merge them and generate only a `mixed` match with a
+  set of all of the points inside.
+
+  ## Chain-reaction
+
+  Because a match in sliding the pieces on top of this element and adding new
+  pieces generated from `Leprechaun.Board.Piece.new/0`, it's possible to find
+  new matches. We count the first set of matches as the _first move_, because
+  with the move we are getting matches around that move.
+
+  The following matches could be not related to the place where the move took
+  place. These are the matches of the chain-reaction or _no first move_
+  matches.
+
+  ## Special moves
+
+  The special moves available for this game are the following ones:
+
+  - match 4 pieces: keep turn. It's triggering the event `{:extra_turn, 1}` and
+    it's intended to keep the turn, it means you're no loosing a turn in this
+    move.
+  - match 5+ pieces: extra turn. It's triggering the event `{:extra_turn, 2}`
+    and it's meaning you add a new turn instead of loosing it. In addition,
+    it triggers the possibility to get a clover (1:3 or 33%, see
+    `Leprechaun.Board` module).
+  - clover: moving the clover with another piece is levelling-up this piece,
+    i.e. moving a clover with a bronze piece, it's converting all of the bronze
+    pieces on the board to silver ones.
+  - leprechaun: moving the leprechaun with another piece is matching all of
+    this kind of pieces in a big _mixed_ match.
   """
   use GenServer
   alias Leprechaun.{Board, Game, HiScore}
@@ -347,6 +401,7 @@ defmodule Leprechaun.Game do
     end
   end
 
+  # part of find_and_apply_matches/4
   defp apply_no_matches_ending(game, board, turns_mod) do
     if turns_mod == -1, do: send_to(game.consumers, {:extra_turn, -1})
 
@@ -369,6 +424,7 @@ defmodule Leprechaun.Game do
     }
   end
 
+  # part of find_and_apply_matches/4
   defp apply_single_leprechaun_matches(game, board, moves, turns_mod) do
     [cell1, cell2] = Board.get_cells(board, moves)
     [pos1, pos2] = Enum.to_list(moves)
@@ -397,6 +453,7 @@ defmodule Leprechaun.Game do
     |> find_and_apply_matches(board, MapSet.new(), turns_mod)
   end
 
+  # part of find_and_apply_matches/4
   defp apply_single_clover_matches(game, board, moves, turns_mod) do
     moved_cells = Board.get_cells(board, moves)
     [pos1, pos2] = Enum.to_list(moves)
@@ -422,12 +479,7 @@ defmodule Leprechaun.Game do
     |> find_and_apply_matches(board, MapSet.new(), turns_mod)
   end
 
-  defp illegal_move(game, moves) do
-    [point1, point2] = Enum.to_list(moves)
-    send_to(game.consumers, {:error, {:illegal_move, {point1, point2}}})
-    game
-  end
-
+  # part of find_and_apply_matches/4
   defp apply_found_matches_recursive(game, board, matches, moves, turns_mod) do
     turns_mod =
       case update_turns(matches, turns_mod) do
@@ -459,27 +511,30 @@ defmodule Leprechaun.Game do
     leprechaun_piece = Piece.leprechaun()
     is_clover? = clover_piece in moved_cells
     is_leprechaun? = leprechaun_piece in moved_cells
+    double_clover? = moved_cells == [clover_piece, clover_piece]
+    double_leprechaun? = moved_cells == [leprechaun_piece, leprechaun_piece]
 
     case {MapSet.size(matches), MapSet.size(moves), is_clover?, is_leprechaun?} do
+      # no matches, no first move (see moduledoc)
       {0, 0, false, false} ->
         apply_no_matches_ending(game, board, turns_mod)
 
-      {0, _, false, false} ->
-        illegal_move(game, moves)
-
       #  single leprechaun
-      {_, _, false, true} ->
+      {_, _, false, true} when not double_leprechaun? ->
         apply_single_leprechaun_matches(game, board, moves, turns_mod)
 
       # single clover
-      {_, _, true, false} ->
+      {_, _, true, false} when not double_clover? ->
         apply_single_clover_matches(game, board, moves, turns_mod)
 
-      {_, _, false, false} ->
+      # matches found
+      {matches_count, _, false, false} when matches_count > 0 ->
         apply_found_matches_recursive(game, board, matches, moves, turns_mod)
 
       _ ->
-        illegal_move(game, moves)
+        [point1, point2] = Enum.to_list(moves)
+        send_to(game.consumers, {:error, {:illegal_move, {point1, point2}}})
+        game
     end
   end
 
