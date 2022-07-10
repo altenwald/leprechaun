@@ -73,7 +73,7 @@ defmodule Leprechaun.Game do
   - leprechaun: moving the leprechaun with another piece is matching all of
     this kind of pieces in a big _mixed_ match.
   """
-  use GenServer
+  use GenServer, restart: :temporary
   alias Leprechaun.{Board, Game, HiScore}
   alias Leprechaun.Board.Piece
   require Logger
@@ -84,6 +84,8 @@ defmodule Leprechaun.Game do
   @max_running_hours 2
 
   @init_turns 10
+
+  @supervisor Leprechaun.Games
 
   @typedoc """
   Name of the game. It's going to be in use to register the name inside of
@@ -121,6 +123,8 @@ defmodule Leprechaun.Game do
   Options passed for the starting of the game process. The possible
   options are:
 
+  - `name` is the only mandatory option, it's setting the name for
+    the game. See `game_name()`.
   - `max_running_time` is the amount of time the game could be running.
     Based on security we are configuring by default a game of 2 hours,
     if the player is playing for more than 2 hours, the game is
@@ -131,11 +135,16 @@ defmodule Leprechaun.Game do
     value is 10.
   - `pieces` the starting pieces to be used when a new piece is requested
     to be inserted in the board.
+  - `board_x` the size of the board in the x-axis.
+  - `board_y` the size of the board in the y-axis.
   """
   @type opts() :: [
+          {:name, game_name()},
           {:max_running_time, timeout()},
           {:turns, turns()},
-          {:pieces, [Piece.t()]}
+          {:pieces, [Piece.t()]},
+          {:board_x, Board.size_x()},
+          {:board_y, Board.size_y()}
         ]
 
   @typedoc """
@@ -177,11 +186,17 @@ defmodule Leprechaun.Game do
   Start the game process. It's providing options based on the `opts()` type.
   It's also adding the current process launching this new game as a consumer.
   """
-  @spec start_link(game_name(), opts()) :: {:ok, pid}
-  def start_link(name, opts \\ []) do
-    {:ok, board} = GenServer.start_link(__MODULE__, opts, name: via(name))
-    :ok = add_consumer(name)
-    {:ok, board}
+  @spec start_link(opts()) :: {:ok, pid}
+  def start_link(opts) do
+    name = Keyword.fetch!(opts, :name)
+    {:ok, _pid} = GenServer.start_link(__MODULE__, opts, name: via(name))
+  end
+
+  @spec start(opts()) :: {:ok, pid}
+  def start(opts) do
+    {:ok, pid} = DynamicSupervisor.start_child(@supervisor, {Game, opts})
+    :ok = add_consumer(pid)
+    {:ok, pid}
   end
 
   defp via(board) do
@@ -254,7 +269,11 @@ defmodule Leprechaun.Game do
   Add a consumer to listen for the events coming from the game. These events
   are referred above in the Events section.
   """
-  @spec add_consumer(game_name()) :: :ok
+  @spec add_consumer(game_name() | pid()) :: :ok
+  def add_consumer(pid) when is_pid(pid) do
+    GenServer.cast(pid, {:consumer, self()})
+  end
+
   def add_consumer(name) do
     GenServer.cast(via(name), {:consumer, self()})
   end
@@ -284,7 +303,9 @@ defmodule Leprechaun.Game do
   @impl GenServer
   def init(opts) do
     if pieces = opts[:pieces], do: Piece.set(pieces)
-    board = Board.new(@board_x, @board_y)
+    board_x = opts[:board_x] || @board_x
+    board_y = opts[:board_y] || @board_y
+    board = Board.new(board_x, board_y)
 
     max_running_time = opts[:max_running_time] || :timer.hours(@max_running_hours)
     Process.send_after(self(), :stop, max_running_time)
@@ -429,10 +450,10 @@ defmodule Leprechaun.Game do
     [cell1, cell2] = Board.get_cells(board, moves)
     [pos1, pos2] = Enum.to_list(moves)
 
-    {leprechaun_pos, leprechaun_cell, cell} =
-      if cell1 == Piece.leprechaun(), do: {pos1, cell1, cell2}, else: {pos2, cell2, cell1}
+    {leprechaun_pos, cell} =
+      if cell1 == Piece.leprechaun(), do: {pos1, cell2}, else: {pos2, cell1}
 
-    send_to(game.consumers, {:leprechaun, leprechaun_cell})
+    send_to(game.consumers, {:leprechaun, cell})
     f = &send_to(game.consumers, &1)
 
     matches =

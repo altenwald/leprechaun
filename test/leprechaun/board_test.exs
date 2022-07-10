@@ -89,6 +89,119 @@ defmodule Leprechaun.BoardTest do
       %{board: board, pieces: pieces}
     end
 
+    test "match kind", data do
+      matches = MapSet.new(mixed: MapSet.new([{2, 1}, {2, 2}, {2, 4}]))
+      assert matches == Board.match_kind(data.board, 8)
+    end
+
+    test "increment kind", data do
+      parent = self()
+      f = &send(parent, &1)
+      board = Board.incr_kind(data.board, 4, f)
+
+      assert [
+               [1, 8, 2, 3, 5, 1, 2, 1],
+               [1, 8, 1, 5, 3, 3, 1, 1],
+               [3, 1, 2, 3, 2, 1, 2, 2],
+               [1, 8, 3, 2, 1, 1, 3, 1],
+               [2, 3, 2, 3, 2, 3, 2, 3],
+               [3, 2, 3, 2, 3, 2, 3, 2],
+               [2, 3, 2, 3, 2, 3, 2, 3],
+               [3, 2, 3, 2, 3, 2, 3, 2]
+             ] == Board.show(board)
+
+      assert_receive {:new_kind, 5, 1, 5}
+      assert_receive {:new_kind, 4, 2, 5}
+      refute_receive _, 500
+    end
+
+    test "increment maximum kind", data do
+      parent = self()
+      f = &send(parent, &1)
+
+      board =
+        data.board
+        |> Board.incr_kind(8, f)
+        |> Board.incr_kind(9, f)
+        |> Board.incr_kind(10, f)
+
+      assert [
+               [1, 10, 2, 3, 4, 1, 2, 1],
+               [1, 10, 1, 4, 3, 3, 1, 1],
+               [3, 1, 2, 3, 2, 1, 2, 2],
+               [1, 10, 3, 2, 1, 1, 3, 1],
+               [2, 3, 2, 3, 2, 3, 2, 3],
+               [3, 2, 3, 2, 3, 2, 3, 2],
+               [2, 3, 2, 3, 2, 3, 2, 3],
+               [3, 2, 3, 2, 3, 2, 3, 2]
+             ] == Board.show(board)
+
+      assert_receive {:new_kind, 2, 1, 9}
+      assert_receive {:new_kind, 2, 2, 9}
+      assert_receive {:new_kind, 2, 4, 9}
+      assert_receive {:new_kind, 2, 1, 10}
+      assert_receive {:new_kind, 2, 2, 10}
+      assert_receive {:new_kind, 2, 4, 10}
+      refute_receive _, 500
+    end
+
+    test "remove match cells from the board", data do
+      Piece.push([1, 2, 3, 4, 5, 6, 7, 8])
+      parent = self()
+      f = &send(parent, &1)
+      matches = MapSet.new(mixed: MapSet.new(for y <- 1..8, do: {1, y}))
+      board = Board.remove_matches(data.board, matches, f)
+
+      assert [
+               [8, 8, 2, 3, 4, 1, 2, 1],
+               [7, 8, 1, 4, 3, 3, 1, 1],
+               [6, 1, 2, 3, 2, 1, 2, 2],
+               [5, 8, 3, 2, 1, 1, 3, 1],
+               [4, 3, 2, 3, 2, 3, 2, 3],
+               [3, 2, 3, 2, 3, 2, 3, 2],
+               [2, 3, 2, 3, 2, 3, 2, 3],
+               [1, 2, 3, 2, 3, 2, 3, 2]
+             ] == Board.show(board)
+
+      assert_receive {:insert, 1, 1}
+      assert_receive {:slide, 1, 1, 2}
+      assert_receive {:insert, 1, 2}
+      assert_receive {:slide, 1, 2, 3}
+      assert_receive {:slide, 1, 1, 2}
+      assert_receive {:insert, 1, 3}
+      assert_receive {:slide, 1, 3, 4}
+      assert_receive {:slide, 1, 2, 3}
+      assert_receive {:slide, 1, 1, 2}
+      assert_receive {:insert, 1, 4}
+      assert_receive {:slide, 1, 4, 5}
+      assert_receive {:slide, 1, 3, 4}
+      assert_receive {:slide, 1, 2, 3}
+      assert_receive {:slide, 1, 1, 2}
+      assert_receive {:insert, 1, 5}
+      assert_receive {:slide, 1, 5, 6}
+      assert_receive {:slide, 1, 4, 5}
+      assert_receive {:slide, 1, 3, 4}
+      assert_receive {:slide, 1, 2, 3}
+      assert_receive {:slide, 1, 1, 2}
+      assert_receive {:insert, 1, 6}
+      assert_receive {:slide, 1, 6, 7}
+      assert_receive {:slide, 1, 5, 6}
+      assert_receive {:slide, 1, 4, 5}
+      assert_receive {:slide, 1, 3, 4}
+      assert_receive {:slide, 1, 2, 3}
+      assert_receive {:slide, 1, 1, 2}
+      assert_receive {:insert, 1, 7}
+      assert_receive {:slide, 1, 7, 8}
+      assert_receive {:slide, 1, 6, 7}
+      assert_receive {:slide, 1, 5, 6}
+      assert_receive {:slide, 1, 4, 5}
+      assert_receive {:slide, 1, 3, 4}
+      assert_receive {:slide, 1, 2, 3}
+      assert_receive {:slide, 1, 1, 2}
+      assert_receive {:insert, 1, 8}
+      refute_receive _, 500
+    end
+
     test "correct move (3 elements, type 8)", data do
       Piece.push([3, 4])
       assert moved_board = Board.move(data.board, {2, 4}, {2, 3})

@@ -234,7 +234,7 @@ defmodule Leprechaun.Websocket do
 
   defp process_data(%{"type" => "create"}, state) do
     id = UUID.uuid4()
-    {:ok, _board} = Game.start_link(id)
+    {:ok, _board} = Game.start(name: id)
     msg = %{"type" => "id", "id" => id}
     {:reply, {:text, Jason.encode!(msg)}, Map.put(state, :board, id)}
   end
@@ -295,7 +295,7 @@ defmodule Leprechaun.Websocket do
 
   defp process_data(%{"type" => "restart"}, %{board: board} = state) do
     if Game.exists?(board), do: Game.stop(board)
-    {:ok, _} = Game.start_link(board)
+    {:ok, _} = Game.start(name: board)
 
     msg = %{
       "type" => "draw",

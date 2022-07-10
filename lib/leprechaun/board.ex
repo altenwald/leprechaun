@@ -354,9 +354,8 @@ defmodule Leprechaun.Board do
   @doc """
   Remove the match cells from the board.
   """
-  @spec remove_matches(t(), matches()) :: t()
   @spec remove_matches(t(), matches(), (event -> any)) :: t()
-  def remove_matches(%__MODULE__{} = board, matches, f \\ fn _ -> :ok end) do
+  def remove_matches(%__MODULE__{} = board, matches, f) do
     Enum.reduce(matches, MapSet.new(), fn {_dir, matched_cells}, removed_cells ->
       MapSet.union(removed_cells, matched_cells)
     end)
@@ -404,9 +403,8 @@ defmodule Leprechaun.Board do
     MapSet.new([{:mixed, matched_cells}])
   end
 
-  @spec incr_kind(t(), Piece.t()) :: t()
   @spec incr_kind(t(), Piece.t(), (event -> any)) :: t()
-  def incr_kind(board, old_kind, f \\ fn _ -> :ok end) do
+  def incr_kind(board, old_kind, f) do
     new_kind = Piece.incr_kind(old_kind)
 
     if new_kind != old_kind do

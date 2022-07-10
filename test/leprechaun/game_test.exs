@@ -15,10 +15,10 @@ defmodule Leprechaun.GameTest do
         [3, 2, 3, 2, 3, 2, 3, 2]
       ]
 
-      opts = [pieces: List.flatten(board)]
-
       name = :game1
-      assert {:ok, pid} = Game.start_link(name, opts)
+      opts = [pieces: List.flatten(board), name: name]
+
+      assert {:ok, pid} = Game.start(opts)
       assert Game.exists?(name)
       assert is_pid(pid) and Process.alive?(pid)
       assert board == Game.show(name)
@@ -40,10 +40,10 @@ defmodule Leprechaun.GameTest do
         [3, 2, 3, 2, 3, 2, 3, 2]
       ]
 
-      opts = [pieces: List.flatten(board), max_running_time: 250]
-
       name = :game1
-      assert {:ok, pid} = Game.start_link(name, opts)
+      opts = [pieces: List.flatten(board), max_running_time: 250, name: name]
+
+      assert {:ok, pid} = Game.start(opts)
       Process.monitor(pid)
       assert Game.exists?(name)
       assert is_pid(pid) and Process.alive?(pid)
@@ -69,10 +69,10 @@ defmodule Leprechaun.GameTest do
         [3, 2, 3, 2, 3, 2, 3, 2]
       ]
 
-      opts = [pieces: List.flatten(board)]
-
       name = :gameC
-      assert {:ok, pid} = Game.start_link(name, opts)
+      opts = [pieces: List.flatten(board), name: name]
+
+      assert {:ok, pid} = Game.start(opts)
       assert Game.exists?(name)
       assert is_pid(pid) and Process.alive?(pid)
       assert board == Game.show(name)
@@ -92,6 +92,155 @@ defmodule Leprechaun.GameTest do
     end
   end
 
+  describe "special moves" do
+    test "clover levelling up" do
+      board = [
+        [1, 8, 2, 3],
+        [1, 8, 1, 4],
+        [3, 1, 3, 3],
+        [1, 10, 3, 2]
+      ]
+
+      name = :game3
+      opts = [pieces: List.flatten(board), name: name, board_x: 4, board_y: 4]
+      assert {:ok, _pid} = Game.start(opts)
+
+      Game.push_pieces(name, [3, 1, 3, 1, 1, 1, 3, 1, 1, 3, 2, 1, 2, 2])
+      assert :ok = Game.move(name, {2, 3}, {2, 4})
+
+      assert_receive {:move, {2, 3}, {2, 4}}
+      assert_receive {:clover, 1}
+      assert_receive {:new_kind, 2, 4, 2}
+      assert_receive {:slide, 2, 2, 3}
+      assert_receive {:slide, 2, 1, 2}
+      assert_receive {:insert, 2, 3}
+      assert_receive {:new_kind, 1, 1, 2}
+      assert_receive {:new_kind, 1, 2, 2}
+      assert_receive {:new_kind, 1, 4, 2}
+      assert_receive {:new_kind, 3, 2, 2}
+      assert_receive {:extra_turn, -1}
+
+      assert_receive {:show,
+                      [
+                        [2, 3, 2, 3],
+                        [2, 8, 2, 4],
+                        [3, 8, 3, 3],
+                        [2, 2, 3, 2]
+                      ]}
+
+      assert_receive :play
+
+      refute_receive _, 500
+      Game.stop(name)
+    end
+
+    test "leprechaun matching" do
+      board = [
+        [1, 8, 2, 3, 4, 1, 2, 1],
+        [1, 8, 1, 4, 3, 3, 1, 1],
+        [3, 1, 2, 3, 2, 1, 2, 2],
+        [1, 9, 3, 2, 1, 1, 3, 1],
+        [2, 3, 2, 3, 2, 3, 2, 3],
+        [3, 2, 3, 2, 3, 2, 3, 2],
+        [2, 3, 2, 3, 2, 3, 2, 3],
+        [3, 2, 3, 2, 3, 2, 3, 2]
+      ]
+
+      moved_board = [
+        [1, 8, 2, 3, 4, 1, 2, 1],
+        [1, 8, 1, 4, 3, 3, 1, 1],
+        [3, 9, 2, 3, 2, 1, 2, 2],
+        [1, 1, 3, 2, 1, 1, 3, 1],
+        [2, 3, 2, 3, 2, 3, 2, 3],
+        [3, 2, 3, 2, 3, 2, 3, 2],
+        [2, 3, 2, 3, 2, 3, 2, 3],
+        [3, 2, 3, 2, 3, 2, 3, 2]
+      ]
+
+      ones_matches = [
+        {1, 1},
+        {1, 2},
+        {1, 4},
+        {2, 4},
+        {3, 2},
+        {5, 4},
+        {6, 1},
+        {6, 3},
+        {6, 4},
+        {7, 2},
+        {8, 1},
+        {8, 2},
+        {8, 4}
+      ]
+
+      name = :game3
+      opts = [pieces: List.flatten(board), name: name]
+      assert {:ok, _pid} = Game.start(opts)
+
+      Game.push_pieces(name, [2, 1, 3, 1, 1, 1, 3, 1, 1, 3, 2, 1, 2, 2])
+      assert :ok = Game.move(name, {2, 3}, {2, 4})
+
+      assert_receive {:move, {2, 3}, {2, 4}}
+      assert_receive {:leprechaun, 1}
+      assert_receive {:match, 9, 9, [mixed: [{2, 3}]], ^moved_board}
+      assert_receive {:match, 13, 22, [mixed: ^ones_matches], ^moved_board}
+      assert_receive {:insert, 1, 2}
+      assert_receive {:insert, 6, 1}
+      assert_receive {:insert, 8, 3}
+      assert_receive {:slide, 1, 1, 2}
+      assert_receive {:insert, 1, 1}
+      assert_receive {:slide, 3, 1, 2}
+      assert_receive {:insert, 3, 1}
+      assert_receive {:slide, 7, 1, 2}
+      assert_receive {:insert, 7, 1}
+      assert_receive {:slide, 8, 1, 2}
+      assert_receive {:insert, 8, 3}
+      assert_receive {:slide, 2, 2, 3}
+      assert_receive {:slide, 2, 1, 2}
+      assert_receive {:insert, 2, 1}
+      assert_receive {:slide, 6, 2, 3}
+      assert_receive {:slide, 6, 1, 2}
+      assert_receive {:insert, 6, 1}
+      assert_receive {:slide, 1, 3, 4}
+      assert_receive {:slide, 1, 2, 3}
+      assert_receive {:slide, 1, 1, 2}
+      assert_receive {:insert, 1, 3}
+      assert_receive {:slide, 2, 3, 4}
+      assert_receive {:slide, 2, 2, 3}
+      assert_receive {:slide, 2, 1, 2}
+      assert_receive {:insert, 2, 2}
+      assert_receive {:slide, 5, 3, 4}
+      assert_receive {:slide, 5, 2, 3}
+      assert_receive {:slide, 5, 1, 2}
+      assert_receive {:insert, 5, 1}
+      assert_receive {:slide, 6, 3, 4}
+      assert_receive {:slide, 6, 2, 3}
+      assert_receive {:slide, 6, 1, 2}
+      assert_receive {:insert, 6, 2}
+      assert_receive {:slide, 8, 3, 4}
+      assert_receive {:slide, 8, 2, 3}
+      assert_receive {:slide, 8, 1, 2}
+      assert_receive {:insert, 8, 2}
+      assert_receive {:extra_turn, -1}
+
+      assert_receive {:show,
+                      [
+                        [3, 2, 1, 3, 1, 2, 1, 2],
+                        [1, 1, 2, 4, 4, 1, 2, 3],
+                        [2, 8, 2, 3, 3, 1, 2, 3],
+                        [3, 8, 3, 2, 2, 3, 3, 2],
+                        [2, 3, 2, 3, 2, 3, 2, 3],
+                        [3, 2, 3, 2, 3, 2, 3, 2],
+                        [2, 3, 2, 3, 2, 3, 2, 3],
+                        [3, 2, 3, 2, 3, 2, 3, 2]
+                      ]}
+
+      assert_receive :play
+      refute_receive _, 500
+      Game.stop(name)
+    end
+  end
+
   describe "playing" do
     setup do
       board = [
@@ -105,10 +254,11 @@ defmodule Leprechaun.GameTest do
         [3, 2, 3, 2, 3, 2, 3, 2]
       ]
 
-      opts = [pieces: List.flatten(board)]
-
       name = :game2
-      {:ok, pid} = Game.start_link(name, opts)
+      opts = [pieces: List.flatten(board), name: name]
+
+      {:ok, pid} = Game.start(opts)
+      on_exit(fn -> Game.stop(name) end)
       %{board: board, pid: pid, name: name}
     end
 
@@ -389,10 +539,11 @@ defmodule Leprechaun.GameTest do
         [3, 2, 3, 2, 3, 2, 3, 2]
       ]
 
-      opts = [pieces: List.flatten(board), turns: 1]
-
       name = :game2
-      {:ok, pid} = Game.start_link(name, opts)
+      opts = [pieces: List.flatten(board), turns: 1, name: name]
+
+      {:ok, pid} = Game.start(opts)
+      on_exit(fn -> Game.stop(name) end)
       %{board: board, pid: pid, name: name}
     end
 

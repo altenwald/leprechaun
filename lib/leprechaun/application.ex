@@ -25,6 +25,8 @@ defmodule Leprechaun.Application do
       Leprechaun.Repo,
       # Start the Registry for boards
       {Registry, keys: :unique, name: Leprechaun.Game.Registry},
+      # Start DynamicSupervisor for games
+      {DynamicSupervisor, strategy: :one_for_one, name: Leprechaun.Games},
       # Start the Registry for bots
       {Registry, keys: :unique, name: Leprechaun.Bot.Registry},
       # Start worker for HTTP listener

@@ -58,7 +58,7 @@ defmodule Leprechaun.Console do
   """
   @spec run :: nil
   def run do
-    {:ok, _game_pid} = Game.start_link(__MODULE__)
+    {:ok, _game_pid} = Game.start(name: __MODULE__)
     run(__MODULE__)
   end
 
@@ -68,7 +68,7 @@ defmodule Leprechaun.Console do
   """
   @spec run(atom() | String.t()) :: nil
   def run(game) do
-    unless Game.exists?(game), do: Game.start_link(game)
+    unless Game.exists?(game), do: Game.start(name: game)
     cells = Game.show(game)
     score = Game.score(game)
     turns = Game.turns(game)

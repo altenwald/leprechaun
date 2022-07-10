@@ -13,7 +13,7 @@ defmodule Leprechaun.HiScoreTest do
       :ok
     end
 
-    test "top 5" do
+    test "top list" do
       assert [
                %HiScore{name: "User1"},
                %HiScore{name: "User2"},
@@ -21,6 +21,19 @@ defmodule Leprechaun.HiScoreTest do
                %HiScore{name: "User4"},
                %HiScore{name: "User5"}
              ] = HiScore.top_list()
+    end
+
+    test "get correctly my index" do
+      [my_id] =
+        :mnesia.dirty_all_keys(:hi_score)
+        |> Enum.sort()
+        |> Enum.take(1)
+
+      assert 1 = HiScore.get_order(my_id)
+    end
+
+    test "get incorrect index" do
+      assert is_nil(HiScore.get_order(0))
     end
   end
 end
