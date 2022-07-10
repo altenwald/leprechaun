@@ -34,6 +34,8 @@ defmodule Leprechaun.Console do
   defp draw_number(6), do: IO.ANSI.yellow_background() <> " 💶 " <> IO.ANSI.reset()
   defp draw_number(7), do: IO.ANSI.light_black_background() <> " MX " <> IO.ANSI.reset()
   defp draw_number(8), do: IO.ANSI.yellow_background() <> " MX " <> IO.ANSI.reset()
+  defp draw_number(9), do: IO.ANSI.yellow_background() <> " 🧚‍♀️ " <> IO.ANSI.reset()
+  defp draw_number(10), do: IO.ANSI.yellow_background() <> " 🍀 " <> IO.ANSI.reset()
 
   defp ask_int(prompt) do
     prompt
