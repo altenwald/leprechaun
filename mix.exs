@@ -10,6 +10,7 @@ defmodule Leprechaun.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       aliases: aliases(),
+      dialyzer: dialyzer(),
       preferred_cli_env: [
         check: :test,
         credo: :test,
@@ -17,6 +18,11 @@ defmodule Leprechaun.MixProject do
         doctor: :test,
         sobelow: :test
       ]
+    ]
+  end
+
+  defp dialyzer do
+    [
     ]
   end
 

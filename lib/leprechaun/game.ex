@@ -83,7 +83,7 @@ defmodule Leprechaun.Game do
 
   @max_running_hours 2
 
-  @init_turns 10
+  @init_turns Application.compile_env!(:leprechaun, :initial_turns)
 
   @supervisor Leprechaun.Games
 
@@ -230,7 +230,7 @@ defmodule Leprechaun.Game do
   this move. The result is always `:ok` but the game process will be triggering
   different events according to if the move was legit or not.
   """
-  @spec move(game_name(), from :: Board.cell_pos(), to :: Board.cell_pos()) :: :ok
+  @spec move(game_name(), from :: pos_integer(), to :: Board.cell_pos()) :: :ok
   def move(name, point_from, point_to) do
     GenServer.cast(via(name), {:move, point_from, point_to})
   end
