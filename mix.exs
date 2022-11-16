@@ -22,8 +22,7 @@ defmodule Leprechaun.MixProject do
   end
 
   defp dialyzer do
-    [
-    ]
+    []
   end
 
   # Specifies which paths to compile per environment.

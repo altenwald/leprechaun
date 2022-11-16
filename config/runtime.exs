@@ -1,6 +1,6 @@
 import Config
 
-get_atom = fn(key, default) ->
+get_atom = fn key, default ->
   if value = System.get_env(key) do
     String.to_atom(value)
   else
