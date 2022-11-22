@@ -3,7 +3,7 @@ import Config
 config :leprechaun,
   port: 4012,
   family: :inet,
-  initial_turns: 20
+  initial_turns: 10
 
 config :leprechaun, ecto_repos: [Leprechaun.Repo]
 
