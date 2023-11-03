@@ -7,11 +7,11 @@ class HighScore extends Phaser.Scene {
   preload() {
     this.load.scenePlugin({
       key: 'rexuiplugin',
-      url: 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js',
+      url: 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/f71581e812f1f0cb8bcc96a5c7ec4459f9c80e34/dist/rexuiplugin.min.js',
       sceneKey: 'rexUI'
     })
     
-    this.load.plugin('rextexteditplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rextexteditplugin.min.js', true)
+    this.load.plugin('rextexteditplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/f71581e812f1f0cb8bcc96a5c7ec4459f9c80e34/dist/rextexteditplugin.min.js', true)
   
     // this.load.setBaseURL('https://leprechaun.altenwald.com')
     this.load.image('background', '/img/background.jpeg')

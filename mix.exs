@@ -4,7 +4,7 @@ defmodule Leprechaun.MixProject do
   def project do
     [
       app: :leprechaun,
-      version: "1.2.3",
+      version: "1.2.4",
       elixir: "~> 1.13",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
