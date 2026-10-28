@@ -52,6 +52,7 @@ deploy:
         cat > "$HOME/leprechaun.env.new" <<'ENV'
         PORT=4012
         DATABASE_PATH=/var/lib/leprechaun/leprechaun.db
+        TRUSTED_PROXIES=192.168.1.40
         RELEASE_DISTRIBUTION=none
         RELEASE_TMP=/var/lib/leprechaun/tmp
         LANG=C.UTF-8

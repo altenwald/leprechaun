@@ -1,5 +1,9 @@
 import Config
 
+if proxies = System.get_env("TRUSTED_PROXIES") do
+  config :leprechaun, trusted_proxies: String.split(proxies, ",", trim: true)
+end
+
 if port = System.get_env("PORT") do
   config :leprechaun, port: String.to_integer(port)
 end

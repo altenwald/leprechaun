@@ -32,19 +32,22 @@ defmodule Leprechaun.Http do
   end
 
   @doc """
-  Returns the client address, trusting forwarded addresses only from the local proxy.
+  Returns the client address, trusting forwarded addresses only from configured proxies.
   """
   @spec remote_ip(Plug.Conn.t()) :: String.t()
   def remote_ip(conn) do
-    address = Plug.Conn.get_peer_data(conn).address
+    address =
+      conn |> Plug.Conn.get_peer_data() |> Map.fetch!(:address) |> :inet.ntoa() |> to_string()
 
-    if address in [{127, 0, 0, 1}, {0, 0, 0, 0, 0, 0, 0, 1}] do
+    trusted_proxies = Application.get_env(:leprechaun, :trusted_proxies, ["127.0.0.1", "::1"])
+
+    if address in trusted_proxies do
       case get_req_header(conn, "x-forwarded-for") do
         [forwarded | _] -> forwarded
-        [] -> to_string(:inet.ntoa(address))
+        [] -> address
       end
     else
-      to_string(:inet.ntoa(address))
+      address
     end
   end
 end

@@ -184,6 +184,11 @@ new scores have been recorded on Oak. Dymploy sets `RELEASE_DISTRIBUTION=none`,
 so distributed `remote`, `rpc` and `stop` commands are unavailable in this setup;
 use systemd to manage the service and `eval` for offline release tasks.
 
+`TRUSTED_PROXIES` is a comma-separated list of proxy IP addresses allowed to
+supply `X-Forwarded-For`. Dymploy sets it to Maple's private address; other peers
+cannot override their client address with that header. Without this variable,
+only loopback proxies are trusted.
+
 [1]: https://github.com/mtrudel/bandit
 [2]: https://github.com/michalmuskala/jason
 [3]: https://phaser.io/

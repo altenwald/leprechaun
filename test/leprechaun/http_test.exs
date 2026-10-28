@@ -1,5 +1,5 @@
 defmodule Leprechaun.HttpTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
   import Plug.Test
 
   alias Leprechaun.Http
@@ -28,5 +28,24 @@ defmodule Leprechaun.HttpTest do
 
     external = put_peer_data(local, %{address: {192, 0, 2, 20}, port: 1234, ssl_cert: nil})
     assert Http.remote_ip(external) == "192.0.2.20"
+  end
+
+  test "trusts only the configured remote proxy" do
+    previous = Application.get_env(:leprechaun, :trusted_proxies)
+    Application.put_env(:leprechaun, :trusted_proxies, ["192.168.1.40"])
+
+    on_exit(fn ->
+      if previous,
+        do: Application.put_env(:leprechaun, :trusted_proxies, previous),
+        else: Application.delete_env(:leprechaun, :trusted_proxies)
+    end)
+
+    forwarded = conn(:get, "/") |> Plug.Conn.put_req_header("x-forwarded-for", "192.0.2.15")
+    proxy = put_peer_data(forwarded, %{address: {192, 168, 1, 40}, port: 1234, ssl_cert: nil})
+    assert Http.remote_ip(proxy) == "192.0.2.15"
+    assert Http.remote_ip(Plug.Conn.delete_req_header(proxy, "x-forwarded-for")) == "192.168.1.40"
+
+    external = put_peer_data(forwarded, %{address: {192, 168, 1, 41}, port: 1234, ssl_cert: nil})
+    assert Http.remote_ip(external) == "192.168.1.41"
   end
 end
