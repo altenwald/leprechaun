@@ -2,5 +2,5 @@ defmodule Leprechaun.Repo do
   @moduledoc false
   use Ecto.Repo,
     otp_app: :leprechaun,
-    adapter: EctoMnesia.Adapter
+    adapter: Ecto.Adapters.SQLite3
 end

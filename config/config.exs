@@ -7,11 +7,7 @@ config :leprechaun,
 
 config :leprechaun, ecto_repos: [Leprechaun.Repo]
 
-# Make sure this directory exists
-if config_env() == :test do
-  config :mnesia, dir: '/tmp/mnesia'
-else
-  config :mnesia, dir: 'priv/data/mnesia'
-end
-
-config :leprechaun, Leprechaun.Repo, adapter: EctoMnesia.Adapter
+config :leprechaun, Leprechaun.Repo,
+  database: Path.expand("../data/leprechaun_#{config_env()}.db", __DIR__),
+  pool_size: 1,
+  busy_timeout: 5_000

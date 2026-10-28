@@ -1,74 +1,50 @@
 defmodule Leprechaun.Http do
   @moduledoc """
-  Implements the functions needed to use cowboy, mainly the dispatching for the
-  static files and starting of the websocket connection.
+  Plug routes for the browser game, static assets and WebSocket connections.
   """
-  require Logger
+  use Plug.Router
 
-  @doc false
-  def child_spec(opts) do
-    %{
-      id: __MODULE__,
-      start: {__MODULE__, :start_link, [opts]}
-    }
+  plug(Plug.Head)
+
+  plug(Plug.Static,
+    at: "/",
+    from: {:leprechaun, "priv"},
+    only: ~w(audio img js css favicon.ico)
+  )
+
+  plug(:match)
+  plug(:dispatch)
+
+  get "/" do
+    conn
+    |> put_resp_content_type("text/html")
+    |> send_file(200, Application.app_dir(:leprechaun, "priv/index.html"))
   end
 
-  defp priv(file), do: priv('/' ++ file, file)
-
-  defp priv(path, file) do
-    {path, :cowboy_static, {:priv_file, :leprechaun, file}}
+  get "/websession" do
+    conn
+    |> WebSockAdapter.upgrade(Leprechaun.Websocket, [remote_ip: remote_ip(conn)], timeout: 60_000)
+    |> halt()
   end
 
-  defp priv_dir(path, dir) do
-    {path, :cowboy_static, {:priv_dir, :leprechaun, dir, [{:mimetypes, :cow_mimetypes, :all}]}}
-  end
-
-  defp dispatch do
-    :cowboy_router.compile([
-      {:_,
-       [
-         priv('/', 'index.html'),
-         priv('/bot/', 'bot.html'),
-         priv('favicon.ico'),
-         priv_dir('/audio/[...]', 'audio'),
-         priv_dir('/img/[...]', 'img'),
-         priv_dir('/js/[...]', 'js'),
-         priv_dir('/css/[...]', 'css'),
-         {'/websession', Leprechaun.Websocket, []}
-       ]}
-    ])
+  match _ do
+    send_resp(conn, 404, "Not found")
   end
 
   @doc """
-  Start the HTTP server for the port and family (IPv4 or IPv6) indicated by the options.
+  Returns the client address, trusting forwarded addresses only from the local proxy.
   """
-  def start_link([port_number, family]) do
-    opts = %{env: %{dispatch: dispatch()}}
-    port = [{:port, port_number}, family]
-    {:ok, _} = :cowboy.start_clear(__MODULE__, port, opts)
-  end
+  @spec remote_ip(Plug.Conn.t()) :: String.t()
+  def remote_ip(conn) do
+    address = Plug.Conn.get_peer_data(conn).address
 
-  @doc false
-  def code_upgrade do
-    :cowboy.set_env(__MODULE__, :dispatch, dispatch())
-  end
-
-  @doc false
-  def init(req, opts) do
-    {:cowboy_websocket, req, opts}
-  end
-
-  @doc false
-  def handle(req, state) do
-    Logger.debug("Unexpected request: #{inspect(req)}")
-    headers = %{"content-type" => "text/html"}
-    req = :cowboy_req.reply(404, headers, req)
-    {:ok, req, state}
-  end
-
-  @doc false
-  def terminate(_reason, _req, _state) do
-    Logger.info("terminate (#{inspect(self())})")
-    :ok
+    if address in [{127, 0, 0, 1}, {0, 0, 0, 0, 0, 0, 0, 1}] do
+      case get_req_header(conn, "x-forwarded-for") do
+        [forwarded | _] -> forwarded
+        [] -> to_string(:inet.ntoa(address))
+      end
+    else
+      to_string(:inet.ntoa(address))
+    end
   end
 end

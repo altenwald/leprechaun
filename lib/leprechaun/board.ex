@@ -259,19 +259,21 @@ defmodule Leprechaun.Board do
     current_cell = board[y][x]
 
     matches = [
-      {:horizontal, find_adjacents(board, current_cell, MapSet.new(), x, y, 1, 0)},
-      {:vertical, find_adjacents(board, current_cell, MapSet.new(), x, y, 0, 1)}
+      {:horizontal, MapSet.new(find_adjacents(board, current_cell, [], x, y, 1, 0))},
+      {:vertical, MapSet.new(find_adjacents(board, current_cell, [], x, y, 0, 1))}
       | matches
     ]
 
     find_matches(board, matches, x + 1, y)
   end
 
+  @spec find_adjacents(t(), Piece.t(), [cell_pos()], pos_x(), pos_y(), 0 | 1, 0 | 1) ::
+          [cell_pos()]
   defp find_adjacents(board, current_cell, adjacents, x, y, inc_x, inc_y) do
     if board[y][x] == current_cell do
       new_x = inc_x + x
       new_y = inc_y + y
-      adjacents = MapSet.put(adjacents, {x, y})
+      adjacents = [{x, y} | adjacents]
 
       if new_x in 1..board.size_x and new_y in 1..board.size_y do
         find_adjacents(board, current_cell, adjacents, new_x, new_y, inc_x, inc_y)
@@ -407,18 +409,14 @@ defmodule Leprechaun.Board do
   def incr_kind(board, old_kind, f) do
     new_kind = Piece.incr_kind(old_kind)
 
-    if new_kind != old_kind do
-      for y <- 1..board.size_y, x <- 1..board.size_x, reduce: board do
-        board ->
-          if board[y][x] == old_kind do
-            f.({:new_kind, x, y, new_kind})
-            put_in(board[y][x], new_kind)
-          else
-            board
-          end
-      end
-    else
-      board
+    for y <- 1..board.size_y,
+        x <- 1..board.size_x,
+        new_kind != old_kind,
+        board[y][x] == old_kind,
+        reduce: board do
+      board ->
+        f.({:new_kind, x, y, new_kind})
+        put_in(board[y][x], new_kind)
     end
   end
 

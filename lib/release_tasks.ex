@@ -1,43 +1,21 @@
 defmodule Leprechaun.ReleaseTasks do
   @moduledoc """
-  When we perform a release we lose Mix and the possibility to use its tasks.
-  This module is a way to implement some of the needed tasks only available
-  initially in Mix like `ecto.migrate`.
+  Database tasks for native Elixir releases, without Mix.
 
-  The idea of this module is to be in use by commands from Distillery or the
-  release commands.
+      bin/leprechaun eval 'Leprechaun.ReleaseTasks.run_migrations()'
   """
 
   @doc """
-  Run the migrations, exactly the same as if we run `mix ecto.migrate` but
-  when Mix isn't available.
+  Applies all pending migrations, starting the repository if necessary.
   """
-  @spec run_migrations :: :ok
+  @spec run_migrations() :: :ok
   def run_migrations do
-    Application.get_env(:leprechaun, :ecto_repos, [])
-    |> Enum.each(&run_migrations_for/1)
+    :ok = Application.ensure_loaded(:leprechaun)
+
+    for repo <- Application.fetch_env!(:leprechaun, :ecto_repos) do
+      {:ok, _, _} = Ecto.Migrator.with_repo(repo, &Ecto.Migrator.run(&1, :up, all: true))
+    end
 
     :ok
-  end
-
-  defp run_migrations_for(repo) do
-    app = Keyword.get(repo.config, :otp_app)
-    IO.puts("Running migrations for #{app}")
-    migrations_path = priv_path_for(repo, "migrations")
-    Ecto.Migrator.run(repo, migrations_path, :up, all: true)
-  end
-
-  defp priv_path_for(repo, filename) do
-    app = Keyword.get(repo.config, :otp_app)
-
-    repo_underscore =
-      repo
-      |> Module.split()
-      |> List.last()
-      |> Macro.underscore()
-
-    priv_dir = "#{:code.priv_dir(app)}"
-
-    Path.join([priv_dir, repo_underscore, filename])
   end
 end

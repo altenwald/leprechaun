@@ -102,7 +102,7 @@ defmodule Leprechaun.Console do
         Process.sleep(@time_to_wait_blink)
         recv_all(total_score, game, cells)
 
-      :extra_turn ->
+      {:extra_turn, _turns} ->
         recv_all(global_score, game, cells)
 
       :play ->
@@ -145,18 +145,7 @@ defmodule Leprechaun.Console do
        for y <- 1..8, into: "" do
          " #{y} " <>
            for x <- 1..8, into: "" do
-             element =
-               cells
-               |> Enum.at(y - 1)
-               |> Enum.at(x - 1)
-
-             if {x, y} in blink do
-               IO.ANSI.blink_slow() <>
-                 draw_number(element) <>
-                 IO.ANSI.reset()
-             else
-               draw_number(element)
-             end
+             draw_cell(cells, x, y, blink)
            end <>
            "\n"
        end)
@@ -164,6 +153,17 @@ defmodule Leprechaun.Console do
 
     if turns == 0 do
       IO.puts(" G A M E   O V E R !!")
+    end
+  end
+
+  defp draw_cell(cells, x, y, blink) do
+    element = cells |> Enum.at(y - 1) |> Enum.at(x - 1)
+    number = draw_number(element)
+
+    if {x, y} in blink do
+      IO.ANSI.blink_slow() <> number <> IO.ANSI.reset()
+    else
+      number
     end
   end
 end

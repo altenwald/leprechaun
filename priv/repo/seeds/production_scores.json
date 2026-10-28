@@ -1,0 +1,5037 @@
+{
+  "source": "leprechaun.altenwald.com",
+  "captured_at": "2026-10-28T00:04:32.072510+00:00",
+  "scores": [
+    {
+      "extra_turns": 8,
+      "id": 1,
+      "inserted_at": "2019-08-19T17:54:32",
+      "name": "Manuel Rubio",
+      "score": 903,
+      "turns": 35,
+      "updated_at": "2019-08-19T17:54:32"
+    },
+    {
+      "extra_turns": 19,
+      "id": 2,
+      "inserted_at": "2019-08-19T18:22:32",
+      "name": "Manuel Rubio",
+      "score": 1201,
+      "turns": 65,
+      "updated_at": "2019-08-19T18:22:32"
+    },
+    {
+      "extra_turns": 4,
+      "id": 3,
+      "inserted_at": "2019-08-20T00:20:30",
+      "name": "Manuel Rubio",
+      "score": 712,
+      "turns": 31,
+      "updated_at": "2019-08-20T00:20:30"
+    },
+    {
+      "extra_turns": 7,
+      "id": 4,
+      "inserted_at": "2019-08-20T06:36:12",
+      "name": "Manuel Rubio",
+      "score": 801,
+      "turns": 35,
+      "updated_at": "2019-08-20T06:36:12"
+    },
+    {
+      "extra_turns": 20,
+      "id": 5,
+      "inserted_at": "2019-08-20T13:53:52",
+      "name": "Manuel Rubio",
+      "score": 1772,
+      "turns": 71,
+      "updated_at": "2019-08-20T13:53:52"
+    },
+    {
+      "extra_turns": 7,
+      "id": 6,
+      "inserted_at": "2019-08-21T11:43:30",
+      "name": "Manuel Rubio",
+      "score": 920,
+      "turns": 41,
+      "updated_at": "2019-08-21T11:43:30"
+    },
+    {
+      "extra_turns": 12,
+      "id": 7,
+      "inserted_at": "2019-08-21T11:49:25",
+      "name": "Manuel Rubio",
+      "score": 907,
+      "turns": 45,
+      "updated_at": "2019-08-21T11:49:25"
+    },
+    {
+      "extra_turns": 3,
+      "id": 8,
+      "inserted_at": "2019-08-21T11:54:38",
+      "name": "Manuel Rubio",
+      "score": 598,
+      "turns": 27,
+      "updated_at": "2019-08-21T11:54:38"
+    },
+    {
+      "extra_turns": 6,
+      "id": 9,
+      "inserted_at": "2019-08-21T11:59:23",
+      "name": "Manuel Rubio",
+      "score": 788,
+      "turns": 35,
+      "updated_at": "2019-08-21T11:59:23"
+    },
+    {
+      "extra_turns": 19,
+      "id": 10,
+      "inserted_at": "2019-08-21T12:08:48",
+      "name": "Manuel Rubio",
+      "score": 1358,
+      "turns": 67,
+      "updated_at": "2019-08-21T12:08:48"
+    },
+    {
+      "extra_turns": 20,
+      "id": 11,
+      "inserted_at": "2019-08-21T19:59:11",
+      "name": "Cazar_con_gato",
+      "score": 1887,
+      "turns": 86,
+      "updated_at": "2019-08-21T19:59:11"
+    },
+    {
+      "extra_turns": 11,
+      "id": 12,
+      "inserted_at": "2019-08-22T09:33:13",
+      "name": "Manuel Rubio",
+      "score": 1138,
+      "turns": 47,
+      "updated_at": "2019-08-22T09:33:13"
+    },
+    {
+      "extra_turns": 19,
+      "id": 13,
+      "inserted_at": "2019-08-22T09:41:36",
+      "name": "Manuel Rubio",
+      "score": 1450,
+      "turns": 67,
+      "updated_at": "2019-08-22T09:41:36"
+    },
+    {
+      "extra_turns": 12,
+      "id": 14,
+      "inserted_at": "2019-08-22T09:48:19",
+      "name": "Manuel Rubio",
+      "score": 1125,
+      "turns": 50,
+      "updated_at": "2019-08-22T09:48:19"
+    },
+    {
+      "extra_turns": 21,
+      "id": 15,
+      "inserted_at": "2019-08-23T08:55:26",
+      "name": "Manuel Rubio",
+      "score": 1589,
+      "turns": 72,
+      "updated_at": "2019-08-23T08:55:26"
+    },
+    {
+      "extra_turns": 18,
+      "id": 16,
+      "inserted_at": "2019-08-23T15:23:02",
+      "name": "Manuel Rubio",
+      "score": 1111,
+      "turns": 61,
+      "updated_at": "2019-08-23T15:23:02"
+    },
+    {
+      "extra_turns": 8,
+      "id": 17,
+      "inserted_at": "2019-08-23T19:19:28",
+      "name": "Cat_hound",
+      "score": 911,
+      "turns": 45,
+      "updated_at": "2019-08-23T19:19:28"
+    },
+    {
+      "extra_turns": 14,
+      "id": 18,
+      "inserted_at": "2019-08-24T12:32:55",
+      "name": "Manuel Rubio",
+      "score": 1340,
+      "turns": 65,
+      "updated_at": "2019-08-24T12:32:55"
+    },
+    {
+      "extra_turns": 15,
+      "id": 19,
+      "inserted_at": "2019-08-27T09:21:40",
+      "name": "Manuel Rubio",
+      "score": 1085,
+      "turns": 54,
+      "updated_at": "2019-08-27T09:21:40"
+    },
+    {
+      "extra_turns": 11,
+      "id": 20,
+      "inserted_at": "2019-08-27T16:23:03",
+      "name": "Fati",
+      "score": 1145,
+      "turns": 51,
+      "updated_at": "2019-08-27T16:23:03"
+    },
+    {
+      "extra_turns": 20,
+      "id": 21,
+      "inserted_at": "2019-08-27T16:37:06",
+      "name": "Fatii",
+      "score": 2210,
+      "turns": 83,
+      "updated_at": "2019-08-27T16:37:06"
+    },
+    {
+      "extra_turns": 11,
+      "id": 22,
+      "inserted_at": "2019-08-27T19:30:25",
+      "name": "Manuel Rubio",
+      "score": 1109,
+      "turns": 50,
+      "updated_at": "2019-08-27T19:30:25"
+    },
+    {
+      "extra_turns": 9,
+      "id": 23,
+      "inserted_at": "2019-08-27T19:39:53",
+      "name": "marga",
+      "score": 898,
+      "turns": 37,
+      "updated_at": "2019-08-27T19:39:53"
+    },
+    {
+      "extra_turns": 9,
+      "id": 24,
+      "inserted_at": "2019-08-27T19:51:17",
+      "name": "marga2",
+      "score": 895,
+      "turns": 34,
+      "updated_at": "2019-08-27T19:51:17"
+    },
+    {
+      "extra_turns": 10,
+      "id": 25,
+      "inserted_at": "2019-08-27T20:01:10",
+      "name": "marga3",
+      "score": 923,
+      "turns": 37,
+      "updated_at": "2019-08-27T20:01:10"
+    },
+    {
+      "extra_turns": 15,
+      "id": 26,
+      "inserted_at": "2019-08-29T08:29:21",
+      "name": "Manuel Rubio",
+      "score": 1410,
+      "turns": 67,
+      "updated_at": "2019-08-29T08:29:21"
+    },
+    {
+      "extra_turns": 10,
+      "id": 27,
+      "inserted_at": "2019-08-29T08:34:39",
+      "name": "Manuel Rubio",
+      "score": 948,
+      "turns": 46,
+      "updated_at": "2019-08-29T08:34:39"
+    },
+    {
+      "extra_turns": 35,
+      "id": 28,
+      "inserted_at": "2019-08-29T08:47:28",
+      "name": "Manuel Rubio",
+      "score": 2543,
+      "turns": 110,
+      "updated_at": "2019-08-29T08:47:28"
+    },
+    {
+      "extra_turns": 19,
+      "id": 29,
+      "inserted_at": "2019-08-29T17:28:36",
+      "name": "Fati",
+      "score": 1681,
+      "turns": 74,
+      "updated_at": "2019-08-29T17:28:36"
+    },
+    {
+      "extra_turns": 23,
+      "id": 30,
+      "inserted_at": "2019-08-30T09:15:58",
+      "name": "Fati",
+      "score": 2299,
+      "turns": 97,
+      "updated_at": "2019-08-30T09:15:58"
+    },
+    {
+      "extra_turns": 5,
+      "id": 31,
+      "inserted_at": "2019-08-30T12:33:41",
+      "name": "Manuel Rubio",
+      "score": 470,
+      "turns": 24,
+      "updated_at": "2019-08-30T12:33:41"
+    },
+    {
+      "extra_turns": 34,
+      "id": 32,
+      "inserted_at": "2019-08-30T12:50:51",
+      "name": "Manuel Rubio",
+      "score": 2729,
+      "turns": 113,
+      "updated_at": "2019-08-30T12:50:51"
+    },
+    {
+      "extra_turns": 31,
+      "id": 33,
+      "inserted_at": "2019-08-31T08:04:48",
+      "name": "Manuel Rubio",
+      "score": 2190,
+      "turns": 91,
+      "updated_at": "2019-08-31T08:04:48"
+    },
+    {
+      "extra_turns": 11,
+      "id": 34,
+      "inserted_at": "2019-08-31T08:12:10",
+      "name": "Manuel Rubio",
+      "score": 900,
+      "turns": 46,
+      "updated_at": "2019-08-31T08:12:10"
+    },
+    {
+      "extra_turns": 16,
+      "id": 35,
+      "inserted_at": "2019-08-31T08:37:38",
+      "name": "Manuel Rubio",
+      "score": 1337,
+      "turns": 61,
+      "updated_at": "2019-08-31T08:37:38"
+    },
+    {
+      "extra_turns": 22,
+      "id": 36,
+      "inserted_at": "2019-08-31T19:53:52",
+      "name": "Manuel Rubio",
+      "score": 1578,
+      "turns": 70,
+      "updated_at": "2019-08-31T19:53:52"
+    },
+    {
+      "extra_turns": 14,
+      "id": 37,
+      "inserted_at": "2019-09-02T07:24:23",
+      "name": "Manuel Rubio",
+      "score": 1295,
+      "turns": 57,
+      "updated_at": "2019-09-02T07:24:23"
+    },
+    {
+      "extra_turns": 31,
+      "id": 38,
+      "inserted_at": "2019-09-02T10:25:34",
+      "name": "Manuel Rubio",
+      "score": 2403,
+      "turns": 103,
+      "updated_at": "2019-09-02T10:25:34"
+    },
+    {
+      "extra_turns": 39,
+      "id": 39,
+      "inserted_at": "2019-09-02T10:42:55",
+      "name": "Manuel Rubio",
+      "score": 3009,
+      "turns": 128,
+      "updated_at": "2019-09-02T10:42:55"
+    },
+    {
+      "extra_turns": 14,
+      "id": 40,
+      "inserted_at": "2019-09-02T17:00:06",
+      "name": "Cat_hounter",
+      "score": 1686,
+      "turns": 66,
+      "updated_at": "2019-09-02T17:00:06"
+    },
+    {
+      "extra_turns": 24,
+      "id": 41,
+      "inserted_at": "2019-09-02T18:46:27",
+      "name": "Fati",
+      "score": 1939,
+      "turns": 86,
+      "updated_at": "2019-09-02T18:46:27"
+    },
+    {
+      "extra_turns": 9,
+      "id": 42,
+      "inserted_at": "2019-09-03T07:24:57",
+      "name": "Manuel Rubio",
+      "score": 892,
+      "turns": 39,
+      "updated_at": "2019-09-03T07:24:57"
+    },
+    {
+      "extra_turns": 8,
+      "id": 43,
+      "inserted_at": "2019-09-03T19:43:09",
+      "name": "Michiño",
+      "score": 1121,
+      "turns": 43,
+      "updated_at": "2019-09-03T19:43:09"
+    },
+    {
+      "extra_turns": 14,
+      "id": 44,
+      "inserted_at": "2019-09-05T09:38:08",
+      "name": "Manuel Rubio",
+      "score": 1513,
+      "turns": 55,
+      "updated_at": "2019-09-05T09:38:08"
+    },
+    {
+      "extra_turns": 34,
+      "id": 45,
+      "inserted_at": "2019-09-05T09:51:57",
+      "name": "Manuel Rubio",
+      "score": 2291,
+      "turns": 100,
+      "updated_at": "2019-09-05T09:51:57"
+    },
+    {
+      "extra_turns": 12,
+      "id": 46,
+      "inserted_at": "2019-09-05T10:58:07",
+      "name": "Manuel Rubio",
+      "score": 1192,
+      "turns": 50,
+      "updated_at": "2019-09-05T10:58:07"
+    },
+    {
+      "extra_turns": 38,
+      "id": 47,
+      "inserted_at": "2019-09-05T14:55:47",
+      "name": "Manuel Rubio",
+      "score": 2774,
+      "turns": 119,
+      "updated_at": "2019-09-05T14:55:47"
+    },
+    {
+      "extra_turns": 13,
+      "id": 48,
+      "inserted_at": "2019-09-05T15:09:27",
+      "name": "Manuel Rubio",
+      "score": 1190,
+      "turns": 53,
+      "updated_at": "2019-09-05T15:09:27"
+    },
+    {
+      "extra_turns": 31,
+      "id": 49,
+      "inserted_at": "2019-09-06T09:05:59",
+      "name": "Fati",
+      "score": 2579,
+      "turns": 117,
+      "updated_at": "2019-09-06T09:05:59"
+    },
+    {
+      "extra_turns": 29,
+      "id": 50,
+      "inserted_at": "2019-09-06T19:05:01",
+      "name": "Manuel Rubio",
+      "score": 2238,
+      "turns": 103,
+      "updated_at": "2019-09-06T19:05:01"
+    },
+    {
+      "extra_turns": 13,
+      "id": 51,
+      "inserted_at": "2019-09-06T19:22:41",
+      "name": "Manuel Rubio",
+      "score": 1240,
+      "turns": 49,
+      "updated_at": "2019-09-06T19:22:41"
+    },
+    {
+      "extra_turns": 35,
+      "id": 52,
+      "inserted_at": "2019-09-06T19:51:10",
+      "name": "Manuel Rubio",
+      "score": 2152,
+      "turns": 100,
+      "updated_at": "2019-09-06T19:51:10"
+    },
+    {
+      "extra_turns": 24,
+      "id": 53,
+      "inserted_at": "2019-09-07T23:25:18",
+      "name": "Manuel Rubio",
+      "score": 2050,
+      "turns": 96,
+      "updated_at": "2019-09-07T23:25:18"
+    },
+    {
+      "extra_turns": 28,
+      "id": 54,
+      "inserted_at": "2019-09-09T14:49:35",
+      "name": "Manuel Rubio",
+      "score": 1945,
+      "turns": 92,
+      "updated_at": "2019-09-09T14:49:35"
+    },
+    {
+      "extra_turns": 7,
+      "id": 55,
+      "inserted_at": "2019-09-09T17:16:24",
+      "name": "Benz",
+      "score": 1269,
+      "turns": 48,
+      "updated_at": "2019-09-09T17:16:24"
+    },
+    {
+      "extra_turns": 12,
+      "id": 56,
+      "inserted_at": "2019-09-10T06:54:55",
+      "name": "Manuel Rubio",
+      "score": 1005,
+      "turns": 43,
+      "updated_at": "2019-09-10T06:54:55"
+    },
+    {
+      "extra_turns": 27,
+      "id": 57,
+      "inserted_at": "2019-09-10T22:21:03",
+      "name": "Duendecillo",
+      "score": 2052,
+      "turns": 88,
+      "updated_at": "2019-09-10T22:21:03"
+    },
+    {
+      "extra_turns": 7,
+      "id": 58,
+      "inserted_at": "2019-09-11T19:52:40",
+      "name": "Greyhound_Cats",
+      "score": 1477,
+      "turns": 53,
+      "updated_at": "2019-09-11T19:52:40"
+    },
+    {
+      "extra_turns": 10,
+      "id": 59,
+      "inserted_at": "2019-09-12T17:29:59",
+      "name": "Marga",
+      "score": 893,
+      "turns": 43,
+      "updated_at": "2019-09-12T17:29:59"
+    },
+    {
+      "extra_turns": 19,
+      "id": 60,
+      "inserted_at": "2019-09-12T17:48:13",
+      "name": "Marga",
+      "score": 1748,
+      "turns": 71,
+      "updated_at": "2019-09-12T17:48:13"
+    },
+    {
+      "extra_turns": 27,
+      "id": 61,
+      "inserted_at": "2019-09-12T18:09:32",
+      "name": "Marga",
+      "score": 2368,
+      "turns": 103,
+      "updated_at": "2019-09-12T18:09:32"
+    },
+    {
+      "extra_turns": 10,
+      "id": 62,
+      "inserted_at": "2019-09-12T18:18:19",
+      "name": "Marga",
+      "score": 926,
+      "turns": 41,
+      "updated_at": "2019-09-12T18:18:19"
+    },
+    {
+      "extra_turns": 8,
+      "id": 63,
+      "inserted_at": "2019-09-12T18:25:15",
+      "name": "a",
+      "score": 841,
+      "turns": 39,
+      "updated_at": "2019-09-12T18:25:15"
+    },
+    {
+      "extra_turns": 25,
+      "id": 64,
+      "inserted_at": "2019-09-12T18:54:39",
+      "name": "Marga",
+      "score": 2386,
+      "turns": 101,
+      "updated_at": "2019-09-12T18:54:39"
+    },
+    {
+      "extra_turns": 12,
+      "id": 65,
+      "inserted_at": "2019-09-16T00:06:33",
+      "name": "M",
+      "score": 1237,
+      "turns": 46,
+      "updated_at": "2019-09-16T00:06:33"
+    },
+    {
+      "extra_turns": 10,
+      "id": 66,
+      "inserted_at": "2019-09-16T00:13:18",
+      "name": "Marga",
+      "score": 912,
+      "turns": 38,
+      "updated_at": "2019-09-16T00:13:18"
+    },
+    {
+      "extra_turns": 25,
+      "id": 67,
+      "inserted_at": "2019-09-16T00:27:22",
+      "name": "Marga ",
+      "score": 1924,
+      "turns": 72,
+      "updated_at": "2019-09-16T00:27:22"
+    },
+    {
+      "extra_turns": 18,
+      "id": 68,
+      "inserted_at": "2019-09-16T00:39:45",
+      "name": "Marga ",
+      "score": 1276,
+      "turns": 59,
+      "updated_at": "2019-09-16T00:39:45"
+    },
+    {
+      "extra_turns": 20,
+      "id": 69,
+      "inserted_at": "2019-09-16T19:33:09",
+      "name": "Cat-hounter",
+      "score": 2058,
+      "turns": 83,
+      "updated_at": "2019-09-16T19:33:09"
+    },
+    {
+      "extra_turns": 8,
+      "id": 70,
+      "inserted_at": "2019-09-17T17:40:24",
+      "name": "Marga",
+      "score": 737,
+      "turns": 33,
+      "updated_at": "2019-09-17T17:40:24"
+    },
+    {
+      "extra_turns": 3,
+      "id": 71,
+      "inserted_at": "2019-09-22T08:57:52",
+      "name": "h",
+      "score": 563,
+      "turns": 27,
+      "updated_at": "2019-09-22T08:57:52"
+    },
+    {
+      "extra_turns": 8,
+      "id": 72,
+      "inserted_at": "2019-09-22T09:03:58",
+      "name": "h",
+      "score": 674,
+      "turns": 35,
+      "updated_at": "2019-09-22T09:03:58"
+    },
+    {
+      "extra_turns": 15,
+      "id": 73,
+      "inserted_at": "2019-09-22T09:11:38",
+      "name": "Marga",
+      "score": 1032,
+      "turns": 47,
+      "updated_at": "2019-09-22T09:11:38"
+    },
+    {
+      "extra_turns": 10,
+      "id": 74,
+      "inserted_at": "2019-09-22T09:18:29",
+      "name": "Marga",
+      "score": 1151,
+      "turns": 36,
+      "updated_at": "2019-09-22T09:18:29"
+    },
+    {
+      "extra_turns": 14,
+      "id": 75,
+      "inserted_at": "2019-09-22T09:27:17",
+      "name": "Marga",
+      "score": 1264,
+      "turns": 54,
+      "updated_at": "2019-09-22T09:27:17"
+    },
+    {
+      "extra_turns": 5,
+      "id": 76,
+      "inserted_at": "2019-09-22T09:31:40",
+      "name": "h",
+      "score": 708,
+      "turns": 30,
+      "updated_at": "2019-09-22T09:31:40"
+    },
+    {
+      "extra_turns": 23,
+      "id": 77,
+      "inserted_at": "2019-09-22T09:44:56",
+      "name": "Marga",
+      "score": 1883,
+      "turns": 81,
+      "updated_at": "2019-09-22T09:44:56"
+    },
+    {
+      "extra_turns": 12,
+      "id": 78,
+      "inserted_at": "2019-09-22T09:52:51",
+      "name": "Marga",
+      "score": 1243,
+      "turns": 47,
+      "updated_at": "2019-09-22T09:52:51"
+    },
+    {
+      "extra_turns": 12,
+      "id": 79,
+      "inserted_at": "2019-09-22T10:00:01",
+      "name": "Marga",
+      "score": 1038,
+      "turns": 41,
+      "updated_at": "2019-09-22T10:00:01"
+    },
+    {
+      "extra_turns": 20,
+      "id": 80,
+      "inserted_at": "2019-09-22T10:12:26",
+      "name": "Marga",
+      "score": 1958,
+      "turns": 71,
+      "updated_at": "2019-09-22T10:12:26"
+    },
+    {
+      "extra_turns": 26,
+      "id": 81,
+      "inserted_at": "2019-09-22T10:25:10",
+      "name": "Marga",
+      "score": 2159,
+      "turns": 84,
+      "updated_at": "2019-09-22T10:25:10"
+    },
+    {
+      "extra_turns": 9,
+      "id": 82,
+      "inserted_at": "2019-09-22T10:31:23",
+      "name": "x",
+      "score": 952,
+      "turns": 45,
+      "updated_at": "2019-09-22T10:31:23"
+    },
+    {
+      "extra_turns": 9,
+      "id": 83,
+      "inserted_at": "2019-09-22T10:38:23",
+      "name": "Marga",
+      "score": 850,
+      "turns": 36,
+      "updated_at": "2019-09-22T10:38:23"
+    },
+    {
+      "extra_turns": 19,
+      "id": 84,
+      "inserted_at": "2019-09-22T10:54:58",
+      "name": "Marga",
+      "score": 1849,
+      "turns": 76,
+      "updated_at": "2019-09-22T10:54:58"
+    },
+    {
+      "extra_turns": 26,
+      "id": 85,
+      "inserted_at": "2019-09-23T12:14:21",
+      "name": "Manuel Rubio",
+      "score": 2173,
+      "turns": 100,
+      "updated_at": "2019-09-23T12:14:21"
+    },
+    {
+      "extra_turns": 8,
+      "id": 86,
+      "inserted_at": "2019-09-24T12:19:38",
+      "name": "Marga",
+      "score": 1259,
+      "turns": 53,
+      "updated_at": "2019-09-24T12:19:38"
+    },
+    {
+      "extra_turns": 23,
+      "id": 87,
+      "inserted_at": "2019-09-24T12:41:33",
+      "name": "Marga",
+      "score": 1797,
+      "turns": 73,
+      "updated_at": "2019-09-24T12:41:33"
+    },
+    {
+      "extra_turns": 13,
+      "id": 88,
+      "inserted_at": "2019-09-24T12:49:34",
+      "name": "Marga",
+      "score": 1157,
+      "turns": 48,
+      "updated_at": "2019-09-24T12:49:34"
+    },
+    {
+      "extra_turns": 7,
+      "id": 89,
+      "inserted_at": "2019-09-24T12:53:05",
+      "name": "Marga",
+      "score": 718,
+      "turns": 26,
+      "updated_at": "2019-09-24T12:53:05"
+    },
+    {
+      "extra_turns": 13,
+      "id": 90,
+      "inserted_at": "2019-09-24T13:00:00",
+      "name": "Marga",
+      "score": 1261,
+      "turns": 51,
+      "updated_at": "2019-09-24T13:00:00"
+    },
+    {
+      "extra_turns": 9,
+      "id": 91,
+      "inserted_at": "2019-09-24T13:06:30",
+      "name": "Marga",
+      "score": 1073,
+      "turns": 45,
+      "updated_at": "2019-09-24T13:06:30"
+    },
+    {
+      "extra_turns": 16,
+      "id": 92,
+      "inserted_at": "2019-09-24T13:16:26",
+      "name": "Marga",
+      "score": 1852,
+      "turns": 66,
+      "updated_at": "2019-09-24T13:16:26"
+    },
+    {
+      "extra_turns": 24,
+      "id": 93,
+      "inserted_at": "2019-09-26T06:13:48",
+      "name": "Marga",
+      "score": 2070,
+      "turns": 77,
+      "updated_at": "2019-09-26T06:13:48"
+    },
+    {
+      "extra_turns": 35,
+      "id": 94,
+      "inserted_at": "2019-09-26T06:33:03",
+      "name": "Marga",
+      "score": 3234,
+      "turns": 105,
+      "updated_at": "2019-09-26T06:33:03"
+    },
+    {
+      "extra_turns": 14,
+      "id": 95,
+      "inserted_at": "2019-09-26T11:48:58",
+      "name": "Duendecillo",
+      "score": 1287,
+      "turns": 54,
+      "updated_at": "2019-09-26T11:48:58"
+    },
+    {
+      "extra_turns": 25,
+      "id": 96,
+      "inserted_at": "2019-09-26T12:06:10",
+      "name": "Duendecillo",
+      "score": 2771,
+      "turns": 102,
+      "updated_at": "2019-09-26T12:06:10"
+    },
+    {
+      "extra_turns": 2,
+      "id": 97,
+      "inserted_at": "2019-09-28T11:48:29",
+      "name": "Marga",
+      "score": 414,
+      "turns": 21,
+      "updated_at": "2019-09-28T11:48:29"
+    },
+    {
+      "extra_turns": 17,
+      "id": 98,
+      "inserted_at": "2019-09-28T11:56:44",
+      "name": "Marga",
+      "score": 1470,
+      "turns": 59,
+      "updated_at": "2019-09-28T11:56:44"
+    },
+    {
+      "extra_turns": 11,
+      "id": 99,
+      "inserted_at": "2019-09-28T14:10:39",
+      "name": "Marga",
+      "score": 1402,
+      "turns": 47,
+      "updated_at": "2019-09-28T14:10:39"
+    },
+    {
+      "extra_turns": 2,
+      "id": 100,
+      "inserted_at": "2019-09-28T14:13:12",
+      "name": "Marga",
+      "score": 402,
+      "turns": 17,
+      "updated_at": "2019-09-28T14:13:12"
+    },
+    {
+      "extra_turns": 18,
+      "id": 101,
+      "inserted_at": "2019-09-28T14:23:34",
+      "name": "Marga",
+      "score": 1741,
+      "turns": 70,
+      "updated_at": "2019-09-28T14:23:34"
+    },
+    {
+      "extra_turns": 16,
+      "id": 102,
+      "inserted_at": "2019-09-28T14:33:07",
+      "name": "Marga",
+      "score": 1746,
+      "turns": 59,
+      "updated_at": "2019-09-28T14:33:07"
+    },
+    {
+      "extra_turns": 33,
+      "id": 103,
+      "inserted_at": "2019-09-28T14:48:17",
+      "name": "Marga",
+      "score": 2725,
+      "turns": 105,
+      "updated_at": "2019-09-28T14:48:17"
+    },
+    {
+      "extra_turns": 8,
+      "id": 104,
+      "inserted_at": "2019-09-28T14:52:51",
+      "name": "Marga",
+      "score": 761,
+      "turns": 37,
+      "updated_at": "2019-09-28T14:52:51"
+    },
+    {
+      "extra_turns": 6,
+      "id": 105,
+      "inserted_at": "2019-10-01T15:31:32",
+      "name": "Marga",
+      "score": 747,
+      "turns": 34,
+      "updated_at": "2019-10-01T15:31:32"
+    },
+    {
+      "extra_turns": 8,
+      "id": 106,
+      "inserted_at": "2019-10-01T15:40:53",
+      "name": "Marga",
+      "score": 798,
+      "turns": 38,
+      "updated_at": "2019-10-01T15:40:53"
+    },
+    {
+      "extra_turns": 6,
+      "id": 107,
+      "inserted_at": "2019-10-01T15:45:24",
+      "name": "Marga",
+      "score": 706,
+      "turns": 32,
+      "updated_at": "2019-10-01T15:45:24"
+    },
+    {
+      "extra_turns": 28,
+      "id": 108,
+      "inserted_at": "2019-10-02T15:50:38",
+      "name": "Duendecillo ",
+      "score": 2131,
+      "turns": 90,
+      "updated_at": "2019-10-02T15:50:38"
+    },
+    {
+      "extra_turns": 23,
+      "id": 109,
+      "inserted_at": "2019-10-03T13:23:50",
+      "name": "Marga",
+      "score": 2000,
+      "turns": 76,
+      "updated_at": "2019-10-03T13:23:50"
+    },
+    {
+      "extra_turns": 16,
+      "id": 110,
+      "inserted_at": "2019-10-03T18:37:17",
+      "name": "Marga",
+      "score": 1346,
+      "turns": 62,
+      "updated_at": "2019-10-03T18:37:17"
+    },
+    {
+      "extra_turns": 9,
+      "id": 111,
+      "inserted_at": "2019-10-03T18:42:32",
+      "name": "Marga",
+      "score": 1202,
+      "turns": 39,
+      "updated_at": "2019-10-03T18:42:32"
+    },
+    {
+      "extra_turns": 11,
+      "id": 112,
+      "inserted_at": "2019-10-03T18:47:25",
+      "name": "Marga",
+      "score": 969,
+      "turns": 41,
+      "updated_at": "2019-10-03T18:47:25"
+    },
+    {
+      "extra_turns": 15,
+      "id": 113,
+      "inserted_at": "2019-10-03T19:04:00",
+      "name": "Marga",
+      "score": 1770,
+      "turns": 70,
+      "updated_at": "2019-10-03T19:04:00"
+    },
+    {
+      "extra_turns": 15,
+      "id": 114,
+      "inserted_at": "2019-10-03T19:11:45",
+      "name": "Marga",
+      "score": 1457,
+      "turns": 57,
+      "updated_at": "2019-10-03T19:11:45"
+    },
+    {
+      "extra_turns": 6,
+      "id": 115,
+      "inserted_at": "2019-10-03T19:15:24",
+      "name": "Marga",
+      "score": 777,
+      "turns": 29,
+      "updated_at": "2019-10-03T19:15:24"
+    },
+    {
+      "extra_turns": 17,
+      "id": 116,
+      "inserted_at": "2019-10-03T19:21:45",
+      "name": "Marga",
+      "score": 1249,
+      "turns": 53,
+      "updated_at": "2019-10-03T19:21:45"
+    },
+    {
+      "extra_turns": 12,
+      "id": 117,
+      "inserted_at": "2019-10-03T19:27:41",
+      "name": "Marga",
+      "score": 1180,
+      "turns": 48,
+      "updated_at": "2019-10-03T19:27:41"
+    },
+    {
+      "extra_turns": 18,
+      "id": 118,
+      "inserted_at": "2019-10-04T16:57:46",
+      "name": "Marga",
+      "score": 1427,
+      "turns": 59,
+      "updated_at": "2019-10-04T16:57:46"
+    },
+    {
+      "extra_turns": 21,
+      "id": 119,
+      "inserted_at": "2019-10-04T17:14:16",
+      "name": "Marga",
+      "score": 1886,
+      "turns": 78,
+      "updated_at": "2019-10-04T17:14:16"
+    },
+    {
+      "extra_turns": 16,
+      "id": 120,
+      "inserted_at": "2019-10-04T17:26:10",
+      "name": "Marga",
+      "score": 1776,
+      "turns": 63,
+      "updated_at": "2019-10-04T17:26:10"
+    },
+    {
+      "extra_turns": 18,
+      "id": 121,
+      "inserted_at": "2019-10-04T17:35:09",
+      "name": "Marga",
+      "score": 1551,
+      "turns": 64,
+      "updated_at": "2019-10-04T17:35:09"
+    },
+    {
+      "extra_turns": 19,
+      "id": 122,
+      "inserted_at": "2019-10-04T17:43:08",
+      "name": "Marga",
+      "score": 1731,
+      "turns": 61,
+      "updated_at": "2019-10-04T17:43:08"
+    },
+    {
+      "extra_turns": 9,
+      "id": 123,
+      "inserted_at": "2019-10-04T17:49:36",
+      "name": "Marga",
+      "score": 824,
+      "turns": 43,
+      "updated_at": "2019-10-04T17:49:36"
+    },
+    {
+      "extra_turns": 10,
+      "id": 124,
+      "inserted_at": "2019-10-06T00:13:35",
+      "name": "Marga",
+      "score": 1056,
+      "turns": 46,
+      "updated_at": "2019-10-06T00:13:35"
+    },
+    {
+      "extra_turns": 17,
+      "id": 125,
+      "inserted_at": "2019-10-06T08:09:58",
+      "name": "Marga",
+      "score": 1273,
+      "turns": 55,
+      "updated_at": "2019-10-06T08:09:58"
+    },
+    {
+      "extra_turns": 16,
+      "id": 126,
+      "inserted_at": "2019-10-06T08:19:12",
+      "name": "Marga",
+      "score": 1559,
+      "turns": 59,
+      "updated_at": "2019-10-06T08:19:12"
+    },
+    {
+      "extra_turns": 4,
+      "id": 127,
+      "inserted_at": "2019-10-06T08:22:43",
+      "name": "Marga",
+      "score": 610,
+      "turns": 25,
+      "updated_at": "2019-10-06T08:22:43"
+    },
+    {
+      "extra_turns": 23,
+      "id": 128,
+      "inserted_at": "2019-10-06T08:32:52",
+      "name": "Marga",
+      "score": 2275,
+      "turns": 79,
+      "updated_at": "2019-10-06T08:32:52"
+    },
+    {
+      "extra_turns": 18,
+      "id": 129,
+      "inserted_at": "2019-10-06T10:20:35",
+      "name": "Marga",
+      "score": 1810,
+      "turns": 64,
+      "updated_at": "2019-10-06T10:20:35"
+    },
+    {
+      "extra_turns": 8,
+      "id": 130,
+      "inserted_at": "2019-10-06T10:28:24",
+      "name": "Marga",
+      "score": 841,
+      "turns": 38,
+      "updated_at": "2019-10-06T10:28:24"
+    },
+    {
+      "extra_turns": 26,
+      "id": 131,
+      "inserted_at": "2019-10-06T15:35:49",
+      "name": "Marga",
+      "score": 2107,
+      "turns": 75,
+      "updated_at": "2019-10-06T15:35:49"
+    },
+    {
+      "extra_turns": 15,
+      "id": 132,
+      "inserted_at": "2019-10-06T15:42:33",
+      "name": "Marga",
+      "score": 1286,
+      "turns": 46,
+      "updated_at": "2019-10-06T15:42:33"
+    },
+    {
+      "extra_turns": 12,
+      "id": 133,
+      "inserted_at": "2019-10-06T15:49:31",
+      "name": "Marga",
+      "score": 1383,
+      "turns": 53,
+      "updated_at": "2019-10-06T15:49:31"
+    },
+    {
+      "extra_turns": 16,
+      "id": 134,
+      "inserted_at": "2019-10-07T12:42:18",
+      "name": "Marga",
+      "score": 1263,
+      "turns": 57,
+      "updated_at": "2019-10-07T12:42:18"
+    },
+    {
+      "extra_turns": 8,
+      "id": 135,
+      "inserted_at": "2019-10-07T12:53:03",
+      "name": "Marga",
+      "score": 960,
+      "turns": 41,
+      "updated_at": "2019-10-07T12:53:03"
+    },
+    {
+      "extra_turns": 14,
+      "id": 136,
+      "inserted_at": "2019-10-08T08:02:55",
+      "name": "Marga",
+      "score": 1262,
+      "turns": 53,
+      "updated_at": "2019-10-08T08:02:55"
+    },
+    {
+      "extra_turns": 14,
+      "id": 137,
+      "inserted_at": "2019-10-08T08:15:45",
+      "name": "Marga",
+      "score": 1304,
+      "turns": 56,
+      "updated_at": "2019-10-08T08:15:45"
+    },
+    {
+      "extra_turns": 13,
+      "id": 138,
+      "inserted_at": "2019-10-08T08:24:54",
+      "name": "Marga",
+      "score": 1595,
+      "turns": 61,
+      "updated_at": "2019-10-08T08:24:54"
+    },
+    {
+      "extra_turns": 6,
+      "id": 139,
+      "inserted_at": "2019-10-08T08:29:12",
+      "name": "Marga",
+      "score": 684,
+      "turns": 27,
+      "updated_at": "2019-10-08T08:29:12"
+    },
+    {
+      "extra_turns": 2,
+      "id": 140,
+      "inserted_at": "2019-10-08T08:31:43",
+      "name": "Marga",
+      "score": 429,
+      "turns": 17,
+      "updated_at": "2019-10-08T08:31:43"
+    },
+    {
+      "extra_turns": 5,
+      "id": 141,
+      "inserted_at": "2019-10-08T08:36:31",
+      "name": "Marga",
+      "score": 971,
+      "turns": 34,
+      "updated_at": "2019-10-08T08:36:31"
+    },
+    {
+      "extra_turns": 28,
+      "id": 142,
+      "inserted_at": "2019-10-08T08:53:01",
+      "name": "Marga",
+      "score": 2535,
+      "turns": 97,
+      "updated_at": "2019-10-08T08:53:01"
+    },
+    {
+      "extra_turns": 9,
+      "id": 143,
+      "inserted_at": "2019-10-08T08:57:43",
+      "name": "Marga",
+      "score": 812,
+      "turns": 37,
+      "updated_at": "2019-10-08T08:57:43"
+    },
+    {
+      "extra_turns": 13,
+      "id": 144,
+      "inserted_at": "2019-10-08T09:06:38",
+      "name": "Marga",
+      "score": 1488,
+      "turns": 60,
+      "updated_at": "2019-10-08T09:06:38"
+    },
+    {
+      "extra_turns": 7,
+      "id": 145,
+      "inserted_at": "2019-10-08T09:10:52",
+      "name": "Marga",
+      "score": 623,
+      "turns": 33,
+      "updated_at": "2019-10-08T09:10:52"
+    },
+    {
+      "extra_turns": 14,
+      "id": 146,
+      "inserted_at": "2019-10-08T12:38:28",
+      "name": "Marga",
+      "score": 1416,
+      "turns": 60,
+      "updated_at": "2019-10-08T12:38:28"
+    },
+    {
+      "extra_turns": 29,
+      "id": 147,
+      "inserted_at": "2019-10-08T12:51:43",
+      "name": "Marga",
+      "score": 2550,
+      "turns": 92,
+      "updated_at": "2019-10-08T12:51:43"
+    },
+    {
+      "extra_turns": 10,
+      "id": 148,
+      "inserted_at": "2019-10-08T12:58:19",
+      "name": "Marga",
+      "score": 1228,
+      "turns": 40,
+      "updated_at": "2019-10-08T12:58:19"
+    },
+    {
+      "extra_turns": 11,
+      "id": 149,
+      "inserted_at": "2019-10-08T13:05:45",
+      "name": "Marga",
+      "score": 1310,
+      "turns": 47,
+      "updated_at": "2019-10-08T13:05:45"
+    },
+    {
+      "extra_turns": 28,
+      "id": 150,
+      "inserted_at": "2019-10-08T13:52:13",
+      "name": "Duendecillo ",
+      "score": 2337,
+      "turns": 91,
+      "updated_at": "2019-10-08T13:52:13"
+    },
+    {
+      "extra_turns": 25,
+      "id": 151,
+      "inserted_at": "2019-10-08T16:52:07",
+      "name": "Marga",
+      "score": 2033,
+      "turns": 86,
+      "updated_at": "2019-10-08T16:52:07"
+    },
+    {
+      "extra_turns": 31,
+      "id": 152,
+      "inserted_at": "2019-10-10T12:29:00",
+      "name": "Duendecillo ",
+      "score": 2433,
+      "turns": 103,
+      "updated_at": "2019-10-10T12:29:00"
+    },
+    {
+      "extra_turns": 29,
+      "id": 153,
+      "inserted_at": "2019-10-10T12:46:06",
+      "name": "Duendecillo ",
+      "score": 2453,
+      "turns": 107,
+      "updated_at": "2019-10-10T12:46:06"
+    },
+    {
+      "extra_turns": 10,
+      "id": 154,
+      "inserted_at": "2019-10-11T16:42:50",
+      "name": "Marga",
+      "score": 1628,
+      "turns": 54,
+      "updated_at": "2019-10-11T16:42:50"
+    },
+    {
+      "extra_turns": 25,
+      "id": 155,
+      "inserted_at": "2019-10-12T18:42:45",
+      "name": "Marga",
+      "score": 2283,
+      "turns": 87,
+      "updated_at": "2019-10-12T18:42:45"
+    },
+    {
+      "extra_turns": 36,
+      "id": 156,
+      "inserted_at": "2019-10-13T10:37:35",
+      "name": "Marga",
+      "score": 2689,
+      "turns": 115,
+      "updated_at": "2019-10-13T10:37:35"
+    },
+    {
+      "extra_turns": 13,
+      "id": 157,
+      "inserted_at": "2019-10-18T09:09:57",
+      "name": "Marga",
+      "score": 1159,
+      "turns": 45,
+      "updated_at": "2019-10-18T09:09:57"
+    },
+    {
+      "extra_turns": 11,
+      "id": 158,
+      "inserted_at": "2019-10-18T16:45:16",
+      "name": "Marga",
+      "score": 1154,
+      "turns": 46,
+      "updated_at": "2019-10-18T16:45:16"
+    },
+    {
+      "extra_turns": 31,
+      "id": 159,
+      "inserted_at": "2019-10-21T14:48:41",
+      "name": "Duendecillo ",
+      "score": 2161,
+      "turns": 95,
+      "updated_at": "2019-10-21T14:48:41"
+    },
+    {
+      "extra_turns": 23,
+      "id": 160,
+      "inserted_at": "2019-10-21T16:38:34",
+      "name": "Fati",
+      "score": 1673,
+      "turns": 76,
+      "updated_at": "2019-10-21T16:38:34"
+    },
+    {
+      "extra_turns": 48,
+      "id": 161,
+      "inserted_at": "2019-10-24T13:39:53",
+      "name": "Duendecillo ",
+      "score": 3978,
+      "turns": 174,
+      "updated_at": "2019-10-24T13:39:53"
+    },
+    {
+      "extra_turns": 26,
+      "id": 162,
+      "inserted_at": "2019-10-24T13:43:06",
+      "name": "Marga",
+      "score": 2111,
+      "turns": 85,
+      "updated_at": "2019-10-24T13:43:06"
+    },
+    {
+      "extra_turns": 28,
+      "id": 163,
+      "inserted_at": "2019-10-24T21:10:06",
+      "name": "Duendecillo ",
+      "score": 2003,
+      "turns": 85,
+      "updated_at": "2019-10-24T21:10:06"
+    },
+    {
+      "extra_turns": 26,
+      "id": 164,
+      "inserted_at": "2019-10-25T14:15:01",
+      "name": "Marga",
+      "score": 2483,
+      "turns": 90,
+      "updated_at": "2019-10-25T14:15:01"
+    },
+    {
+      "extra_turns": 16,
+      "id": 165,
+      "inserted_at": "2019-10-26T07:21:33",
+      "name": "Marga",
+      "score": 1432,
+      "turns": 60,
+      "updated_at": "2019-10-26T07:21:33"
+    },
+    {
+      "extra_turns": 14,
+      "id": 166,
+      "inserted_at": "2019-10-26T21:57:42",
+      "name": "Marga",
+      "score": 1438,
+      "turns": 54,
+      "updated_at": "2019-10-26T21:57:42"
+    },
+    {
+      "extra_turns": 37,
+      "id": 167,
+      "inserted_at": "2019-10-28T09:46:38",
+      "name": "Duendecillo ",
+      "score": 2696,
+      "turns": 121,
+      "updated_at": "2019-10-28T09:46:38"
+    },
+    {
+      "extra_turns": 1,
+      "id": 168,
+      "inserted_at": "2019-10-28T19:45:33",
+      "name": "dunkel",
+      "score": 335,
+      "turns": 16,
+      "updated_at": "2019-10-28T19:45:33"
+    },
+    {
+      "extra_turns": 9,
+      "id": 169,
+      "inserted_at": "2019-10-31T15:42:48",
+      "name": "Marga",
+      "score": 1091,
+      "turns": 45,
+      "updated_at": "2019-10-31T15:42:48"
+    },
+    {
+      "extra_turns": 24,
+      "id": 170,
+      "inserted_at": "2019-10-31T18:18:12",
+      "name": "Duendecillo ",
+      "score": 2219,
+      "turns": 88,
+      "updated_at": "2019-10-31T18:18:12"
+    },
+    {
+      "extra_turns": 1,
+      "id": 171,
+      "inserted_at": "2019-11-01T03:41:43",
+      "name": "ohi",
+      "score": 270,
+      "turns": 14,
+      "updated_at": "2019-11-01T03:41:43"
+    },
+    {
+      "extra_turns": 28,
+      "id": 172,
+      "inserted_at": "2019-11-01T17:39:39",
+      "name": "Duendecillo ",
+      "score": 2257,
+      "turns": 96,
+      "updated_at": "2019-11-01T17:39:39"
+    },
+    {
+      "extra_turns": 35,
+      "id": 173,
+      "inserted_at": "2019-11-01T17:53:39",
+      "name": "Duendecillo ",
+      "score": 2408,
+      "turns": 108,
+      "updated_at": "2019-11-01T17:53:39"
+    },
+    {
+      "extra_turns": 3,
+      "id": 174,
+      "inserted_at": "2019-11-01T19:39:41",
+      "name": "pepe",
+      "score": 616,
+      "turns": 24,
+      "updated_at": "2019-11-01T19:39:41"
+    },
+    {
+      "extra_turns": 55,
+      "id": 175,
+      "inserted_at": "2019-11-02T19:17:24",
+      "name": "Duendecillo ",
+      "score": 4200,
+      "turns": 164,
+      "updated_at": "2019-11-02T19:17:24"
+    },
+    {
+      "extra_turns": 37,
+      "id": 176,
+      "inserted_at": "2019-11-04T13:17:56",
+      "name": "Duendecillo ",
+      "score": 2751,
+      "turns": 118,
+      "updated_at": "2019-11-04T13:17:56"
+    },
+    {
+      "extra_turns": 34,
+      "id": 177,
+      "inserted_at": "2019-11-09T17:58:42",
+      "name": "Duendecillo ",
+      "score": 2370,
+      "turns": 104,
+      "updated_at": "2019-11-09T17:58:42"
+    },
+    {
+      "extra_turns": 25,
+      "id": 178,
+      "inserted_at": "2019-11-10T14:40:27",
+      "name": "Duendecillo ",
+      "score": 2387,
+      "turns": 85,
+      "updated_at": "2019-11-10T14:40:27"
+    },
+    {
+      "extra_turns": 31,
+      "id": 179,
+      "inserted_at": "2019-11-16T11:15:54",
+      "name": "Duendecillo ",
+      "score": 2063,
+      "turns": 98,
+      "updated_at": "2019-11-16T11:15:54"
+    },
+    {
+      "extra_turns": 40,
+      "id": 180,
+      "inserted_at": "2019-11-19T12:50:14",
+      "name": "Duendecillo ",
+      "score": 2856,
+      "turns": 126,
+      "updated_at": "2019-11-19T12:50:14"
+    },
+    {
+      "extra_turns": 30,
+      "id": 181,
+      "inserted_at": "2019-11-20T12:01:44",
+      "name": "Duendecillo ",
+      "score": 2666,
+      "turns": 114,
+      "updated_at": "2019-11-20T12:01:44"
+    },
+    {
+      "extra_turns": 32,
+      "id": 182,
+      "inserted_at": "2019-11-20T21:37:28",
+      "name": "Duendecillo ",
+      "score": 2373,
+      "turns": 101,
+      "updated_at": "2019-11-20T21:37:28"
+    },
+    {
+      "extra_turns": 31,
+      "id": 183,
+      "inserted_at": "2019-11-22T15:55:10",
+      "name": "Duendecillo ",
+      "score": 3086,
+      "turns": 119,
+      "updated_at": "2019-11-22T15:55:10"
+    },
+    {
+      "extra_turns": 7,
+      "id": 184,
+      "inserted_at": "2019-11-23T18:18:33",
+      "name": "Marga",
+      "score": 864,
+      "turns": 36,
+      "updated_at": "2019-11-23T18:18:33"
+    },
+    {
+      "extra_turns": 18,
+      "id": 185,
+      "inserted_at": "2019-11-23T18:28:30",
+      "name": "Bot",
+      "score": 1829,
+      "turns": 71,
+      "updated_at": "2019-11-23T18:28:30"
+    },
+    {
+      "extra_turns": 22,
+      "id": 186,
+      "inserted_at": "2019-11-23T18:38:53",
+      "name": "ana",
+      "score": 1969,
+      "turns": 90,
+      "updated_at": "2019-11-23T18:38:53"
+    },
+    {
+      "extra_turns": 20,
+      "id": 187,
+      "inserted_at": "2019-11-23T19:00:01",
+      "name": "ana",
+      "score": 2164,
+      "turns": 84,
+      "updated_at": "2019-11-23T19:00:01"
+    },
+    {
+      "extra_turns": 21,
+      "id": 188,
+      "inserted_at": "2019-11-23T19:26:00",
+      "name": "ana",
+      "score": 2046,
+      "turns": 83,
+      "updated_at": "2019-11-23T19:26:00"
+    },
+    {
+      "extra_turns": 8,
+      "id": 189,
+      "inserted_at": "2019-11-23T19:33:17",
+      "name": "f",
+      "score": 869,
+      "turns": 38,
+      "updated_at": "2019-11-23T19:33:17"
+    },
+    {
+      "extra_turns": 14,
+      "id": 190,
+      "inserted_at": "2019-11-23T19:44:05",
+      "name": "gg",
+      "score": 1503,
+      "turns": 56,
+      "updated_at": "2019-11-23T19:44:05"
+    },
+    {
+      "extra_turns": 7,
+      "id": 191,
+      "inserted_at": "2019-11-23T19:50:24",
+      "name": "tt",
+      "score": 909,
+      "turns": 34,
+      "updated_at": "2019-11-23T19:50:24"
+    },
+    {
+      "extra_turns": 3,
+      "id": 192,
+      "inserted_at": "2019-11-23T19:54:12",
+      "name": "5",
+      "score": 417,
+      "turns": 24,
+      "updated_at": "2019-11-23T19:54:12"
+    },
+    {
+      "extra_turns": 54,
+      "id": 193,
+      "inserted_at": "2019-11-23T20:12:51",
+      "name": "Duendecillo salvaje!",
+      "score": 3938,
+      "turns": 160,
+      "updated_at": "2019-11-23T20:12:51"
+    },
+    {
+      "extra_turns": 21,
+      "id": 194,
+      "inserted_at": "2019-11-24T17:36:28",
+      "name": "Duendecillo ",
+      "score": 1773,
+      "turns": 66,
+      "updated_at": "2019-11-24T17:36:28"
+    },
+    {
+      "extra_turns": 39,
+      "id": 195,
+      "inserted_at": "2019-11-25T10:16:11",
+      "name": "Duendecillo ",
+      "score": 3083,
+      "turns": 133,
+      "updated_at": "2019-11-25T10:16:11"
+    },
+    {
+      "extra_turns": 14,
+      "id": 196,
+      "inserted_at": "2019-11-26T07:58:39",
+      "name": "Duendecillo ",
+      "score": 1380,
+      "turns": 57,
+      "updated_at": "2019-11-26T07:58:39"
+    },
+    {
+      "extra_turns": 31,
+      "id": 197,
+      "inserted_at": "2019-11-26T18:48:00",
+      "name": "Duendecillo ",
+      "score": 2110,
+      "turns": 99,
+      "updated_at": "2019-11-26T18:48:00"
+    },
+    {
+      "extra_turns": 2,
+      "id": 198,
+      "inserted_at": "2019-11-27T00:36:51",
+      "name": "Sonia",
+      "score": 410,
+      "turns": 18,
+      "updated_at": "2019-11-27T00:36:51"
+    },
+    {
+      "extra_turns": 3,
+      "id": 199,
+      "inserted_at": "2019-11-27T00:44:28",
+      "name": "Sonia",
+      "score": 548,
+      "turns": 21,
+      "updated_at": "2019-11-27T00:44:28"
+    },
+    {
+      "extra_turns": 4,
+      "id": 200,
+      "inserted_at": "2019-11-27T00:51:03",
+      "name": "SSS",
+      "score": 513,
+      "turns": 22,
+      "updated_at": "2019-11-27T00:51:03"
+    },
+    {
+      "extra_turns": 42,
+      "id": 201,
+      "inserted_at": "2019-11-27T02:39:50",
+      "name": "Duendecillo",
+      "score": 2755,
+      "turns": 127,
+      "updated_at": "2019-11-27T02:39:50"
+    },
+    {
+      "extra_turns": 38,
+      "id": 202,
+      "inserted_at": "2019-11-27T03:11:06",
+      "name": "Duendecillo",
+      "score": 2984,
+      "turns": 119,
+      "updated_at": "2019-11-27T03:11:06"
+    },
+    {
+      "extra_turns": 13,
+      "id": 203,
+      "inserted_at": "2019-11-27T12:02:53",
+      "name": "Duendecillo ",
+      "score": 1485,
+      "turns": 60,
+      "updated_at": "2019-11-27T12:02:53"
+    },
+    {
+      "extra_turns": 31,
+      "id": 204,
+      "inserted_at": "2019-11-27T18:10:35",
+      "name": "Duendecillo ",
+      "score": 2592,
+      "turns": 112,
+      "updated_at": "2019-11-27T18:10:35"
+    },
+    {
+      "extra_turns": 37,
+      "id": 205,
+      "inserted_at": "2019-11-28T11:47:01",
+      "name": "Duendecillo ",
+      "score": 3109,
+      "turns": 128,
+      "updated_at": "2019-11-28T11:47:01"
+    },
+    {
+      "extra_turns": 46,
+      "id": 206,
+      "inserted_at": "2019-11-28T23:30:12",
+      "name": "Duendecillo ",
+      "score": 3453,
+      "turns": 144,
+      "updated_at": "2019-11-28T23:30:12"
+    },
+    {
+      "extra_turns": 24,
+      "id": 207,
+      "inserted_at": "2019-11-29T09:34:55",
+      "name": "Duendecillo ",
+      "score": 2274,
+      "turns": 91,
+      "updated_at": "2019-11-29T09:34:55"
+    },
+    {
+      "extra_turns": 31,
+      "id": 208,
+      "inserted_at": "2019-12-02T19:55:16",
+      "name": "ana",
+      "score": 2401,
+      "turns": 102,
+      "updated_at": "2019-12-02T19:55:16"
+    },
+    {
+      "extra_turns": 10,
+      "id": 209,
+      "inserted_at": "2019-12-02T20:02:32",
+      "name": "sd",
+      "score": 837,
+      "turns": 42,
+      "updated_at": "2019-12-02T20:02:32"
+    },
+    {
+      "extra_turns": 5,
+      "id": 210,
+      "inserted_at": "2019-12-02T20:08:15",
+      "name": "ss",
+      "score": 595,
+      "turns": 30,
+      "updated_at": "2019-12-02T20:08:15"
+    },
+    {
+      "extra_turns": 24,
+      "id": 211,
+      "inserted_at": "2019-12-03T15:26:16",
+      "name": "Duendecillo ",
+      "score": 1828,
+      "turns": 78,
+      "updated_at": "2019-12-03T15:26:16"
+    },
+    {
+      "extra_turns": 40,
+      "id": 212,
+      "inserted_at": "2019-12-04T22:22:52",
+      "name": "Duendecillo ",
+      "score": 3324,
+      "turns": 129,
+      "updated_at": "2019-12-04T22:22:52"
+    },
+    {
+      "extra_turns": 26,
+      "id": 213,
+      "inserted_at": "2019-12-09T18:13:21",
+      "name": "Duendecillo ",
+      "score": 2390,
+      "turns": 96,
+      "updated_at": "2019-12-09T18:13:21"
+    },
+    {
+      "extra_turns": 21,
+      "id": 214,
+      "inserted_at": "2019-12-10T08:15:20",
+      "name": "Duendecillo ",
+      "score": 1531,
+      "turns": 69,
+      "updated_at": "2019-12-10T08:15:20"
+    },
+    {
+      "extra_turns": 44,
+      "id": 215,
+      "inserted_at": "2019-12-10T15:50:57",
+      "name": "Duendecillo ",
+      "score": 3428,
+      "turns": 146,
+      "updated_at": "2019-12-10T15:50:57"
+    },
+    {
+      "extra_turns": 36,
+      "id": 216,
+      "inserted_at": "2019-12-12T18:41:25",
+      "name": "Fati",
+      "score": 2541,
+      "turns": 111,
+      "updated_at": "2019-12-12T18:41:25"
+    },
+    {
+      "extra_turns": 13,
+      "id": 217,
+      "inserted_at": "2019-12-26T16:55:56",
+      "name": "miaulolo",
+      "score": 1275,
+      "turns": 47,
+      "updated_at": "2019-12-26T16:55:56"
+    },
+    {
+      "extra_turns": 4,
+      "id": 218,
+      "inserted_at": "2019-12-26T17:05:51",
+      "name": "catlolo",
+      "score": 667,
+      "turns": 27,
+      "updated_at": "2019-12-26T17:05:51"
+    },
+    {
+      "extra_turns": 23,
+      "id": 219,
+      "inserted_at": "2019-12-26T18:26:04",
+      "name": "Fati",
+      "score": 2433,
+      "turns": 88,
+      "updated_at": "2019-12-26T18:26:04"
+    },
+    {
+      "extra_turns": 5,
+      "id": 220,
+      "inserted_at": "2019-12-29T14:21:39",
+      "name": "Jaro",
+      "score": 480,
+      "turns": 29,
+      "updated_at": "2019-12-29T14:21:39"
+    },
+    {
+      "extra_turns": 37,
+      "id": 221,
+      "inserted_at": "2019-12-29T14:47:08",
+      "name": "Duendecillo salvaje!",
+      "score": 2542,
+      "turns": 115,
+      "updated_at": "2019-12-29T14:47:08"
+    },
+    {
+      "extra_turns": 15,
+      "id": 222,
+      "inserted_at": "2019-12-29T15:10:35",
+      "name": "Jarosapiens",
+      "score": 1223,
+      "turns": 54,
+      "updated_at": "2019-12-29T15:10:35"
+    },
+    {
+      "extra_turns": 50,
+      "id": 223,
+      "inserted_at": "2019-12-30T00:33:19",
+      "name": "Duendecillo ",
+      "score": 3274,
+      "turns": 150,
+      "updated_at": "2019-12-30T00:33:19"
+    },
+    {
+      "extra_turns": 23,
+      "id": 224,
+      "inserted_at": "2019-12-30T01:42:03",
+      "name": "Duendecillo ",
+      "score": 2212,
+      "turns": 85,
+      "updated_at": "2019-12-30T01:42:03"
+    },
+    {
+      "extra_turns": 17,
+      "id": 225,
+      "inserted_at": "2019-12-30T10:20:19",
+      "name": "Duendecillo ",
+      "score": 1542,
+      "turns": 55,
+      "updated_at": "2019-12-30T10:20:19"
+    },
+    {
+      "extra_turns": 51,
+      "id": 226,
+      "inserted_at": "2019-12-30T10:50:52",
+      "name": "Duendecillo ",
+      "score": 3706,
+      "turns": 160,
+      "updated_at": "2019-12-30T10:50:52"
+    },
+    {
+      "extra_turns": 2,
+      "id": 227,
+      "inserted_at": "2020-02-16T22:52:39",
+      "name": "Fortop",
+      "score": 696,
+      "turns": 22,
+      "updated_at": "2020-02-16T22:52:39"
+    },
+    {
+      "extra_turns": 12,
+      "id": 228,
+      "inserted_at": "2020-03-10T21:32:04",
+      "name": "bot",
+      "score": 1256,
+      "turns": 62,
+      "updated_at": "2020-03-10T21:32:04"
+    },
+    {
+      "extra_turns": 5,
+      "id": 229,
+      "inserted_at": "2020-04-01T15:59:21",
+      "name": "Jorge",
+      "score": 553,
+      "turns": 25,
+      "updated_at": "2020-04-01T15:59:21"
+    },
+    {
+      "extra_turns": 7,
+      "id": 230,
+      "inserted_at": "2020-05-26T10:17:58",
+      "name": "FT",
+      "score": 693,
+      "turns": 31,
+      "updated_at": "2020-05-26T10:17:58"
+    },
+    {
+      "extra_turns": 6,
+      "id": 231,
+      "inserted_at": "2020-08-11T20:49:44",
+      "name": "josemrb",
+      "score": 561,
+      "turns": 28,
+      "updated_at": "2020-08-11T20:49:44"
+    },
+    {
+      "extra_turns": 8,
+      "id": 232,
+      "inserted_at": "2020-08-11T21:01:31",
+      "name": "josemrb",
+      "score": 1108,
+      "turns": 37,
+      "updated_at": "2020-08-11T21:01:31"
+    },
+    {
+      "extra_turns": 40,
+      "id": 233,
+      "inserted_at": "2020-09-11T10:35:30",
+      "name": "Duendecillo ",
+      "score": 2968,
+      "turns": 130,
+      "updated_at": "2020-09-11T10:35:30"
+    },
+    {
+      "extra_turns": 6,
+      "id": 234,
+      "inserted_at": "2020-10-02T21:56:37",
+      "name": "J",
+      "score": 845,
+      "turns": 25,
+      "updated_at": "2020-10-02T21:56:37"
+    },
+    {
+      "extra_turns": 19,
+      "id": 235,
+      "inserted_at": "2020-10-19T21:02:24",
+      "name": "Duendecillo ",
+      "score": 1527,
+      "turns": 70,
+      "updated_at": "2020-10-19T21:02:24"
+    },
+    {
+      "extra_turns": 0,
+      "id": 236,
+      "inserted_at": "2020-10-29T14:41:00",
+      "name": "Drizar",
+      "score": 356,
+      "turns": 15,
+      "updated_at": "2020-10-29T14:41:00"
+    },
+    {
+      "extra_turns": 1,
+      "id": 237,
+      "inserted_at": "2020-11-17T23:09:30",
+      "name": "ELVIOLADOR",
+      "score": 412,
+      "turns": 21,
+      "updated_at": "2020-11-17T23:09:30"
+    },
+    {
+      "extra_turns": 5,
+      "id": 238,
+      "inserted_at": "2020-11-26T11:04:00",
+      "name": "maurycy",
+      "score": 735,
+      "turns": 26,
+      "updated_at": "2020-11-26T11:04:00"
+    },
+    {
+      "extra_turns": 0,
+      "id": 239,
+      "inserted_at": "2020-12-20T21:30:04",
+      "name": "Nico",
+      "score": 344,
+      "turns": 17,
+      "updated_at": "2020-12-20T21:30:04"
+    },
+    {
+      "extra_turns": 1,
+      "id": 240,
+      "inserted_at": "2020-12-20T21:52:20",
+      "name": "Nico",
+      "score": 392,
+      "turns": 15,
+      "updated_at": "2020-12-20T21:52:20"
+    },
+    {
+      "extra_turns": 5,
+      "id": 241,
+      "inserted_at": "2021-01-12T04:33:13",
+      "name": "Saludo",
+      "score": 553,
+      "turns": 27,
+      "updated_at": "2021-01-12T04:33:13"
+    },
+    {
+      "extra_turns": 3,
+      "id": 242,
+      "inserted_at": "2021-01-29T20:45:43",
+      "name": "Jarosapiens",
+      "score": 462,
+      "turns": 27,
+      "updated_at": "2021-01-29T20:45:43"
+    },
+    {
+      "extra_turns": 0,
+      "id": 243,
+      "inserted_at": "2021-02-16T17:13:59",
+      "name": "Adrian",
+      "score": 196,
+      "turns": 15,
+      "updated_at": "2021-02-16T17:13:59"
+    },
+    {
+      "extra_turns": 10,
+      "id": 244,
+      "inserted_at": "2021-02-28T19:45:28",
+      "name": "Synth",
+      "score": 1256,
+      "turns": 46,
+      "updated_at": "2021-02-28T19:45:28"
+    },
+    {
+      "extra_turns": 3,
+      "id": 245,
+      "inserted_at": "2021-03-03T17:17:44",
+      "name": "moi",
+      "score": 743,
+      "turns": 25,
+      "updated_at": "2021-03-03T17:17:44"
+    },
+    {
+      "extra_turns": 5,
+      "id": 246,
+      "inserted_at": "2021-03-03T20:38:43",
+      "name": "jad24",
+      "score": 646,
+      "turns": 25,
+      "updated_at": "2021-03-03T20:38:43"
+    },
+    {
+      "extra_turns": 0,
+      "id": 247,
+      "inserted_at": "2021-04-19T06:14:42",
+      "name": "jj",
+      "score": 248,
+      "turns": 18,
+      "updated_at": "2021-04-19T06:14:42"
+    },
+    {
+      "extra_turns": 5,
+      "id": 248,
+      "inserted_at": "2021-04-30T14:42:41",
+      "name": "s",
+      "score": 882,
+      "turns": 38,
+      "updated_at": "2021-04-30T14:42:41"
+    },
+    {
+      "extra_turns": 20,
+      "id": 249,
+      "inserted_at": "2021-05-06T17:43:59",
+      "name": "Marga",
+      "score": 1499,
+      "turns": 61,
+      "updated_at": "2021-05-06T17:43:59"
+    },
+    {
+      "extra_turns": 40,
+      "id": 250,
+      "inserted_at": "2021-05-06T22:39:47",
+      "name": "Duendecillo salvaje!",
+      "score": 3382,
+      "turns": 133,
+      "updated_at": "2021-05-06T22:39:47"
+    },
+    {
+      "extra_turns": 2,
+      "id": 251,
+      "inserted_at": "2021-05-13T13:04:15",
+      "name": "dd",
+      "score": 286,
+      "turns": 17,
+      "updated_at": "2021-05-13T13:04:15"
+    },
+    {
+      "extra_turns": 30,
+      "id": 252,
+      "inserted_at": "2021-05-17T13:31:13",
+      "name": "Duendecillo salvaje!",
+      "score": 2505,
+      "turns": 100,
+      "updated_at": "2021-05-17T13:31:13"
+    },
+    {
+      "extra_turns": 23,
+      "id": 253,
+      "inserted_at": "2021-05-19T15:51:24",
+      "name": "Duendecillo salvaje!",
+      "score": 1926,
+      "turns": 81,
+      "updated_at": "2021-05-19T15:51:24"
+    },
+    {
+      "extra_turns": 2,
+      "id": 254,
+      "inserted_at": "2021-05-22T06:18:55",
+      "name": "Sama",
+      "score": 408,
+      "turns": 17,
+      "updated_at": "2021-05-22T06:18:55"
+    },
+    {
+      "extra_turns": 2,
+      "id": 255,
+      "inserted_at": "2021-05-23T07:58:07",
+      "name": "rho",
+      "score": 212,
+      "turns": 15,
+      "updated_at": "2021-05-23T07:58:07"
+    },
+    {
+      "extra_turns": 3,
+      "id": 256,
+      "inserted_at": "2021-05-27T15:31:09",
+      "name": "Margarita",
+      "score": 498,
+      "turns": 22,
+      "updated_at": "2021-05-27T15:31:09"
+    },
+    {
+      "extra_turns": 1,
+      "id": 257,
+      "inserted_at": "2021-06-01T22:23:29",
+      "name": "Laucha",
+      "score": 415,
+      "turns": 16,
+      "updated_at": "2021-06-01T22:23:29"
+    },
+    {
+      "extra_turns": 5,
+      "id": 258,
+      "inserted_at": "2021-06-01T22:28:53",
+      "name": "Laucha",
+      "score": 653,
+      "turns": 26,
+      "updated_at": "2021-06-01T22:28:53"
+    },
+    {
+      "extra_turns": 12,
+      "id": 259,
+      "inserted_at": "2021-06-01T22:38:14",
+      "name": "Laucha",
+      "score": 1161,
+      "turns": 42,
+      "updated_at": "2021-06-01T22:38:14"
+    },
+    {
+      "extra_turns": 9,
+      "id": 260,
+      "inserted_at": "2021-06-01T22:55:38",
+      "name": "Laucha",
+      "score": 1057,
+      "turns": 37,
+      "updated_at": "2021-06-01T22:55:38"
+    },
+    {
+      "extra_turns": 9,
+      "id": 261,
+      "inserted_at": "2021-06-01T23:06:17",
+      "name": "Laucha",
+      "score": 786,
+      "turns": 32,
+      "updated_at": "2021-06-01T23:06:17"
+    },
+    {
+      "extra_turns": 6,
+      "id": 262,
+      "inserted_at": "2021-06-01T23:11:52",
+      "name": "Laucha",
+      "score": 817,
+      "turns": 31,
+      "updated_at": "2021-06-01T23:11:52"
+    },
+    {
+      "extra_turns": 6,
+      "id": 263,
+      "inserted_at": "2021-06-01T23:16:55",
+      "name": "Laucha",
+      "score": 538,
+      "turns": 26,
+      "updated_at": "2021-06-01T23:16:55"
+    },
+    {
+      "extra_turns": 3,
+      "id": 264,
+      "inserted_at": "2021-06-01T23:21:10",
+      "name": "Laucha",
+      "score": 473,
+      "turns": 21,
+      "updated_at": "2021-06-01T23:21:10"
+    },
+    {
+      "extra_turns": 5,
+      "id": 265,
+      "inserted_at": "2021-06-01T23:27:12",
+      "name": "Laucha",
+      "score": 561,
+      "turns": 23,
+      "updated_at": "2021-06-01T23:27:12"
+    },
+    {
+      "extra_turns": 4,
+      "id": 266,
+      "inserted_at": "2021-06-01T23:32:10",
+      "name": "Laucha",
+      "score": 457,
+      "turns": 18,
+      "updated_at": "2021-06-01T23:32:10"
+    },
+    {
+      "extra_turns": 14,
+      "id": 267,
+      "inserted_at": "2021-06-01T23:43:24",
+      "name": "Laucha",
+      "score": 1400,
+      "turns": 44,
+      "updated_at": "2021-06-01T23:43:24"
+    },
+    {
+      "extra_turns": 7,
+      "id": 268,
+      "inserted_at": "2021-06-01T23:49:51",
+      "name": "Laucha",
+      "score": 593,
+      "turns": 27,
+      "updated_at": "2021-06-01T23:49:51"
+    },
+    {
+      "extra_turns": 3,
+      "id": 269,
+      "inserted_at": "2021-06-09T15:59:08",
+      "name": "benzema",
+      "score": 466,
+      "turns": 24,
+      "updated_at": "2021-06-09T15:59:08"
+    },
+    {
+      "extra_turns": 5,
+      "id": 270,
+      "inserted_at": "2021-06-21T03:25:30",
+      "name": "221V",
+      "score": 613,
+      "turns": 30,
+      "updated_at": "2021-06-21T03:25:30"
+    },
+    {
+      "extra_turns": 0,
+      "id": 271,
+      "inserted_at": "2021-06-21T03:27:58",
+      "name": "221V",
+      "score": 260,
+      "turns": 13,
+      "updated_at": "2021-06-21T03:27:58"
+    },
+    {
+      "extra_turns": 8,
+      "id": 272,
+      "inserted_at": "2021-06-21T03:33:25",
+      "name": "221V",
+      "score": 898,
+      "turns": 32,
+      "updated_at": "2021-06-21T03:33:25"
+    },
+    {
+      "extra_turns": 2,
+      "id": 273,
+      "inserted_at": "2021-06-21T03:37:42",
+      "name": "221V",
+      "score": 553,
+      "turns": 21,
+      "updated_at": "2021-06-21T03:37:42"
+    },
+    {
+      "extra_turns": 7,
+      "id": 274,
+      "inserted_at": "2021-06-21T03:52:06",
+      "name": "221V",
+      "score": 648,
+      "turns": 35,
+      "updated_at": "2021-06-21T03:52:06"
+    },
+    {
+      "extra_turns": 12,
+      "id": 275,
+      "inserted_at": "2021-06-21T04:10:32",
+      "name": "221V",
+      "score": 1051,
+      "turns": 55,
+      "updated_at": "2021-06-21T04:10:32"
+    },
+    {
+      "extra_turns": 14,
+      "id": 276,
+      "inserted_at": "2021-06-21T04:31:03",
+      "name": "221V",
+      "score": 1570,
+      "turns": 68,
+      "updated_at": "2021-06-21T04:31:03"
+    },
+    {
+      "extra_turns": 4,
+      "id": 277,
+      "inserted_at": "2021-06-21T04:38:47",
+      "name": "221V",
+      "score": 458,
+      "turns": 30,
+      "updated_at": "2021-06-21T04:38:47"
+    },
+    {
+      "extra_turns": 7,
+      "id": 278,
+      "inserted_at": "2021-06-21T04:50:17",
+      "name": "221V",
+      "score": 1134,
+      "turns": 47,
+      "updated_at": "2021-06-21T04:50:17"
+    },
+    {
+      "extra_turns": 2,
+      "id": 279,
+      "inserted_at": "2021-06-21T04:54:20",
+      "name": "221V",
+      "score": 445,
+      "turns": 24,
+      "updated_at": "2021-06-21T04:54:20"
+    },
+    {
+      "extra_turns": 3,
+      "id": 280,
+      "inserted_at": "2021-06-21T04:59:21",
+      "name": "221V",
+      "score": 438,
+      "turns": 28,
+      "updated_at": "2021-06-21T04:59:21"
+    },
+    {
+      "extra_turns": 5,
+      "id": 281,
+      "inserted_at": "2021-06-21T05:06:45",
+      "name": "221V",
+      "score": 682,
+      "turns": 32,
+      "updated_at": "2021-06-21T05:06:45"
+    },
+    {
+      "extra_turns": 8,
+      "id": 282,
+      "inserted_at": "2021-06-21T05:17:15",
+      "name": "221V",
+      "score": 986,
+      "turns": 44,
+      "updated_at": "2021-06-21T05:17:15"
+    },
+    {
+      "extra_turns": 2,
+      "id": 283,
+      "inserted_at": "2021-06-21T05:23:04",
+      "name": "221V",
+      "score": 574,
+      "turns": 24,
+      "updated_at": "2021-06-21T05:23:04"
+    },
+    {
+      "extra_turns": 14,
+      "id": 284,
+      "inserted_at": "2021-06-21T05:39:25",
+      "name": "221V",
+      "score": 1742,
+      "turns": 66,
+      "updated_at": "2021-06-21T05:39:25"
+    },
+    {
+      "extra_turns": 8,
+      "id": 285,
+      "inserted_at": "2021-06-21T05:48:08",
+      "name": "221V",
+      "score": 837,
+      "turns": 44,
+      "updated_at": "2021-06-21T05:48:08"
+    },
+    {
+      "extra_turns": 7,
+      "id": 286,
+      "inserted_at": "2021-06-21T05:56:49",
+      "name": "221V",
+      "score": 902,
+      "turns": 35,
+      "updated_at": "2021-06-21T05:56:49"
+    },
+    {
+      "extra_turns": 7,
+      "id": 287,
+      "inserted_at": "2021-06-21T06:02:23",
+      "name": "221V",
+      "score": 692,
+      "turns": 33,
+      "updated_at": "2021-06-21T06:02:23"
+    },
+    {
+      "extra_turns": 15,
+      "id": 288,
+      "inserted_at": "2021-06-21T06:16:15",
+      "name": "221V",
+      "score": 1592,
+      "turns": 61,
+      "updated_at": "2021-06-21T06:16:15"
+    },
+    {
+      "extra_turns": 33,
+      "id": 289,
+      "inserted_at": "2021-06-21T06:49:50",
+      "name": "221V",
+      "score": 2926,
+      "turns": 118,
+      "updated_at": "2021-06-21T06:49:50"
+    },
+    {
+      "extra_turns": 17,
+      "id": 290,
+      "inserted_at": "2021-06-21T07:07:04",
+      "name": "221V",
+      "score": 1505,
+      "turns": 64,
+      "updated_at": "2021-06-21T07:07:04"
+    },
+    {
+      "extra_turns": 19,
+      "id": 291,
+      "inserted_at": "2021-06-21T16:05:41",
+      "name": "221V",
+      "score": 1581,
+      "turns": 65,
+      "updated_at": "2021-06-21T16:05:41"
+    },
+    {
+      "extra_turns": 23,
+      "id": 292,
+      "inserted_at": "2021-06-21T16:29:47",
+      "name": "221V",
+      "score": 2296,
+      "turns": 85,
+      "updated_at": "2021-06-21T16:29:47"
+    },
+    {
+      "extra_turns": 18,
+      "id": 293,
+      "inserted_at": "2021-06-21T16:44:43",
+      "name": "221V",
+      "score": 1609,
+      "turns": 73,
+      "updated_at": "2021-06-21T16:44:43"
+    },
+    {
+      "extra_turns": 7,
+      "id": 294,
+      "inserted_at": "2021-06-21T16:52:38",
+      "name": "221V",
+      "score": 701,
+      "turns": 35,
+      "updated_at": "2021-06-21T16:52:38"
+    },
+    {
+      "extra_turns": 12,
+      "id": 295,
+      "inserted_at": "2021-06-21T17:01:45",
+      "name": "221V",
+      "score": 1139,
+      "turns": 43,
+      "updated_at": "2021-06-21T17:01:45"
+    },
+    {
+      "extra_turns": 9,
+      "id": 296,
+      "inserted_at": "2021-06-21T17:08:38",
+      "name": "221V",
+      "score": 805,
+      "turns": 40,
+      "updated_at": "2021-06-21T17:08:38"
+    },
+    {
+      "extra_turns": 21,
+      "id": 297,
+      "inserted_at": "2021-06-21T17:26:53",
+      "name": "221V",
+      "score": 1620,
+      "turns": 71,
+      "updated_at": "2021-06-21T17:26:53"
+    },
+    {
+      "extra_turns": 33,
+      "id": 298,
+      "inserted_at": "2021-06-21T19:38:53",
+      "name": "221V",
+      "score": 2648,
+      "turns": 107,
+      "updated_at": "2021-06-21T19:38:53"
+    },
+    {
+      "extra_turns": 18,
+      "id": 299,
+      "inserted_at": "2021-06-21T20:01:25",
+      "name": "221V",
+      "score": 1723,
+      "turns": 80,
+      "updated_at": "2021-06-21T20:01:25"
+    },
+    {
+      "extra_turns": 14,
+      "id": 300,
+      "inserted_at": "2021-06-21T20:14:37",
+      "name": "221V",
+      "score": 1321,
+      "turns": 62,
+      "updated_at": "2021-06-21T20:14:37"
+    },
+    {
+      "extra_turns": 6,
+      "id": 301,
+      "inserted_at": "2021-06-21T20:23:14",
+      "name": "221V",
+      "score": 711,
+      "turns": 31,
+      "updated_at": "2021-06-21T20:23:14"
+    },
+    {
+      "extra_turns": 11,
+      "id": 302,
+      "inserted_at": "2021-06-21T22:48:05",
+      "name": "221V",
+      "score": 985,
+      "turns": 48,
+      "updated_at": "2021-06-21T22:48:05"
+    },
+    {
+      "extra_turns": 22,
+      "id": 303,
+      "inserted_at": "2021-06-21T23:05:49",
+      "name": "221V",
+      "score": 1653,
+      "turns": 84,
+      "updated_at": "2021-06-21T23:05:49"
+    },
+    {
+      "extra_turns": 16,
+      "id": 304,
+      "inserted_at": "2021-06-21T23:19:28",
+      "name": "221V",
+      "score": 1472,
+      "turns": 60,
+      "updated_at": "2021-06-21T23:19:28"
+    },
+    {
+      "extra_turns": 3,
+      "id": 305,
+      "inserted_at": "2021-06-21T23:24:33",
+      "name": "221V",
+      "score": 653,
+      "turns": 24,
+      "updated_at": "2021-06-21T23:24:33"
+    },
+    {
+      "extra_turns": 4,
+      "id": 306,
+      "inserted_at": "2021-06-22T10:28:58",
+      "name": "длддлд",
+      "score": 345,
+      "turns": 22,
+      "updated_at": "2021-06-22T10:28:58"
+    },
+    {
+      "extra_turns": 16,
+      "id": 307,
+      "inserted_at": "2021-06-22T23:29:15",
+      "name": "221V",
+      "score": 1089,
+      "turns": 57,
+      "updated_at": "2021-06-22T23:29:15"
+    },
+    {
+      "extra_turns": 21,
+      "id": 308,
+      "inserted_at": "2021-06-22T23:45:39",
+      "name": "221V",
+      "score": 2092,
+      "turns": 81,
+      "updated_at": "2021-06-22T23:45:39"
+    },
+    {
+      "extra_turns": 15,
+      "id": 309,
+      "inserted_at": "2021-06-22T23:56:38",
+      "name": "221V",
+      "score": 1166,
+      "turns": 53,
+      "updated_at": "2021-06-22T23:56:38"
+    },
+    {
+      "extra_turns": 14,
+      "id": 310,
+      "inserted_at": "2021-06-23T00:05:16",
+      "name": "221V",
+      "score": 1106,
+      "turns": 53,
+      "updated_at": "2021-06-23T00:05:16"
+    },
+    {
+      "extra_turns": 13,
+      "id": 311,
+      "inserted_at": "2021-06-23T00:14:16",
+      "name": "221V",
+      "score": 1168,
+      "turns": 51,
+      "updated_at": "2021-06-23T00:14:16"
+    },
+    {
+      "extra_turns": 18,
+      "id": 312,
+      "inserted_at": "2021-06-23T00:25:16",
+      "name": "221V",
+      "score": 1390,
+      "turns": 60,
+      "updated_at": "2021-06-23T00:25:16"
+    },
+    {
+      "extra_turns": 10,
+      "id": 313,
+      "inserted_at": "2021-06-23T00:33:26",
+      "name": "221V",
+      "score": 1011,
+      "turns": 44,
+      "updated_at": "2021-06-23T00:33:26"
+    },
+    {
+      "extra_turns": 11,
+      "id": 314,
+      "inserted_at": "2021-06-23T00:41:10",
+      "name": "221V",
+      "score": 1031,
+      "turns": 44,
+      "updated_at": "2021-06-23T00:41:10"
+    },
+    {
+      "extra_turns": 11,
+      "id": 315,
+      "inserted_at": "2021-06-23T00:48:31",
+      "name": "221V",
+      "score": 1020,
+      "turns": 46,
+      "updated_at": "2021-06-23T00:48:31"
+    },
+    {
+      "extra_turns": 14,
+      "id": 316,
+      "inserted_at": "2021-06-23T00:57:22",
+      "name": "221V",
+      "score": 1211,
+      "turns": 49,
+      "updated_at": "2021-06-23T00:57:22"
+    },
+    {
+      "extra_turns": 27,
+      "id": 317,
+      "inserted_at": "2021-06-23T01:14:21",
+      "name": "221V",
+      "score": 2022,
+      "turns": 91,
+      "updated_at": "2021-06-23T01:14:21"
+    },
+    {
+      "extra_turns": 11,
+      "id": 318,
+      "inserted_at": "2021-06-23T01:24:09",
+      "name": "221V",
+      "score": 1368,
+      "turns": 52,
+      "updated_at": "2021-06-23T01:24:09"
+    },
+    {
+      "extra_turns": 17,
+      "id": 319,
+      "inserted_at": "2021-06-23T01:37:02",
+      "name": "221V",
+      "score": 1627,
+      "turns": 58,
+      "updated_at": "2021-06-23T01:37:02"
+    },
+    {
+      "extra_turns": 9,
+      "id": 320,
+      "inserted_at": "2021-06-23T01:43:30",
+      "name": "221V",
+      "score": 888,
+      "turns": 42,
+      "updated_at": "2021-06-23T01:43:30"
+    },
+    {
+      "extra_turns": 6,
+      "id": 321,
+      "inserted_at": "2021-06-23T01:48:23",
+      "name": "221V",
+      "score": 643,
+      "turns": 28,
+      "updated_at": "2021-06-23T01:48:23"
+    },
+    {
+      "extra_turns": 14,
+      "id": 322,
+      "inserted_at": "2021-06-23T01:57:23",
+      "name": "221V",
+      "score": 1231,
+      "turns": 47,
+      "updated_at": "2021-06-23T01:57:23"
+    },
+    {
+      "extra_turns": 17,
+      "id": 323,
+      "inserted_at": "2021-06-23T02:08:52",
+      "name": "221V",
+      "score": 1487,
+      "turns": 62,
+      "updated_at": "2021-06-23T02:08:52"
+    },
+    {
+      "extra_turns": 15,
+      "id": 324,
+      "inserted_at": "2021-06-25T01:01:15",
+      "name": "221V",
+      "score": 1016,
+      "turns": 53,
+      "updated_at": "2021-06-25T01:01:15"
+    },
+    {
+      "extra_turns": 5,
+      "id": 325,
+      "inserted_at": "2021-06-26T00:58:28",
+      "name": "221V",
+      "score": 643,
+      "turns": 33,
+      "updated_at": "2021-06-26T00:58:28"
+    },
+    {
+      "extra_turns": 21,
+      "id": 326,
+      "inserted_at": "2021-06-26T01:12:03",
+      "name": "221V",
+      "score": 1620,
+      "turns": 71,
+      "updated_at": "2021-06-26T01:12:03"
+    },
+    {
+      "extra_turns": 35,
+      "id": 327,
+      "inserted_at": "2021-06-26T01:37:43",
+      "name": "221V",
+      "score": 3242,
+      "turns": 129,
+      "updated_at": "2021-06-26T01:37:43"
+    },
+    {
+      "extra_turns": 14,
+      "id": 328,
+      "inserted_at": "2021-06-26T21:47:38",
+      "name": "221V",
+      "score": 1191,
+      "turns": 44,
+      "updated_at": "2021-06-26T21:47:38"
+    },
+    {
+      "extra_turns": 19,
+      "id": 329,
+      "inserted_at": "2021-06-27T22:08:31",
+      "name": "221V",
+      "score": 1833,
+      "turns": 76,
+      "updated_at": "2021-06-27T22:08:31"
+    },
+    {
+      "extra_turns": 19,
+      "id": 330,
+      "inserted_at": "2021-06-28T07:21:06",
+      "name": "221V",
+      "score": 1466,
+      "turns": 73,
+      "updated_at": "2021-06-28T07:21:06"
+    },
+    {
+      "extra_turns": 10,
+      "id": 331,
+      "inserted_at": "2021-06-28T07:30:10",
+      "name": "221V",
+      "score": 861,
+      "turns": 42,
+      "updated_at": "2021-06-28T07:30:10"
+    },
+    {
+      "extra_turns": 8,
+      "id": 332,
+      "inserted_at": "2021-06-29T05:06:02",
+      "name": "221V",
+      "score": 614,
+      "turns": 32,
+      "updated_at": "2021-06-29T05:06:02"
+    },
+    {
+      "extra_turns": 7,
+      "id": 333,
+      "inserted_at": "2021-07-01T06:02:50",
+      "name": "221V",
+      "score": 801,
+      "turns": 34,
+      "updated_at": "2021-07-01T06:02:50"
+    },
+    {
+      "extra_turns": 39,
+      "id": 334,
+      "inserted_at": "2021-07-02T15:19:56",
+      "name": "221V",
+      "score": 2878,
+      "turns": 124,
+      "updated_at": "2021-07-02T15:19:56"
+    },
+    {
+      "extra_turns": 4,
+      "id": 335,
+      "inserted_at": "2021-07-05T19:43:04",
+      "name": "Jarosapiens",
+      "score": 822,
+      "turns": 32,
+      "updated_at": "2021-07-05T19:43:04"
+    },
+    {
+      "extra_turns": 19,
+      "id": 336,
+      "inserted_at": "2021-07-07T13:38:07",
+      "name": "221V",
+      "score": 1559,
+      "turns": 74,
+      "updated_at": "2021-07-07T13:38:07"
+    },
+    {
+      "extra_turns": 17,
+      "id": 337,
+      "inserted_at": "2021-07-07T16:02:23",
+      "name": "221V",
+      "score": 1510,
+      "turns": 66,
+      "updated_at": "2021-07-07T16:02:23"
+    },
+    {
+      "extra_turns": 19,
+      "id": 338,
+      "inserted_at": "2021-07-09T22:42:13",
+      "name": "221V",
+      "score": 1779,
+      "turns": 77,
+      "updated_at": "2021-07-09T22:42:13"
+    },
+    {
+      "extra_turns": 12,
+      "id": 339,
+      "inserted_at": "2021-07-10T17:49:43",
+      "name": "221V",
+      "score": 972,
+      "turns": 45,
+      "updated_at": "2021-07-10T17:49:43"
+    },
+    {
+      "extra_turns": 17,
+      "id": 340,
+      "inserted_at": "2021-07-10T18:05:27",
+      "name": "221V",
+      "score": 1376,
+      "turns": 64,
+      "updated_at": "2021-07-10T18:05:27"
+    },
+    {
+      "extra_turns": 40,
+      "id": 341,
+      "inserted_at": "2021-07-10T18:57:58",
+      "name": "221V",
+      "score": 3552,
+      "turns": 140,
+      "updated_at": "2021-07-10T18:57:58"
+    },
+    {
+      "extra_turns": 40,
+      "id": 342,
+      "inserted_at": "2021-07-10T19:43:39",
+      "name": "221V",
+      "score": 3163,
+      "turns": 124,
+      "updated_at": "2021-07-10T19:43:39"
+    },
+    {
+      "extra_turns": 28,
+      "id": 343,
+      "inserted_at": "2021-07-11T22:39:36",
+      "name": "221V",
+      "score": 2175,
+      "turns": 92,
+      "updated_at": "2021-07-11T22:39:36"
+    },
+    {
+      "extra_turns": 16,
+      "id": 344,
+      "inserted_at": "2021-07-21T04:09:49",
+      "name": "221V",
+      "score": 1546,
+      "turns": 68,
+      "updated_at": "2021-07-21T04:09:49"
+    },
+    {
+      "extra_turns": 24,
+      "id": 345,
+      "inserted_at": "2021-07-21T08:30:08",
+      "name": "221V",
+      "score": 1778,
+      "turns": 76,
+      "updated_at": "2021-07-21T08:30:08"
+    },
+    {
+      "extra_turns": 9,
+      "id": 346,
+      "inserted_at": "2021-07-22T03:36:47",
+      "name": "221V",
+      "score": 1351,
+      "turns": 46,
+      "updated_at": "2021-07-22T03:36:47"
+    },
+    {
+      "extra_turns": 16,
+      "id": 347,
+      "inserted_at": "2021-07-23T00:42:27",
+      "name": "221V",
+      "score": 1509,
+      "turns": 76,
+      "updated_at": "2021-07-23T00:42:27"
+    },
+    {
+      "extra_turns": 24,
+      "id": 348,
+      "inserted_at": "2021-07-23T00:59:35",
+      "name": "221V",
+      "score": 1894,
+      "turns": 81,
+      "updated_at": "2021-07-23T00:59:35"
+    },
+    {
+      "extra_turns": 20,
+      "id": 349,
+      "inserted_at": "2021-07-23T01:13:15",
+      "name": "221V",
+      "score": 1514,
+      "turns": 73,
+      "updated_at": "2021-07-23T01:13:15"
+    },
+    {
+      "extra_turns": 30,
+      "id": 350,
+      "inserted_at": "2021-07-23T03:33:09",
+      "name": "221V",
+      "score": 2677,
+      "turns": 118,
+      "updated_at": "2021-07-23T03:33:09"
+    },
+    {
+      "extra_turns": 31,
+      "id": 351,
+      "inserted_at": "2021-07-23T05:15:25",
+      "name": "221V",
+      "score": 2636,
+      "turns": 107,
+      "updated_at": "2021-07-23T05:15:25"
+    },
+    {
+      "extra_turns": 4,
+      "id": 352,
+      "inserted_at": "2021-07-25T10:41:26",
+      "name": "Ivanhercaz",
+      "score": 495,
+      "turns": 23,
+      "updated_at": "2021-07-25T10:41:26"
+    },
+    {
+      "extra_turns": 12,
+      "id": 353,
+      "inserted_at": "2021-07-29T22:50:40",
+      "name": "Yahaira",
+      "score": 1040,
+      "turns": 41,
+      "updated_at": "2021-07-29T22:50:40"
+    },
+    {
+      "extra_turns": 5,
+      "id": 354,
+      "inserted_at": "2021-07-29T22:54:24",
+      "name": "Yahaira",
+      "score": 501,
+      "turns": 24,
+      "updated_at": "2021-07-29T22:54:24"
+    },
+    {
+      "extra_turns": 10,
+      "id": 355,
+      "inserted_at": "2021-07-29T23:01:46",
+      "name": "Yahaira",
+      "score": 954,
+      "turns": 44,
+      "updated_at": "2021-07-29T23:01:46"
+    },
+    {
+      "extra_turns": 5,
+      "id": 356,
+      "inserted_at": "2021-07-29T23:05:12",
+      "name": "Yahaira",
+      "score": 514,
+      "turns": 23,
+      "updated_at": "2021-07-29T23:05:12"
+    },
+    {
+      "extra_turns": 8,
+      "id": 357,
+      "inserted_at": "2021-07-29T23:10:41",
+      "name": "Yahaira",
+      "score": 841,
+      "turns": 34,
+      "updated_at": "2021-07-29T23:10:41"
+    },
+    {
+      "extra_turns": 6,
+      "id": 358,
+      "inserted_at": "2021-07-29T23:14:24",
+      "name": "Yahaira",
+      "score": 569,
+      "turns": 27,
+      "updated_at": "2021-07-29T23:14:24"
+    },
+    {
+      "extra_turns": 18,
+      "id": 359,
+      "inserted_at": "2021-07-29T23:24:44",
+      "name": "Yahaira",
+      "score": 1693,
+      "turns": 74,
+      "updated_at": "2021-07-29T23:24:44"
+    },
+    {
+      "extra_turns": 15,
+      "id": 360,
+      "inserted_at": "2021-07-29T23:34:10",
+      "name": "Yahaira",
+      "score": 1438,
+      "turns": 64,
+      "updated_at": "2021-07-29T23:34:10"
+    },
+    {
+      "extra_turns": 32,
+      "id": 361,
+      "inserted_at": "2021-08-25T11:10:20",
+      "name": "мавпуся",
+      "score": 3404,
+      "turns": 124,
+      "updated_at": "2021-08-25T11:10:20"
+    },
+    {
+      "extra_turns": 23,
+      "id": 362,
+      "inserted_at": "2021-08-29T00:07:05",
+      "name": "221V",
+      "score": 1870,
+      "turns": 75,
+      "updated_at": "2021-08-29T00:07:05"
+    },
+    {
+      "extra_turns": 35,
+      "id": 363,
+      "inserted_at": "2021-08-29T07:40:38",
+      "name": "мавпуся",
+      "score": 3498,
+      "turns": 138,
+      "updated_at": "2021-08-29T07:40:38"
+    },
+    {
+      "extra_turns": 37,
+      "id": 364,
+      "inserted_at": "2021-08-29T10:02:34",
+      "name": "мавпуся",
+      "score": 3299,
+      "turns": 127,
+      "updated_at": "2021-08-29T10:02:34"
+    },
+    {
+      "extra_turns": 41,
+      "id": 365,
+      "inserted_at": "2021-08-29T20:24:46",
+      "name": "мавпуся",
+      "score": 3085,
+      "turns": 133,
+      "updated_at": "2021-08-29T20:24:46"
+    },
+    {
+      "extra_turns": 45,
+      "id": 366,
+      "inserted_at": "2021-08-31T13:54:55",
+      "name": "мавпуся",
+      "score": 3361,
+      "turns": 142,
+      "updated_at": "2021-08-31T13:54:55"
+    },
+    {
+      "extra_turns": 53,
+      "id": 367,
+      "inserted_at": "2021-09-01T05:52:26",
+      "name": "мавпуся",
+      "score": 4647,
+      "turns": 185,
+      "updated_at": "2021-09-01T05:52:26"
+    },
+    {
+      "extra_turns": 53,
+      "id": 368,
+      "inserted_at": "2021-09-03T18:42:01",
+      "name": "221V",
+      "score": 3687,
+      "turns": 167,
+      "updated_at": "2021-09-03T18:42:01"
+    },
+    {
+      "extra_turns": 43,
+      "id": 369,
+      "inserted_at": "2021-09-03T19:56:30",
+      "name": "221V",
+      "score": 3069,
+      "turns": 132,
+      "updated_at": "2021-09-03T19:56:30"
+    },
+    {
+      "extra_turns": 19,
+      "id": 370,
+      "inserted_at": "2021-09-03T20:31:52",
+      "name": "221V",
+      "score": 1772,
+      "turns": 71,
+      "updated_at": "2021-09-03T20:31:52"
+    },
+    {
+      "extra_turns": 23,
+      "id": 371,
+      "inserted_at": "2021-09-03T21:04:11",
+      "name": "221V",
+      "score": 1807,
+      "turns": 77,
+      "updated_at": "2021-09-03T21:04:11"
+    },
+    {
+      "extra_turns": 11,
+      "id": 372,
+      "inserted_at": "2021-09-03T21:20:43",
+      "name": "221V",
+      "score": 1111,
+      "turns": 44,
+      "updated_at": "2021-09-03T21:20:43"
+    },
+    {
+      "extra_turns": 29,
+      "id": 373,
+      "inserted_at": "2021-09-03T23:00:05",
+      "name": "221V",
+      "score": 2227,
+      "turns": 105,
+      "updated_at": "2021-09-03T23:00:05"
+    },
+    {
+      "extra_turns": 50,
+      "id": 374,
+      "inserted_at": "2021-09-04T08:15:26",
+      "name": "мавпуся",
+      "score": 3854,
+      "turns": 161,
+      "updated_at": "2021-09-04T08:15:26"
+    },
+    {
+      "extra_turns": 38,
+      "id": 375,
+      "inserted_at": "2021-09-04T18:02:54",
+      "name": "221V",
+      "score": 3110,
+      "turns": 123,
+      "updated_at": "2021-09-04T18:02:54"
+    },
+    {
+      "extra_turns": 13,
+      "id": 376,
+      "inserted_at": "2021-09-04T18:35:52",
+      "name": "221V",
+      "score": 1279,
+      "turns": 55,
+      "updated_at": "2021-09-04T18:35:52"
+    },
+    {
+      "extra_turns": 17,
+      "id": 377,
+      "inserted_at": "2021-09-04T19:05:45",
+      "name": "221V",
+      "score": 1844,
+      "turns": 70,
+      "updated_at": "2021-09-04T19:05:45"
+    },
+    {
+      "extra_turns": 29,
+      "id": 378,
+      "inserted_at": "2021-09-04T20:06:20",
+      "name": "221V",
+      "score": 1889,
+      "turns": 92,
+      "updated_at": "2021-09-04T20:06:20"
+    },
+    {
+      "extra_turns": 7,
+      "id": 379,
+      "inserted_at": "2021-09-04T20:21:03",
+      "name": "221V",
+      "score": 819,
+      "turns": 36,
+      "updated_at": "2021-09-04T20:21:03"
+    },
+    {
+      "extra_turns": 25,
+      "id": 380,
+      "inserted_at": "2021-09-04T21:15:11",
+      "name": "221V",
+      "score": 2381,
+      "turns": 93,
+      "updated_at": "2021-09-04T21:15:11"
+    },
+    {
+      "extra_turns": 10,
+      "id": 381,
+      "inserted_at": "2021-09-04T21:31:53",
+      "name": "221V",
+      "score": 1137,
+      "turns": 48,
+      "updated_at": "2021-09-04T21:31:53"
+    },
+    {
+      "extra_turns": 52,
+      "id": 382,
+      "inserted_at": "2021-09-05T04:52:33",
+      "name": "мавпуся",
+      "score": 4586,
+      "turns": 177,
+      "updated_at": "2021-09-05T04:52:33"
+    },
+    {
+      "extra_turns": 54,
+      "id": 383,
+      "inserted_at": "2021-09-06T09:50:38",
+      "name": "мавпуся",
+      "score": 4532,
+      "turns": 182,
+      "updated_at": "2021-09-06T09:50:38"
+    },
+    {
+      "extra_turns": 19,
+      "id": 384,
+      "inserted_at": "2021-09-06T16:27:21",
+      "name": "221V",
+      "score": 1458,
+      "turns": 63,
+      "updated_at": "2021-09-06T16:27:21"
+    },
+    {
+      "extra_turns": 30,
+      "id": 385,
+      "inserted_at": "2021-09-06T17:03:17",
+      "name": "221V",
+      "score": 1984,
+      "turns": 101,
+      "updated_at": "2021-09-06T17:03:17"
+    },
+    {
+      "extra_turns": 14,
+      "id": 386,
+      "inserted_at": "2021-09-06T17:18:28",
+      "name": "221V",
+      "score": 1351,
+      "turns": 59,
+      "updated_at": "2021-09-06T17:18:28"
+    },
+    {
+      "extra_turns": 24,
+      "id": 387,
+      "inserted_at": "2021-09-06T17:41:30",
+      "name": "221V",
+      "score": 1803,
+      "turns": 85,
+      "updated_at": "2021-09-06T17:41:30"
+    },
+    {
+      "extra_turns": 21,
+      "id": 388,
+      "inserted_at": "2021-09-06T18:04:37",
+      "name": "221V",
+      "score": 1700,
+      "turns": 63,
+      "updated_at": "2021-09-06T18:04:37"
+    },
+    {
+      "extra_turns": 31,
+      "id": 389,
+      "inserted_at": "2021-09-06T18:41:22",
+      "name": "221V",
+      "score": 2588,
+      "turns": 102,
+      "updated_at": "2021-09-06T18:41:22"
+    },
+    {
+      "extra_turns": 36,
+      "id": 390,
+      "inserted_at": "2021-09-06T19:44:23",
+      "name": "221V",
+      "score": 2903,
+      "turns": 124,
+      "updated_at": "2021-09-06T19:44:23"
+    },
+    {
+      "extra_turns": 24,
+      "id": 391,
+      "inserted_at": "2021-09-06T20:37:36",
+      "name": "221V",
+      "score": 1987,
+      "turns": 82,
+      "updated_at": "2021-09-06T20:37:36"
+    },
+    {
+      "extra_turns": 33,
+      "id": 392,
+      "inserted_at": "2021-09-07T08:47:53",
+      "name": "мавпуся",
+      "score": 3516,
+      "turns": 118,
+      "updated_at": "2021-09-07T08:47:53"
+    },
+    {
+      "extra_turns": 38,
+      "id": 393,
+      "inserted_at": "2021-09-08T07:58:44",
+      "name": "мавпуся",
+      "score": 3265,
+      "turns": 133,
+      "updated_at": "2021-09-08T07:58:44"
+    },
+    {
+      "extra_turns": 53,
+      "id": 394,
+      "inserted_at": "2021-09-08T16:23:23",
+      "name": "221V",
+      "score": 4042,
+      "turns": 165,
+      "updated_at": "2021-09-08T16:23:23"
+    },
+    {
+      "extra_turns": 21,
+      "id": 395,
+      "inserted_at": "2021-09-08T16:47:33",
+      "name": "221V",
+      "score": 1876,
+      "turns": 79,
+      "updated_at": "2021-09-08T16:47:33"
+    },
+    {
+      "extra_turns": 25,
+      "id": 396,
+      "inserted_at": "2021-09-08T17:05:17",
+      "name": "221V",
+      "score": 2430,
+      "turns": 85,
+      "updated_at": "2021-09-08T17:05:17"
+    },
+    {
+      "extra_turns": 9,
+      "id": 397,
+      "inserted_at": "2021-09-08T18:45:02",
+      "name": "221V",
+      "score": 808,
+      "turns": 39,
+      "updated_at": "2021-09-08T18:45:02"
+    },
+    {
+      "extra_turns": 12,
+      "id": 398,
+      "inserted_at": "2021-09-08T19:18:05",
+      "name": "221V",
+      "score": 1425,
+      "turns": 64,
+      "updated_at": "2021-09-08T19:18:05"
+    },
+    {
+      "extra_turns": 39,
+      "id": 399,
+      "inserted_at": "2021-09-08T20:18:47",
+      "name": "221V",
+      "score": 2785,
+      "turns": 127,
+      "updated_at": "2021-09-08T20:18:47"
+    },
+    {
+      "extra_turns": 8,
+      "id": 400,
+      "inserted_at": "2021-09-08T20:35:28",
+      "name": "221V",
+      "score": 620,
+      "turns": 38,
+      "updated_at": "2021-09-08T20:35:28"
+    },
+    {
+      "extra_turns": 39,
+      "id": 401,
+      "inserted_at": "2021-09-10T18:45:19",
+      "name": "мавпуся",
+      "score": 3511,
+      "turns": 132,
+      "updated_at": "2021-09-10T18:45:19"
+    },
+    {
+      "extra_turns": 9,
+      "id": 402,
+      "inserted_at": "2021-09-10T22:25:20",
+      "name": "221V",
+      "score": 856,
+      "turns": 46,
+      "updated_at": "2021-09-10T22:25:20"
+    },
+    {
+      "extra_turns": 24,
+      "id": 403,
+      "inserted_at": "2021-09-10T22:51:17",
+      "name": "221V",
+      "score": 2048,
+      "turns": 81,
+      "updated_at": "2021-09-10T22:51:17"
+    },
+    {
+      "extra_turns": 8,
+      "id": 404,
+      "inserted_at": "2021-09-10T23:02:23",
+      "name": "221V",
+      "score": 1024,
+      "turns": 45,
+      "updated_at": "2021-09-10T23:02:23"
+    },
+    {
+      "extra_turns": 24,
+      "id": 405,
+      "inserted_at": "2021-09-10T23:51:00",
+      "name": "221V",
+      "score": 1668,
+      "turns": 79,
+      "updated_at": "2021-09-10T23:51:00"
+    },
+    {
+      "extra_turns": 17,
+      "id": 406,
+      "inserted_at": "2021-09-11T14:24:31",
+      "name": "221V",
+      "score": 1708,
+      "turns": 72,
+      "updated_at": "2021-09-11T14:24:31"
+    },
+    {
+      "extra_turns": 29,
+      "id": 407,
+      "inserted_at": "2021-09-11T14:57:10",
+      "name": "221V",
+      "score": 2234,
+      "turns": 111,
+      "updated_at": "2021-09-11T14:57:10"
+    },
+    {
+      "extra_turns": 34,
+      "id": 408,
+      "inserted_at": "2021-09-11T16:15:48",
+      "name": "221V",
+      "score": 2478,
+      "turns": 106,
+      "updated_at": "2021-09-11T16:15:48"
+    },
+    {
+      "extra_turns": 16,
+      "id": 409,
+      "inserted_at": "2021-09-11T17:11:11",
+      "name": "221V",
+      "score": 1217,
+      "turns": 62,
+      "updated_at": "2021-09-11T17:11:11"
+    },
+    {
+      "extra_turns": 35,
+      "id": 410,
+      "inserted_at": "2021-09-11T18:14:17",
+      "name": "221V",
+      "score": 2983,
+      "turns": 123,
+      "updated_at": "2021-09-11T18:14:17"
+    },
+    {
+      "extra_turns": 20,
+      "id": 411,
+      "inserted_at": "2021-09-11T19:33:57",
+      "name": "221V",
+      "score": 1799,
+      "turns": 84,
+      "updated_at": "2021-09-11T19:33:57"
+    },
+    {
+      "extra_turns": 45,
+      "id": 412,
+      "inserted_at": "2021-09-12T07:55:11",
+      "name": "мавпуся",
+      "score": 3609,
+      "turns": 145,
+      "updated_at": "2021-09-12T07:55:11"
+    },
+    {
+      "extra_turns": 13,
+      "id": 413,
+      "inserted_at": "2021-09-12T18:37:29",
+      "name": "221V",
+      "score": 1133,
+      "turns": 60,
+      "updated_at": "2021-09-12T18:37:29"
+    },
+    {
+      "extra_turns": 45,
+      "id": 414,
+      "inserted_at": "2021-09-12T19:17:49",
+      "name": "мавпуся",
+      "score": 3460,
+      "turns": 155,
+      "updated_at": "2021-09-12T19:17:49"
+    },
+    {
+      "extra_turns": 40,
+      "id": 415,
+      "inserted_at": "2021-09-12T20:36:17",
+      "name": "221V",
+      "score": 3038,
+      "turns": 124,
+      "updated_at": "2021-09-12T20:36:17"
+    },
+    {
+      "extra_turns": 13,
+      "id": 416,
+      "inserted_at": "2021-09-12T21:06:36",
+      "name": "221V",
+      "score": 1545,
+      "turns": 65,
+      "updated_at": "2021-09-12T21:06:36"
+    },
+    {
+      "extra_turns": 24,
+      "id": 417,
+      "inserted_at": "2021-09-12T21:33:03",
+      "name": "221V",
+      "score": 1841,
+      "turns": 89,
+      "updated_at": "2021-09-12T21:33:03"
+    },
+    {
+      "extra_turns": 28,
+      "id": 418,
+      "inserted_at": "2021-09-12T22:20:25",
+      "name": "221V",
+      "score": 1929,
+      "turns": 91,
+      "updated_at": "2021-09-12T22:20:25"
+    },
+    {
+      "extra_turns": 1,
+      "id": 419,
+      "inserted_at": "2021-09-12T22:23:57",
+      "name": "221V",
+      "score": 385,
+      "turns": 19,
+      "updated_at": "2021-09-12T22:23:57"
+    },
+    {
+      "extra_turns": 30,
+      "id": 420,
+      "inserted_at": "2021-09-12T23:29:06",
+      "name": "221V",
+      "score": 2246,
+      "turns": 106,
+      "updated_at": "2021-09-12T23:29:06"
+    },
+    {
+      "extra_turns": 17,
+      "id": 421,
+      "inserted_at": "2021-09-13T00:30:27",
+      "name": "221V",
+      "score": 1452,
+      "turns": 66,
+      "updated_at": "2021-09-13T00:30:27"
+    },
+    {
+      "extra_turns": 40,
+      "id": 422,
+      "inserted_at": "2021-09-13T04:36:19",
+      "name": "мавпуся",
+      "score": 3446,
+      "turns": 142,
+      "updated_at": "2021-09-13T04:36:19"
+    },
+    {
+      "extra_turns": 46,
+      "id": 423,
+      "inserted_at": "2021-09-13T06:53:57",
+      "name": "мавпуся",
+      "score": 3484,
+      "turns": 148,
+      "updated_at": "2021-09-13T06:53:57"
+    },
+    {
+      "extra_turns": 20,
+      "id": 424,
+      "inserted_at": "2021-09-13T12:34:56",
+      "name": "221V",
+      "score": 1426,
+      "turns": 72,
+      "updated_at": "2021-09-13T12:34:56"
+    },
+    {
+      "extra_turns": 17,
+      "id": 425,
+      "inserted_at": "2021-09-13T13:07:09",
+      "name": "221V",
+      "score": 1396,
+      "turns": 68,
+      "updated_at": "2021-09-13T13:07:09"
+    },
+    {
+      "extra_turns": 26,
+      "id": 426,
+      "inserted_at": "2021-09-13T14:06:32",
+      "name": "221V",
+      "score": 2267,
+      "turns": 93,
+      "updated_at": "2021-09-13T14:06:32"
+    },
+    {
+      "extra_turns": 44,
+      "id": 427,
+      "inserted_at": "2021-09-14T05:15:38",
+      "name": "мавпуся",
+      "score": 3439,
+      "turns": 143,
+      "updated_at": "2021-09-14T05:15:38"
+    },
+    {
+      "extra_turns": 43,
+      "id": 428,
+      "inserted_at": "2021-09-14T06:07:24",
+      "name": "мавпуся",
+      "score": 3879,
+      "turns": 158,
+      "updated_at": "2021-09-14T06:07:24"
+    },
+    {
+      "extra_turns": 49,
+      "id": 429,
+      "inserted_at": "2021-09-15T05:59:17",
+      "name": "мавпуся",
+      "score": 3637,
+      "turns": 158,
+      "updated_at": "2021-09-15T05:59:17"
+    },
+    {
+      "extra_turns": 37,
+      "id": 430,
+      "inserted_at": "2021-09-16T05:52:37",
+      "name": "мавпуся",
+      "score": 3935,
+      "turns": 137,
+      "updated_at": "2021-09-16T05:52:37"
+    },
+    {
+      "extra_turns": 41,
+      "id": 431,
+      "inserted_at": "2021-09-19T07:46:26",
+      "name": "мавпуся",
+      "score": 3487,
+      "turns": 133,
+      "updated_at": "2021-09-19T07:46:26"
+    },
+    {
+      "extra_turns": 21,
+      "id": 432,
+      "inserted_at": "2021-09-20T04:29:36",
+      "name": "221V",
+      "score": 1655,
+      "turns": 68,
+      "updated_at": "2021-09-20T04:29:36"
+    },
+    {
+      "extra_turns": 25,
+      "id": 433,
+      "inserted_at": "2021-09-20T05:09:35",
+      "name": "221V",
+      "score": 2297,
+      "turns": 85,
+      "updated_at": "2021-09-20T05:09:35"
+    },
+    {
+      "extra_turns": 49,
+      "id": 434,
+      "inserted_at": "2021-09-21T08:14:37",
+      "name": "мавпуся",
+      "score": 4601,
+      "turns": 185,
+      "updated_at": "2021-09-21T08:14:37"
+    },
+    {
+      "extra_turns": 43,
+      "id": 435,
+      "inserted_at": "2021-09-22T05:39:04",
+      "name": "мавпуся",
+      "score": 4405,
+      "turns": 176,
+      "updated_at": "2021-09-22T05:39:04"
+    },
+    {
+      "extra_turns": 39,
+      "id": 436,
+      "inserted_at": "2021-09-26T05:50:33",
+      "name": "мавпуся",
+      "score": 3587,
+      "turns": 133,
+      "updated_at": "2021-09-26T05:50:33"
+    },
+    {
+      "extra_turns": 46,
+      "id": 437,
+      "inserted_at": "2021-09-27T09:17:43",
+      "name": "мавпуся",
+      "score": 3855,
+      "turns": 159,
+      "updated_at": "2021-09-27T09:17:43"
+    },
+    {
+      "extra_turns": 13,
+      "id": 438,
+      "inserted_at": "2021-09-28T15:16:13",
+      "name": "221V",
+      "score": 1412,
+      "turns": 58,
+      "updated_at": "2021-09-28T15:16:13"
+    },
+    {
+      "extra_turns": 68,
+      "id": 439,
+      "inserted_at": "2021-10-02T19:12:24",
+      "name": "мавпуся",
+      "score": 5651,
+      "turns": 232,
+      "updated_at": "2021-10-02T19:12:24"
+    },
+    {
+      "extra_turns": 58,
+      "id": 440,
+      "inserted_at": "2021-10-08T14:52:35",
+      "name": "221V",
+      "score": 3987,
+      "turns": 180,
+      "updated_at": "2021-10-08T14:52:35"
+    },
+    {
+      "extra_turns": 68,
+      "id": 441,
+      "inserted_at": "2021-10-30T16:17:51",
+      "name": "мавпуся",
+      "score": 5791,
+      "turns": 225,
+      "updated_at": "2021-10-30T16:17:51"
+    },
+    {
+      "extra_turns": 30,
+      "id": 442,
+      "inserted_at": "2021-11-05T23:39:53",
+      "name": "Duendecillo salvaje!",
+      "score": 2216,
+      "turns": 105,
+      "updated_at": "2021-11-05T23:39:53"
+    },
+    {
+      "extra_turns": 5,
+      "id": 443,
+      "inserted_at": "2021-11-15T23:00:08",
+      "name": "Hat",
+      "score": 741,
+      "turns": 30,
+      "updated_at": "2021-11-15T23:00:08"
+    },
+    {
+      "extra_turns": 76,
+      "id": 444,
+      "inserted_at": "2021-11-20T08:28:02",
+      "name": "мавпуся",
+      "score": 5982,
+      "turns": 246,
+      "updated_at": "2021-11-20T08:28:02"
+    },
+    {
+      "extra_turns": 3,
+      "id": 445,
+      "inserted_at": "2021-11-22T10:29:42",
+      "name": "J",
+      "score": 341,
+      "turns": 20,
+      "updated_at": "2021-11-22T10:29:42"
+    },
+    {
+      "extra_turns": 24,
+      "id": 446,
+      "inserted_at": "2021-11-25T19:22:40",
+      "name": "Duendecillo salvaje!",
+      "score": 2234,
+      "turns": 91,
+      "updated_at": "2021-11-25T19:22:40"
+    },
+    {
+      "extra_turns": 21,
+      "id": 447,
+      "inserted_at": "2021-12-05T23:19:25",
+      "name": "Duendecillo salvaje!",
+      "score": 1709,
+      "turns": 72,
+      "updated_at": "2021-12-05T23:19:25"
+    },
+    {
+      "extra_turns": 11,
+      "id": 448,
+      "inserted_at": "2021-12-05T23:26:58",
+      "name": "Duendecillo salvaje!",
+      "score": 1045,
+      "turns": 48,
+      "updated_at": "2021-12-05T23:26:58"
+    },
+    {
+      "extra_turns": 14,
+      "id": 449,
+      "inserted_at": "2021-12-05T23:35:23",
+      "name": "Duendecillo salvaje!",
+      "score": 951,
+      "turns": 47,
+      "updated_at": "2021-12-05T23:35:23"
+    },
+    {
+      "extra_turns": 13,
+      "id": 450,
+      "inserted_at": "2021-12-05T23:43:58",
+      "name": "Duendecillo salvaje!",
+      "score": 1273,
+      "turns": 54,
+      "updated_at": "2021-12-05T23:43:58"
+    },
+    {
+      "extra_turns": 11,
+      "id": 451,
+      "inserted_at": "2021-12-05T23:53:58",
+      "name": "Duendecillo salvaje!",
+      "score": 1058,
+      "turns": 50,
+      "updated_at": "2021-12-05T23:53:58"
+    },
+    {
+      "extra_turns": 13,
+      "id": 452,
+      "inserted_at": "2021-12-06T00:01:10",
+      "name": "Duendecillo salvaje!",
+      "score": 1123,
+      "turns": 50,
+      "updated_at": "2021-12-06T00:01:10"
+    },
+    {
+      "extra_turns": 19,
+      "id": 453,
+      "inserted_at": "2021-12-06T00:12:21",
+      "name": "Duendecillo salvaje!",
+      "score": 1684,
+      "turns": 69,
+      "updated_at": "2021-12-06T00:12:21"
+    },
+    {
+      "extra_turns": 7,
+      "id": 454,
+      "inserted_at": "2021-12-06T00:18:29",
+      "name": "Duendecillo salvaje!",
+      "score": 791,
+      "turns": 32,
+      "updated_at": "2021-12-06T00:18:29"
+    },
+    {
+      "extra_turns": 3,
+      "id": 455,
+      "inserted_at": "2021-12-16T20:17:20",
+      "name": "Luis ",
+      "score": 388,
+      "turns": 21,
+      "updated_at": "2021-12-16T20:17:20"
+    },
+    {
+      "extra_turns": 4,
+      "id": 456,
+      "inserted_at": "2021-12-23T21:57:21",
+      "name": "асдф",
+      "score": 726,
+      "turns": 24,
+      "updated_at": "2021-12-23T21:57:21"
+    },
+    {
+      "extra_turns": 13,
+      "id": 457,
+      "inserted_at": "2022-02-01T07:55:34",
+      "name": "Ana",
+      "score": 1239,
+      "turns": 47,
+      "updated_at": "2022-02-01T07:55:34"
+    },
+    {
+      "extra_turns": 11,
+      "id": 458,
+      "inserted_at": "2022-02-01T08:03:37",
+      "name": "Ana 🐹",
+      "score": 1097,
+      "turns": 45,
+      "updated_at": "2022-02-01T08:03:37"
+    },
+    {
+      "extra_turns": 9,
+      "id": 459,
+      "inserted_at": "2022-02-01T08:12:55",
+      "name": "Ana🐹",
+      "score": 1059,
+      "turns": 42,
+      "updated_at": "2022-02-01T08:12:55"
+    },
+    {
+      "extra_turns": 18,
+      "id": 460,
+      "inserted_at": "2022-02-25T14:38:22",
+      "name": "Auto-Duendecillo",
+      "score": 1319,
+      "turns": 75,
+      "updated_at": "2022-02-25T14:38:22"
+    },
+    {
+      "extra_turns": 18,
+      "id": 461,
+      "inserted_at": "2022-02-25T14:57:10",
+      "name": "Duendecillo salvaje!",
+      "score": 1964,
+      "turns": 77,
+      "updated_at": "2022-02-25T14:57:10"
+    },
+    {
+      "extra_turns": 5,
+      "id": 462,
+      "inserted_at": "2022-03-08T19:42:44",
+      "name": "Takitos",
+      "score": 625,
+      "turns": 25,
+      "updated_at": "2022-03-08T19:42:44"
+    },
+    {
+      "extra_turns": 16,
+      "id": 463,
+      "inserted_at": "2022-03-10T13:07:50",
+      "name": "Duendecillo salvaje!",
+      "score": 1518,
+      "turns": 65,
+      "updated_at": "2022-03-10T13:07:50"
+    },
+    {
+      "extra_turns": 16,
+      "id": 464,
+      "inserted_at": "2022-03-10T13:18:44",
+      "name": "Duendecillo salvaje!",
+      "score": 1795,
+      "turns": 74,
+      "updated_at": "2022-03-10T13:18:44"
+    },
+    {
+      "extra_turns": 8,
+      "id": 465,
+      "inserted_at": "2022-03-10T13:24:40",
+      "name": "Duendecillo salvaje!",
+      "score": 1101,
+      "turns": 43,
+      "updated_at": "2022-03-10T13:24:40"
+    },
+    {
+      "extra_turns": 1,
+      "id": 466,
+      "inserted_at": "2022-03-10T13:32:51",
+      "name": "Malatesta",
+      "score": 405,
+      "turns": 16,
+      "updated_at": "2022-03-10T13:32:51"
+    },
+    {
+      "extra_turns": 18,
+      "id": 467,
+      "inserted_at": "2022-03-10T14:03:19",
+      "name": "Duendecillo salvaje!",
+      "score": 1294,
+      "turns": 64,
+      "updated_at": "2022-03-10T14:03:19"
+    },
+    {
+      "extra_turns": 11,
+      "id": 468,
+      "inserted_at": "2022-03-18T17:42:56",
+      "name": "Pete",
+      "score": 1119,
+      "turns": 41,
+      "updated_at": "2022-03-18T17:42:56"
+    },
+    {
+      "extra_turns": 14,
+      "id": 469,
+      "inserted_at": "2022-03-18T19:30:27",
+      "name": "Pete",
+      "score": 1189,
+      "turns": 55,
+      "updated_at": "2022-03-18T19:30:27"
+    },
+    {
+      "extra_turns": 18,
+      "id": 470,
+      "inserted_at": "2022-03-26T22:13:12",
+      "name": "PGG",
+      "score": 1841,
+      "turns": 69,
+      "updated_at": "2022-03-26T22:13:12"
+    },
+    {
+      "extra_turns": 12,
+      "id": 471,
+      "inserted_at": "2022-03-30T05:51:30",
+      "name": "PGG",
+      "score": 1242,
+      "turns": 54,
+      "updated_at": "2022-03-30T05:51:30"
+    },
+    {
+      "extra_turns": 9,
+      "id": 472,
+      "inserted_at": "2022-03-30T06:05:11",
+      "name": "PGG",
+      "score": 1053,
+      "turns": 47,
+      "updated_at": "2022-03-30T06:05:11"
+    },
+    {
+      "extra_turns": 25,
+      "id": 473,
+      "inserted_at": "2022-03-30T06:38:41",
+      "name": "PGG",
+      "score": 1913,
+      "turns": 81,
+      "updated_at": "2022-03-30T06:38:41"
+    },
+    {
+      "extra_turns": 12,
+      "id": 474,
+      "inserted_at": "2022-03-31T04:52:54",
+      "name": "PGG",
+      "score": 1202,
+      "turns": 50,
+      "updated_at": "2022-03-31T04:52:54"
+    },
+    {
+      "extra_turns": 14,
+      "id": 475,
+      "inserted_at": "2022-03-31T05:35:01",
+      "name": "PGG",
+      "score": 1236,
+      "turns": 47,
+      "updated_at": "2022-03-31T05:35:01"
+    },
+    {
+      "extra_turns": 14,
+      "id": 476,
+      "inserted_at": "2022-03-31T06:04:51",
+      "name": "PGG",
+      "score": 1571,
+      "turns": 64,
+      "updated_at": "2022-03-31T06:04:51"
+    },
+    {
+      "extra_turns": 22,
+      "id": 477,
+      "inserted_at": "2022-03-31T06:32:36",
+      "name": "PGG",
+      "score": 1719,
+      "turns": 83,
+      "updated_at": "2022-03-31T06:32:36"
+    },
+    {
+      "extra_turns": 15,
+      "id": 478,
+      "inserted_at": "2022-03-31T07:50:19",
+      "name": "PGG",
+      "score": 1535,
+      "turns": 61,
+      "updated_at": "2022-03-31T07:50:19"
+    },
+    {
+      "extra_turns": 31,
+      "id": 479,
+      "inserted_at": "2022-03-31T20:44:04",
+      "name": "PGG",
+      "score": 2461,
+      "turns": 101,
+      "updated_at": "2022-03-31T20:44:04"
+    },
+    {
+      "extra_turns": 40,
+      "id": 480,
+      "inserted_at": "2022-03-31T22:11:14",
+      "name": "PGG",
+      "score": 3008,
+      "turns": 125,
+      "updated_at": "2022-03-31T22:11:14"
+    },
+    {
+      "extra_turns": 21,
+      "id": 481,
+      "inserted_at": "2022-04-08T16:24:12",
+      "name": "PGG",
+      "score": 2028,
+      "turns": 80,
+      "updated_at": "2022-04-08T16:24:12"
+    },
+    {
+      "extra_turns": 24,
+      "id": 482,
+      "inserted_at": "2022-04-08T22:57:54",
+      "name": "PGG",
+      "score": 2189,
+      "turns": 79,
+      "updated_at": "2022-04-08T22:57:54"
+    },
+    {
+      "extra_turns": 26,
+      "id": 483,
+      "inserted_at": "2022-04-09T00:12:18",
+      "name": "PGG",
+      "score": 2127,
+      "turns": 92,
+      "updated_at": "2022-04-09T00:12:18"
+    },
+    {
+      "extra_turns": 14,
+      "id": 484,
+      "inserted_at": "2022-04-19T13:18:29",
+      "name": "Hamster ",
+      "score": 1169,
+      "turns": 54,
+      "updated_at": "2022-04-19T13:18:29"
+    },
+    {
+      "extra_turns": 7,
+      "id": 485,
+      "inserted_at": "2022-04-19T13:23:30",
+      "name": "Hamster ",
+      "score": 629,
+      "turns": 30,
+      "updated_at": "2022-04-19T13:23:30"
+    },
+    {
+      "extra_turns": 9,
+      "id": 486,
+      "inserted_at": "2022-04-19T13:29:33",
+      "name": "Catana",
+      "score": 722,
+      "turns": 39,
+      "updated_at": "2022-04-19T13:29:33"
+    },
+    {
+      "extra_turns": 8,
+      "id": 487,
+      "inserted_at": "2022-04-19T13:35:57",
+      "name": "Hamsta",
+      "score": 841,
+      "turns": 39,
+      "updated_at": "2022-04-19T13:35:57"
+    },
+    {
+      "extra_turns": 43,
+      "id": 488,
+      "inserted_at": "2022-04-21T06:22:40",
+      "name": "Pedro G. Galaviz",
+      "score": 3912,
+      "turns": 150,
+      "updated_at": "2022-04-21T06:22:40"
+    },
+    {
+      "extra_turns": 32,
+      "id": 489,
+      "inserted_at": "2022-04-23T05:26:54",
+      "name": "Pedro G. Galaviz",
+      "score": 3049,
+      "turns": 105,
+      "updated_at": "2022-04-23T05:26:54"
+    },
+    {
+      "extra_turns": 11,
+      "id": 490,
+      "inserted_at": "2022-04-23T18:02:38",
+      "name": "Duendecillo salvaje ",
+      "score": 959,
+      "turns": 46,
+      "updated_at": "2022-04-23T18:02:38"
+    },
+    {
+      "extra_turns": 30,
+      "id": 491,
+      "inserted_at": "2022-04-25T12:39:14",
+      "name": "Duendecillo salvaje",
+      "score": 2352,
+      "turns": 105,
+      "updated_at": "2022-04-25T12:39:14"
+    },
+    {
+      "extra_turns": 12,
+      "id": 492,
+      "inserted_at": "2022-04-25T13:27:29",
+      "name": "Jarosapiens",
+      "score": 1138,
+      "turns": 44,
+      "updated_at": "2022-04-25T13:27:29"
+    },
+    {
+      "extra_turns": 19,
+      "id": 493,
+      "inserted_at": "2022-04-25T13:40:03",
+      "name": "Jarosapiens",
+      "score": 1448,
+      "turns": 67,
+      "updated_at": "2022-04-25T13:40:03"
+    },
+    {
+      "extra_turns": 19,
+      "id": 494,
+      "inserted_at": "2022-04-25T13:57:17",
+      "name": "Jarosapiens",
+      "score": 1901,
+      "turns": 69,
+      "updated_at": "2022-04-25T13:57:17"
+    },
+    {
+      "extra_turns": 14,
+      "id": 495,
+      "inserted_at": "2022-04-25T15:08:41",
+      "name": "m",
+      "score": 1213,
+      "turns": 52,
+      "updated_at": "2022-04-25T15:08:41"
+    },
+    {
+      "extra_turns": 16,
+      "id": 496,
+      "inserted_at": "2022-04-25T15:18:31",
+      "name": "marga",
+      "score": 1302,
+      "turns": 56,
+      "updated_at": "2022-04-25T15:18:31"
+    },
+    {
+      "extra_turns": 7,
+      "id": 497,
+      "inserted_at": "2022-04-25T15:23:53",
+      "name": "marga",
+      "score": 729,
+      "turns": 31,
+      "updated_at": "2022-04-25T15:23:53"
+    },
+    {
+      "extra_turns": 6,
+      "id": 498,
+      "inserted_at": "2022-04-25T15:28:15",
+      "name": "m",
+      "score": 700,
+      "turns": 25,
+      "updated_at": "2022-04-25T15:28:15"
+    },
+    {
+      "extra_turns": 9,
+      "id": 499,
+      "inserted_at": "2022-04-25T15:35:26",
+      "name": "m",
+      "score": 761,
+      "turns": 35,
+      "updated_at": "2022-04-25T15:35:26"
+    },
+    {
+      "extra_turns": 8,
+      "id": 500,
+      "inserted_at": "2022-04-28T07:08:13",
+      "name": "Duendecillo salvaje",
+      "score": 728,
+      "turns": 38,
+      "updated_at": "2022-04-28T07:08:13"
+    },
+    {
+      "extra_turns": 15,
+      "id": 501,
+      "inserted_at": "2022-04-28T07:20:31",
+      "name": "Duendecillo 🧚‍♂️ ",
+      "score": 1586,
+      "turns": 78,
+      "updated_at": "2022-04-28T07:20:31"
+    },
+    {
+      "extra_turns": 23,
+      "id": 502,
+      "inserted_at": "2022-04-29T08:59:47",
+      "name": "Duendecillo salvaje!",
+      "score": 2155,
+      "turns": 91,
+      "updated_at": "2022-04-29T08:59:47"
+    },
+    {
+      "extra_turns": 30,
+      "id": 503,
+      "inserted_at": "2022-04-30T23:21:27",
+      "name": "Duendecillo salvaje ",
+      "score": 1957,
+      "turns": 89,
+      "updated_at": "2022-04-30T23:21:27"
+    },
+    {
+      "extra_turns": 24,
+      "id": 504,
+      "inserted_at": "2022-05-02T20:05:50",
+      "name": "Duendecillo salvaje",
+      "score": 2109,
+      "turns": 81,
+      "updated_at": "2022-05-02T20:05:50"
+    },
+    {
+      "extra_turns": 68,
+      "id": 505,
+      "inserted_at": "2022-05-02T20:33:53",
+      "name": "Duendecillo salvaje",
+      "score": 4657,
+      "turns": 197,
+      "updated_at": "2022-05-02T20:33:53"
+    },
+    {
+      "extra_turns": 42,
+      "id": 506,
+      "inserted_at": "2022-05-04T11:54:26",
+      "name": "Duendecillo salvaje ",
+      "score": 3324,
+      "turns": 145,
+      "updated_at": "2022-05-04T11:54:26"
+    },
+    {
+      "extra_turns": 38,
+      "id": 507,
+      "inserted_at": "2022-05-04T12:13:02",
+      "name": "Duendecillo salvaje ",
+      "score": 3534,
+      "turns": 129,
+      "updated_at": "2022-05-04T12:13:02"
+    },
+    {
+      "extra_turns": 56,
+      "id": 508,
+      "inserted_at": "2022-05-10T22:33:22",
+      "name": "Duendecillo salvaje ",
+      "score": 4388,
+      "turns": 167,
+      "updated_at": "2022-05-10T22:33:22"
+    },
+    {
+      "extra_turns": 37,
+      "id": 509,
+      "inserted_at": "2022-05-14T18:42:53",
+      "name": "Duendecillo salvaje ",
+      "score": 3162,
+      "turns": 126,
+      "updated_at": "2022-05-14T18:42:53"
+    },
+    {
+      "extra_turns": 50,
+      "id": 510,
+      "inserted_at": "2022-05-15T21:48:23",
+      "name": "Duendecillo salvaje ",
+      "score": 3904,
+      "turns": 173,
+      "updated_at": "2022-05-15T21:48:23"
+    },
+    {
+      "extra_turns": 44,
+      "id": 511,
+      "inserted_at": "2022-05-15T22:07:07",
+      "name": "Duendecillo salvaje ",
+      "score": 3529,
+      "turns": 147,
+      "updated_at": "2022-05-15T22:07:07"
+    },
+    {
+      "extra_turns": 46,
+      "id": 512,
+      "inserted_at": "2022-05-18T18:23:19",
+      "name": "Duendecillo salvaje",
+      "score": 3377,
+      "turns": 147,
+      "updated_at": "2022-05-18T18:23:19"
+    },
+    {
+      "extra_turns": 55,
+      "id": 513,
+      "inserted_at": "2022-05-21T05:10:33",
+      "name": "Жар-птиця",
+      "score": 4638,
+      "turns": 193,
+      "updated_at": "2022-05-21T05:10:33"
+    },
+    {
+      "extra_turns": 65,
+      "id": 514,
+      "inserted_at": "2022-05-24T20:39:17",
+      "name": "Жабка зелена",
+      "score": 5559,
+      "turns": 224,
+      "updated_at": "2022-05-24T20:39:17"
+    },
+    {
+      "extra_turns": 53,
+      "id": 515,
+      "inserted_at": "2022-05-26T15:43:50",
+      "name": "Duendecillo salvaje",
+      "score": 3931,
+      "turns": 170,
+      "updated_at": "2022-05-26T15:43:50"
+    },
+    {
+      "extra_turns": 53,
+      "id": 516,
+      "inserted_at": "2022-05-30T05:45:01",
+      "name": "Duendecillo salvaje!",
+      "score": 4170,
+      "turns": 173,
+      "updated_at": "2022-05-30T05:45:01"
+    },
+    {
+      "extra_turns": 60,
+      "id": 517,
+      "inserted_at": "2022-05-30T22:35:00",
+      "name": "Duendecillo salvaje!",
+      "score": 5064,
+      "turns": 196,
+      "updated_at": "2022-05-30T22:35:00"
+    },
+    {
+      "extra_turns": 60,
+      "id": 518,
+      "inserted_at": "2022-05-31T05:34:54",
+      "name": "Жанчик",
+      "score": 5482,
+      "turns": 221,
+      "updated_at": "2022-05-31T05:34:54"
+    },
+    {
+      "extra_turns": 4,
+      "id": 519,
+      "inserted_at": "2022-06-03T08:44:33",
+      "name": "marga",
+      "score": 658,
+      "turns": 31,
+      "updated_at": "2022-06-03T08:44:33"
+    },
+    {
+      "extra_turns": 2,
+      "id": 520,
+      "inserted_at": "2022-06-03T08:46:50",
+      "name": "marga",
+      "score": 305,
+      "turns": 17,
+      "updated_at": "2022-06-03T08:46:50"
+    },
+    {
+      "extra_turns": 24,
+      "id": 521,
+      "inserted_at": "2022-06-03T09:07:27",
+      "name": "marga",
+      "score": 2308,
+      "turns": 90,
+      "updated_at": "2022-06-03T09:07:27"
+    },
+    {
+      "extra_turns": 50,
+      "id": 522,
+      "inserted_at": "2022-06-05T08:12:24",
+      "name": "Duendecillo salvaje!",
+      "score": 4362,
+      "turns": 180,
+      "updated_at": "2022-06-05T08:12:24"
+    },
+    {
+      "extra_turns": 51,
+      "id": 523,
+      "inserted_at": "2022-06-06T18:10:17",
+      "name": "Жанчик",
+      "score": 4516,
+      "turns": 163,
+      "updated_at": "2022-06-06T18:10:17"
+    },
+    {
+      "extra_turns": 7,
+      "id": 524,
+      "inserted_at": "2022-06-07T06:32:22",
+      "name": "Swxo",
+      "score": 515,
+      "turns": 25,
+      "updated_at": "2022-06-07T06:32:22"
+    },
+    {
+      "extra_turns": 77,
+      "id": 525,
+      "inserted_at": "2022-06-07T19:39:01",
+      "name": "Жанчик",
+      "score": 5762,
+      "turns": 248,
+      "updated_at": "2022-06-07T19:39:01"
+    },
+    {
+      "extra_turns": 43,
+      "id": 526,
+      "inserted_at": "2022-06-08T21:54:58",
+      "name": "Duendecillo 🧚‍♂️ ",
+      "score": 3755,
+      "turns": 143,
+      "updated_at": "2022-06-08T21:54:58"
+    },
+    {
+      "extra_turns": 53,
+      "id": 527,
+      "inserted_at": "2022-06-10T22:37:34",
+      "name": "🧚‍♂️ salvaje ",
+      "score": 4556,
+      "turns": 173,
+      "updated_at": "2022-06-10T22:37:34"
+    },
+    {
+      "extra_turns": 53,
+      "id": 528,
+      "inserted_at": "2022-06-10T23:13:51",
+      "name": "Duendecillo 🧚‍♂️ salvaje ",
+      "score": 4142,
+      "turns": 168,
+      "updated_at": "2022-06-10T23:13:51"
+    },
+    {
+      "extra_turns": 57,
+      "id": 529,
+      "inserted_at": "2022-06-11T08:12:48",
+      "name": "Живчик",
+      "score": 5159,
+      "turns": 187,
+      "updated_at": "2022-06-11T08:12:48"
+    },
+    {
+      "extra_turns": 80,
+      "id": 530,
+      "inserted_at": "2022-06-14T08:19:30",
+      "name": "Живчик",
+      "score": 6099,
+      "turns": 245,
+      "updated_at": "2022-06-14T08:19:30"
+    },
+    {
+      "extra_turns": 72,
+      "id": 531,
+      "inserted_at": "2022-06-14T23:08:58",
+      "name": "Duendecillo 🧚‍♂️ salvaje!",
+      "score": 4842,
+      "turns": 219,
+      "updated_at": "2022-06-14T23:08:58"
+    },
+    {
+      "extra_turns": 50,
+      "id": 532,
+      "inserted_at": "2022-06-15T23:23:39",
+      "name": "Duendecillo 🧚‍♂️ salvaje!",
+      "score": 3711,
+      "turns": 159,
+      "updated_at": "2022-06-15T23:23:39"
+    },
+    {
+      "extra_turns": 64,
+      "id": 533,
+      "inserted_at": "2022-06-17T12:04:37",
+      "name": "Duendecillo 🧚‍♂️ salvaje!",
+      "score": 4902,
+      "turns": 206,
+      "updated_at": "2022-06-17T12:04:37"
+    },
+    {
+      "extra_turns": 66,
+      "id": 534,
+      "inserted_at": "2022-06-18T21:27:35",
+      "name": "Duendecillo 🧚‍♂️ salvaje!",
+      "score": 5004,
+      "turns": 198,
+      "updated_at": "2022-06-18T21:27:35"
+    },
+    {
+      "extra_turns": 51,
+      "id": 535,
+      "inserted_at": "2022-06-19T07:34:19",
+      "name": "Живчик",
+      "score": 4773,
+      "turns": 183,
+      "updated_at": "2022-06-19T07:34:19"
+    },
+    {
+      "extra_turns": 3,
+      "id": 536,
+      "inserted_at": "2022-06-20T11:42:00",
+      "name": "catana",
+      "score": 442,
+      "turns": 20,
+      "updated_at": "2022-06-20T11:42:00"
+    },
+    {
+      "extra_turns": 20,
+      "id": 537,
+      "inserted_at": "2022-06-20T11:53:35",
+      "name": "CatAna",
+      "score": 1622,
+      "turns": 63,
+      "updated_at": "2022-06-20T11:53:35"
+    },
+    {
+      "extra_turns": 8,
+      "id": 538,
+      "inserted_at": "2022-06-20T12:19:24",
+      "name": "Not Cyrillic",
+      "score": 859,
+      "turns": 38,
+      "updated_at": "2022-06-20T12:19:24"
+    },
+    {
+      "extra_turns": 4,
+      "id": 539,
+      "inserted_at": "2022-06-20T13:12:15",
+      "name": "My name here!",
+      "score": 414,
+      "turns": 22,
+      "updated_at": "2022-06-20T13:12:15"
+    },
+    {
+      "extra_turns": 43,
+      "id": 540,
+      "inserted_at": "2022-06-21T12:17:44",
+      "name": "🧚‍♂️ ",
+      "score": 3759,
+      "turns": 145,
+      "updated_at": "2022-06-21T12:17:44"
+    },
+    {
+      "extra_turns": 9,
+      "id": 541,
+      "inserted_at": "2022-06-26T17:03:14",
+      "name": "jarosapiens",
+      "score": 902,
+      "turns": 43,
+      "updated_at": "2022-06-26T17:03:15"
+    },
+    {
+      "extra_turns": 30,
+      "id": 542,
+      "inserted_at": "2022-06-29T17:21:57",
+      "name": "jarosapiens ",
+      "score": 2456,
+      "turns": 103,
+      "updated_at": "2022-06-29T17:21:57"
+    },
+    {
+      "extra_turns": 19,
+      "id": 543,
+      "inserted_at": "2022-06-29T17:51:07",
+      "name": "My name here!",
+      "score": 1916,
+      "turns": 74,
+      "updated_at": "2022-06-29T17:51:07"
+    },
+    {
+      "extra_turns": 10,
+      "id": 544,
+      "inserted_at": "2022-06-29T18:03:15",
+      "name": "My name here!",
+      "score": 845,
+      "turns": 44,
+      "updated_at": "2022-06-29T18:03:15"
+    },
+    {
+      "extra_turns": 6,
+      "id": 545,
+      "inserted_at": "2022-06-29T18:10:55",
+      "name": "My name here!",
+      "score": 904,
+      "turns": 35,
+      "updated_at": "2022-06-29T18:10:55"
+    },
+    {
+      "extra_turns": 7,
+      "id": 546,
+      "inserted_at": "2022-06-29T18:19:00",
+      "name": "TTaraskin",
+      "score": 817,
+      "turns": 37,
+      "updated_at": "2022-06-29T18:19:00"
+    },
+    {
+      "extra_turns": 42,
+      "id": 547,
+      "inserted_at": "2022-06-29T18:44:33",
+      "name": "My name here!",
+      "score": 3262,
+      "turns": 135,
+      "updated_at": "2022-06-29T18:44:33"
+    },
+    {
+      "extra_turns": 13,
+      "id": 548,
+      "inserted_at": "2022-06-29T18:53:59",
+      "name": "TTaraskin",
+      "score": 1264,
+      "turns": 52,
+      "updated_at": "2022-06-29T18:53:59"
+    },
+    {
+      "extra_turns": 6,
+      "id": 549,
+      "inserted_at": "2022-07-03T09:53:01",
+      "name": "jarosapiens",
+      "score": 867,
+      "turns": 33,
+      "updated_at": "2022-07-03T09:53:01"
+    },
+    {
+      "extra_turns": 12,
+      "id": 550,
+      "inserted_at": "2022-07-03T11:49:51",
+      "name": "ana",
+      "score": 1174,
+      "turns": 54,
+      "updated_at": "2022-07-03T11:49:51"
+    },
+    {
+      "extra_turns": 13,
+      "id": 551,
+      "inserted_at": "2022-07-04T18:04:31",
+      "name": "TTaraskin",
+      "score": 1926,
+      "turns": 72,
+      "updated_at": "2022-07-04T18:04:31"
+    },
+    {
+      "extra_turns": 17,
+      "id": 552,
+      "inserted_at": "2022-07-04T18:24:16",
+      "name": "TTaraskin",
+      "score": 1349,
+      "turns": 60,
+      "updated_at": "2022-07-04T18:24:16"
+    },
+    {
+      "extra_turns": 26,
+      "id": 553,
+      "inserted_at": "2022-07-04T18:42:46",
+      "name": "My name here!",
+      "score": 1985,
+      "turns": 87,
+      "updated_at": "2022-07-04T18:42:46"
+    },
+    {
+      "extra_turns": 40,
+      "id": 554,
+      "inserted_at": "2022-07-04T22:48:50",
+      "name": "221V",
+      "score": 3208,
+      "turns": 126,
+      "updated_at": "2022-07-04T22:48:50"
+    },
+    {
+      "extra_turns": 26,
+      "id": 555,
+      "inserted_at": "2022-07-04T23:07:45",
+      "name": "221V",
+      "score": 2121,
+      "turns": 86,
+      "updated_at": "2022-07-04T23:07:45"
+    },
+    {
+      "extra_turns": 11,
+      "id": 556,
+      "inserted_at": "2022-07-04T23:17:45",
+      "name": "221V",
+      "score": 1140,
+      "turns": 45,
+      "updated_at": "2022-07-04T23:17:45"
+    },
+    {
+      "extra_turns": 55,
+      "id": 557,
+      "inserted_at": "2022-07-04T23:21:41",
+      "name": "Duendecillo",
+      "score": 4305,
+      "turns": 177,
+      "updated_at": "2022-07-04T23:21:41"
+    },
+    {
+      "extra_turns": 51,
+      "id": 558,
+      "inserted_at": "2022-07-05T19:19:47",
+      "name": "My name here!",
+      "score": 4144,
+      "turns": 171,
+      "updated_at": "2022-07-05T19:19:47"
+    },
+    {
+      "extra_turns": 5,
+      "id": 559,
+      "inserted_at": "2022-07-06T15:44:04",
+      "name": "Ana maruchi",
+      "score": 657,
+      "turns": 30,
+      "updated_at": "2022-07-06T15:44:04"
+    }
+  ]
+}

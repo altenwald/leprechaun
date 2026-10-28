@@ -23,7 +23,7 @@ defmodule Leprechaun.GameTest do
       assert is_pid(pid) and Process.alive?(pid)
       assert board == Game.show(name)
       assert :ok = Game.stop(name)
-      refute is_pid(pid) and Process.alive?(pid)
+      refute Process.alive?(pid)
       Process.sleep(100)
       refute Game.exists?(name)
     end
@@ -50,7 +50,7 @@ defmodule Leprechaun.GameTest do
       assert board == Game.show(name)
 
       assert_receive {:DOWN, _ref, :process, ^pid, :normal}, 500
-      refute is_pid(pid) and Process.alive?(pid)
+      refute Process.alive?(pid)
       Process.sleep(100)
       refute Game.exists?(name)
     end
@@ -88,7 +88,7 @@ defmodule Leprechaun.GameTest do
       end)
 
       assert_receive :continue
-      assert %Game{consumers: [^mypid]} = :sys.get_state(pid)
+      assert_consumers(pid, [mypid], 50)
     end
   end
 
@@ -652,6 +652,17 @@ defmodule Leprechaun.GameTest do
       assert :ok = Game.move(data.name, {1, 3}, {2, 3})
       assert_receive {:error, :gameover}
       refute_receive _, 500
+    end
+  end
+
+  defp assert_consumers(pid, expected, attempts) do
+    actual = :sys.get_state(pid).consumers
+
+    if actual == expected or attempts == 0 do
+      assert actual == expected
+    else
+      Process.sleep(10)
+      assert_consumers(pid, expected, attempts - 1)
     end
   end
 end

@@ -24,16 +24,32 @@ defmodule Leprechaun.HiScoreTest do
     end
 
     test "get correctly my index" do
-      [my_id] =
-        :mnesia.dirty_all_keys(:hi_score)
-        |> Enum.sort()
-        |> Enum.take(1)
+      my_id = Repo.get_by!(HiScore, name: "User1").id
 
       assert 1 = HiScore.get_order(my_id)
     end
 
     test "get incorrect index" do
       assert is_nil(HiScore.get_order(0))
+    end
+
+    test "stores timestamps and fields in SQLite" do
+      assert {:ok, saved} = HiScore.save("SQLite player", 1234, 20, 3, "192.0.2.1")
+      stored = Repo.get!(HiScore, saved.id)
+
+      assert stored.name == "SQLite player"
+      assert stored.score == 1234
+      assert stored.turns == 20
+      assert stored.extra_turns == 3
+      assert stored.remote_ip == "192.0.2.1"
+      assert %NaiveDateTime{} = stored.inserted_at
+      assert %NaiveDateTime{} = stored.updated_at
+    end
+
+    test "rerunning release migrations preserves high scores" do
+      before = HiScore.top_list()
+      assert :ok = Leprechaun.ReleaseTasks.run_migrations()
+      assert HiScore.top_list() == before
     end
   end
 end

@@ -1,0 +1,7 @@
+# The environment the release is built in: Erlang/OTP 29 and Elixir 1.20 on Debian 13, so the release links against
+# the libraries of the Debian that runs it. Built by dymploy for each run (see dymploy.yaml); nothing in it is a secret.
+FROM hexpm/elixir:1.20.4-erlang-29.1.1-debian-trixie-20261005-slim
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends build-essential git ca-certificates curl \
+ && rm -rf /var/lib/apt/lists/*

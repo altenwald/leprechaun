@@ -1,7 +1,7 @@
 defmodule Leprechaun.Websocket do
   @moduledoc """
   Implements the modules needed to attend a websocket connection from
-  cowboy. It's interacting with the websocket receiving information
+  the WebSock interface. It's interacting with the websocket receiving information
   from the websocket and from the application and acting according to
   the message it receives from each part.
 
@@ -10,98 +10,81 @@ defmodule Leprechaun.Websocket do
   with the game.
   """
   require Logger
-  alias Leprechaun.{Game, Bot, HiScore}
+  alias Leprechaun.{Game, HiScore}
 
-  @doc false
-  @spec init(:cowboy_req.req(), []) ::
-          {:cowboy_websocket, :cowboy_req.req(), [{:remote_ip, Game.remote_ip()}]}
-  def init(req, []) do
-    Logger.info("[websocket] init req => #{inspect(req)}")
+  @behaviour WebSock
 
-    remote_ip =
-      case :cowboy_req.peer(req) do
-        {{127, 0, 0, 1}, _} ->
-          case :cowboy_req.header("x-forwarded-for", req) do
-            remote_ip when is_binary(remote_ip) -> remote_ip
-            :undefined -> "127.0.0.1"
-          end
-
-        {remote_ip, _} ->
-          to_string(:inet.ntoa(remote_ip))
-      end
-
-    {:cowboy_websocket, req, [{:remote_ip, remote_ip}]}
-  end
-
-  @doc false
-  def websocket_init(remote_ip: remote_ip) do
+  @impl WebSock
+  def init(remote_ip: remote_ip) do
     vsn = to_string(Application.spec(:leprechaun)[:vsn])
-    send(self(), {:send, Jason.encode!(%{"type" => "vsn", "vsn" => vsn})})
-    {:ok, %{board: nil, remote_ip: remote_ip}}
+
+    {:push, {:text, Jason.encode!(%{"type" => "vsn", "vsn" => vsn})},
+     %{board: nil, remote_ip: remote_ip}}
   end
 
-  @doc false
-  def websocket_handle({:text, msg}, state) do
-    msg
-    |> Jason.decode!()
-    |> process_data(state)
+  @impl WebSock
+  def handle_in({msg, [opcode: :text]}, state) do
+    case Jason.decode(msg) do
+      {:ok, data} -> process_data(data, state)
+      {:error, _reason} -> {:push, {:text, "eh?"}, state}
+    end
   end
 
-  def websocket_handle(_any, state) do
-    {:reply, {:text, "eh?"}, state}
+  def handle_in(_any, state) do
+    {:push, {:text, "eh?"}, state}
   end
 
-  @doc false
-  def websocket_info({:send, data}, state) do
-    {:reply, {:text, data}, state}
+  @impl WebSock
+  def handle_info({:send, data}, state) do
+    {:push, {:text, data}, state}
   end
 
-  def websocket_info({:timeout, _ref, msg}, state) do
-    {:reply, {:text, msg}, state}
+  def handle_info({:timeout, _ref, msg}, state) do
+    {:push, {:text, msg}, state}
   end
 
-  def websocket_info(:play, state) do
+  def handle_info(:play, state) do
     turns = Game.turns(state.board)
-    {:reply, {:text, Jason.encode!(%{"type" => "play", "turns" => turns})}, state}
+    {:push, {:text, Jason.encode!(%{"type" => "play", "turns" => turns})}, state}
   end
 
-  def websocket_info({:insert, x, piece}, state) do
+  def handle_info({:insert, x, piece}, state) do
     msg = %{"type" => "slide_new", "row" => 1, "col" => x, "piece" => img(piece)}
-    {:reply, {:text, Jason.encode!(msg)}, state}
+    {:push, {:text, Jason.encode!(msg)}, state}
   end
 
-  def websocket_info({:slide, x, y_orig, y_dest}, state) do
+  def handle_info({:slide, x, y_orig, y_dest}, state) do
     msg = %{
       "type" => "slide",
       "orig" => %{"row" => y_orig, "col" => x},
       "dest" => %{"row" => y_dest, "col" => x}
     }
 
-    {:reply, {:text, Jason.encode!(msg)}, state}
+    {:push, {:text, Jason.encode!(msg)}, state}
   end
 
-  def websocket_info({:new_kind, x, y, new_kind}, state) do
+  def handle_info({:new_kind, x, y, new_kind}, state) do
     msg = %{"type" => "new_kind", "row" => y, "col" => x, "piece" => img(new_kind)}
-    {:reply, {:text, Jason.encode!(msg)}, state}
+    {:push, {:text, Jason.encode!(msg)}, state}
   end
 
-  def websocket_info({:extra_turn, extra_turns}, state) do
+  def handle_info({:extra_turn, extra_turns}, state) do
     turns = Game.turns(state.board)
     msg = %{"type" => "extra_turn", "extra_turns" => extra_turns, "turns" => turns}
-    {:reply, {:text, Jason.encode!(msg)}, state}
+    {:push, {:text, Jason.encode!(msg)}, state}
   end
 
-  def websocket_info({:leprechaun, cell}, state) do
+  def handle_info({:leprechaun, cell}, state) do
     msg = %{"type" => "leprechaun", "cell" => cell}
-    {:reply, {:text, Jason.encode!(msg)}, state}
+    {:push, {:text, Jason.encode!(msg)}, state}
   end
 
-  def websocket_info({:clover, cell}, state) do
+  def handle_info({:clover, cell}, state) do
     msg = %{"type" => "clover", "cell" => cell}
-    {:reply, {:text, Jason.encode!(msg)}, state}
+    {:push, {:text, Jason.encode!(msg)}, state}
   end
 
-  def websocket_info({:match, score, global_score, acc, cells}, state) do
+  def handle_info({:match, score, global_score, acc, cells}, state) do
     acc =
       for {_, points} <- acc do
         for {x, y} <- points do
@@ -118,10 +101,10 @@ defmodule Leprechaun.Websocket do
       "cells" => build_show(cells)
     }
 
-    {:reply, {:text, Jason.encode!(msg)}, state}
+    {:push, {:text, Jason.encode!(msg)}, state}
   end
 
-  def websocket_info({:show, cells}, %{board: board} = state) do
+  def handle_info({:show, cells}, %{board: board} = state) do
     msg = %{
       "type" => "draw",
       "cells" => build_show(cells),
@@ -129,40 +112,40 @@ defmodule Leprechaun.Websocket do
       "turns" => Game.turns(board)
     }
 
-    {:reply, {:text, Jason.encode!(msg)}, state}
+    {:push, {:text, Jason.encode!(msg)}, state}
   end
 
-  def websocket_info({:gameover, score, has_username}, state) do
+  def handle_info({:gameover, score, has_username}, state) do
     msg = %{"type" => "gameover", "score" => score, "turns" => 0, "has_username" => has_username}
-    {:reply, {:text, Jason.encode!(msg)}, state}
+    {:push, {:text, Jason.encode!(msg)}, state}
   end
 
-  def websocket_info({:error, :gameover}, state) do
+  def handle_info({:error, :gameover}, state) do
     score = Game.score(state.board)
     msg = %{"type" => "gameover", "score" => score, "turns" => 0, "has_username" => true}
-    {:reply, {:text, Jason.encode!(msg)}, state}
+    {:push, {:text, Jason.encode!(msg)}, state}
   end
 
-  def websocket_info({:error, {:illegal_move, {{x1, y1}, {x2, y2}}}}, state) do
+  def handle_info({:error, {:illegal_move, {{x1, y1}, {x2, y2}}}}, state) do
     msg = %{
       "type" => "illegal_move",
       "points" => [%{"row" => y1, "col" => x1}, %{"row" => y2, "col" => x2}]
     }
 
-    {:reply, {:text, Jason.encode!(msg)}, state}
+    {:push, {:text, Jason.encode!(msg)}, state}
   end
 
-  def websocket_info({:hiscore, order}, state) do
-    if order, do: send_hiscore(order, state)
+  def handle_info({:hiscore, order}, state) do
+    if order, do: send_hiscore(order, state), else: {:ok, state}
   end
 
-  def websocket_info(info, state) do
+  def handle_info(info, state) do
     Logger.info("info => #{inspect(info)}")
     {:ok, state}
   end
 
-  @doc false
-  def websocket_terminate(reason, _state) do
+  @impl WebSock
+  def terminate(reason, _state) do
     Logger.info("reason => #{inspect(reason)}")
     :ok
   end
@@ -191,30 +174,11 @@ defmodule Leprechaun.Websocket do
       end)
 
     msg = %{"type" => "hiscore", "top_list" => top_list, "position" => order}
-    {:reply, {:text, Jason.encode!(msg)}, state}
+    {:push, {:text, Jason.encode!(msg)}, state}
   end
 
   defp process_data(%{"type" => "ping"}, state) do
-    {:reply, {:text, Jason.encode!(%{"type" => "pong"})}, state}
-  end
-
-  defp process_data(%{"type" => "run", "code" => code} = info, state) do
-    if state[:bot_id] != nil do
-      if Bot.exists?(state.bot_id) do
-        result = Bot.run(state.bot_id, code)
-        msg = %{"type" => "log", "info" => result}
-        {:reply, {:text, Jason.encode!(msg)}, state}
-      else
-        process_data(info, Map.delete(state, :bot_id))
-      end
-    else
-      id = UUID.uuid4()
-      Bot.start_link(id, state.board)
-      result = Bot.run(id, code)
-      msg = %{"type" => "log", "info" => result}
-      send(self(), {:send, Jason.encode!(%{"type" => "bot_id", "id" => id})})
-      {:reply, {:text, Jason.encode!(msg)}, Map.put(state, :bot_id, id)}
-    end
+    {:push, {:text, Jason.encode!(%{"type" => "pong"})}, state}
   end
 
   defp process_data(%{"type" => "hiscore"}, state) do
@@ -228,7 +192,7 @@ defmodule Leprechaun.Websocket do
 
       {:error, reason} ->
         msg = %{"type" => "set-hiscore-name-error", "reason" => "#{inspect(reason)}"}
-        {:reply, {:text, Jason.encode!(msg)}, state}
+        {:push, {:text, Jason.encode!(msg)}, state}
     end
   end
 
@@ -236,29 +200,24 @@ defmodule Leprechaun.Websocket do
     id = UUID.uuid4()
     {:ok, _board} = Game.start(name: id)
     msg = %{"type" => "id", "id" => id}
-    {:reply, {:text, Jason.encode!(msg)}, Map.put(state, :board, id)}
+    {:push, {:text, Jason.encode!(msg)}, Map.put(state, :board, id)}
   end
 
-  defp process_data(%{"type" => "join", "id" => id} = info, state) do
+  defp process_data(%{"type" => "join", "id" => id}, state) do
     if Game.exists?(id) do
       state = Map.put(state, :board, id)
 
       if Game.turns(id) > 0 do
         Game.add_consumer(id)
 
-        if info["bot_id"] != nil do
-          Bot.set_websocket_pid(info["bot_id"])
-          {:ok, Map.put(state, :bot_id, info["bot_id"])}
-        else
-          {:ok, state}
-        end
+        {:ok, state}
       else
         msg = %{"type" => "gameover", "turns" => 0}
-        {:reply, {:text, Jason.encode!(msg)}, state}
+        {:push, {:text, Jason.encode!(msg)}, state}
       end
     else
       msg = %{"type" => "gameover", "turns" => 0, "error" => true}
-      {:reply, {:text, Jason.encode!(msg)}, state}
+      {:push, {:text, Jason.encode!(msg)}, state}
     end
   end
 
@@ -273,7 +232,7 @@ defmodule Leprechaun.Websocket do
       {:ok, state}
     else
       msg = %{"type" => "gameover", "turns" => 0, "error" => true}
-      {:reply, {:text, Jason.encode!(msg)}, state}
+      {:push, {:text, Jason.encode!(msg)}, state}
     end
   end
 
@@ -286,10 +245,10 @@ defmodule Leprechaun.Websocket do
         "turns" => Game.turns(board)
       }
 
-      {:reply, {:text, Jason.encode!(msg)}, state}
+      {:push, {:text, Jason.encode!(msg)}, state}
     else
       msg = %{"type" => "gameover", "turns" => 0, "error" => true}
-      {:reply, {:text, Jason.encode!(msg)}, state}
+      {:push, {:text, Jason.encode!(msg)}, state}
     end
   end
 
@@ -305,12 +264,17 @@ defmodule Leprechaun.Websocket do
     }
 
     send(self(), {:send, Jason.encode!(%{"type" => "play"})})
-    {:reply, {:text, Jason.encode!(msg)}, state}
+    {:push, {:text, Jason.encode!(msg)}, state}
   end
 
   defp process_data(%{"type" => "stop"}, %{board: board} = state) do
     if Game.exists?(board), do: Game.stop(board)
     {:ok, state}
+  end
+
+  defp process_data(_message, state) do
+    msg = %{"type" => "error", "reason" => "unsupported_message"}
+    {:push, {:text, Jason.encode!(msg)}, state}
   end
 
   defp img(0), do: ""

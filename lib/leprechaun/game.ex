@@ -366,7 +366,7 @@ defmodule Leprechaun.Game do
     {:noreply, swap(point1, point2, game)}
   end
 
-  def handle_cast({:consumer, from}, game) do
+  def handle_cast({:consumer, from}, %Game{} = game) do
     Process.monitor(from)
     {:noreply, %Game{game | consumers: [from | game.consumers]}}
   end
@@ -383,7 +383,7 @@ defmodule Leprechaun.Game do
   end
 
   def handle_info(:stop, state) do
-    Logger.warn("game stopped")
+    Logger.warning("game stopped")
     {:stop, :normal, state}
   end
 
@@ -423,7 +423,7 @@ defmodule Leprechaun.Game do
   end
 
   # part of find_and_apply_matches/4
-  defp apply_no_matches_ending(game, board, turns_mod) do
+  defp apply_no_matches_ending(%Game{} = game, board, turns_mod) do
     if turns_mod == -1, do: send_to(game.consumers, {:extra_turn, -1})
 
     send_to(game.consumers, {:show, Board.show(board)})
@@ -446,7 +446,7 @@ defmodule Leprechaun.Game do
   end
 
   # part of find_and_apply_matches/4
-  defp apply_single_leprechaun_matches(game, board, moves, turns_mod) do
+  defp apply_single_leprechaun_matches(%Game{} = game, board, moves, turns_mod) do
     [cell1, cell2] = Board.get_cells(board, moves)
     [pos1, pos2] = Enum.to_list(moves)
 
@@ -475,7 +475,7 @@ defmodule Leprechaun.Game do
   end
 
   # part of find_and_apply_matches/4
-  defp apply_single_clover_matches(game, board, moves, turns_mod) do
+  defp apply_single_clover_matches(%Game{} = game, board, moves, turns_mod) do
     moved_cells = Board.get_cells(board, moves)
     [pos1, pos2] = Enum.to_list(moves)
     [cell1, cell2] = Board.get_cells(board, moves)
@@ -501,7 +501,7 @@ defmodule Leprechaun.Game do
   end
 
   # part of find_and_apply_matches/4
-  defp apply_found_matches_recursive(game, board, matches, moves, turns_mod) do
+  defp apply_found_matches_recursive(%Game{} = game, board, matches, moves, turns_mod) do
     turns_mod =
       case update_turns(matches, turns_mod) do
         new_turns_mod when turns_mod < new_turns_mod ->

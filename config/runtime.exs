@@ -1,13 +1,15 @@
 import Config
 
-get_atom = fn key, default ->
-  if value = System.get_env(key) do
-    String.to_atom(value)
-  else
-    default
-  end
+if port = System.get_env("PORT") do
+  config :leprechaun, port: String.to_integer(port)
 end
 
-config :ecto_mnesia,
-  host: get_atom.("MNESIA_HOST", Kernel.node()),
-  storage_type: get_atom.("MNESIA_STORAGE_TYPE", :disc_copies)
+# Production data must live outside the release directory.
+if config_env() == :prod do
+  database = System.fetch_env!("DATABASE_PATH")
+  config :leprechaun, Leprechaun.Repo, database: Path.expand(database)
+else
+  if database = System.get_env("DATABASE_PATH") do
+    config :leprechaun, Leprechaun.Repo, database: Path.expand(database)
+  end
+end

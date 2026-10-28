@@ -24,3 +24,10 @@ leprechaun-*.tar
 
 priv/data/
 .DS_Store
+
+# SQLite databases and journal files.
+/data/
+*.db
+*.db-shm
+*.db-wal
+*.db-journal

@@ -47,8 +47,7 @@ defmodule Leprechaun.Board.Piece do
   @spec new() :: t()
   def new do
     case Process.get(:pieces) do
-      pieces when is_list(pieces) and length(pieces) > 0 ->
-        {[piece], remain_pieces} = Enum.split(pieces, 1)
+      [piece | remain_pieces] ->
         Process.put(:pieces, remain_pieces)
         piece
 

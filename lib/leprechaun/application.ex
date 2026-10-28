@@ -1,8 +1,7 @@
 defmodule Leprechaun.Application do
   @moduledoc """
   Creates the application and the supervision tree for the games.
-  This is in charge of running the migrations, starting the base
-  for ePHP and configure the supervision tree.
+  This is in charge of running the migrations and configuring the supervision tree.
   """
   use Application
 
@@ -16,21 +15,20 @@ defmodule Leprechaun.Application do
     port = Application.get_env(:leprechaun, :port, @port)
     family = Application.get_env(:leprechaun, :family, @family)
 
-    {:ok, _} = EctoBootMigration.migrate(:leprechaun)
-
-    :ephp.start()
-
     children = [
       # Start the Ecto repository
       Leprechaun.Repo,
+      {Ecto.Migrator, repos: [Leprechaun.Repo]},
       # Start the Registry for boards
       {Registry, keys: :unique, name: Leprechaun.Game.Registry},
       # Start DynamicSupervisor for games
       {DynamicSupervisor, strategy: :one_for_one, name: Leprechaun.Games},
-      # Start the Registry for bots
-      {Registry, keys: :unique, name: Leprechaun.Bot.Registry},
       # Start worker for HTTP listener
-      {Leprechaun.Http, [port, family]}
+      {Bandit,
+       plug: Leprechaun.Http,
+       scheme: :http,
+       port: port,
+       thousand_island_options: [transport_options: [family]]}
     ]
 
     Logger.info("[app] iniciada aplicación")

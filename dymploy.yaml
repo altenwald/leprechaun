@@ -1,0 +1,88 @@
+# Validate locally with dymploy validate. dymploy try builds without deploying.
+version: 1
+
+build:
+  image:
+    dockerfile: ci/Dockerfile.build
+    context: ci
+  env:
+    MIX_ENV: prod
+    ERL_FLAGS: "+Q 65536"
+    MIX_HOME: /cache/mix
+    HEX_HOME: /cache/hex
+  cache:
+    - {name: mix, path: /cache/mix}
+    - {name: hex, path: /cache/hex}
+  limits: {cpus: 2, memory: 2g, timeout: 10m, nofile: 65536}
+  steps:
+    - name: dependencies
+      run: |
+        mix local.hex --force
+        mix local.rebar --force
+        MIX_ENV=test mix deps.get
+    - name: quality gate and coverage
+      env:
+        MIX_ENV: test
+        PORT: "0"
+        DATABASE_PATH: /work/data/gate.db
+      run: mix check --no-retry
+    - name: release
+      run: mix release
+    - name: verify packaged SQLite and initial scores
+      run: sh ci/check_release.sh
+
+artifact:
+  name: leprechaun
+  paths: [_build/prod/rel/leprechaun]
+
+deploy:
+  # Must be provisioned on the dymploy server before the first deployment.
+  target: rowan-leprechaun
+  timeout: 5m
+  steps:
+    - name: install the release
+      run: |
+        new="$HOME/releases/$DYMPLOY_SHORT_COMMIT"
+        test ! -e "$new"
+        mkdir -p "$new"
+        tar -xzf "$DYMPLOY_ARTIFACT" -C "$new" --strip-components=1
+    - name: install the environment
+      run: |
+        umask 027
+        cat > "$HOME/leprechaun.env.new" <<'ENV'
+        PORT=4012
+        DATABASE_PATH=/var/lib/leprechaun/leprechaun.db
+        RELEASE_DISTRIBUTION=none
+        RELEASE_TMP=/var/lib/leprechaun/tmp
+        LANG=C.UTF-8
+        ENV
+        chgrp leprechaun "$HOME/leprechaun.env.new"
+        chmod 0640 "$HOME/leprechaun.env.new"
+        mv -f "$HOME/leprechaun.env.new" "$HOME/leprechaun.env"
+    - name: activate the release and restart the service
+      run: |
+        before=$(systemctl show -p ActiveEnterTimestampMonotonic --value leprechaun.service)
+        ln -sfn "$HOME/releases/$DYMPLOY_SHORT_COMMIT" "$HOME/current"
+        printf '%s\n' "$DYMPLOY_COMMIT" > "$HOME/.deployed"
+        for i in $(seq 1 30); do
+          now=$(systemctl show -p ActiveEnterTimestampMonotonic --value leprechaun.service)
+          if [ "$now" != "$before" ] && systemctl is-active --quiet leprechaun.service; then
+            exit 0
+          fi
+          sleep 1
+        done
+        echo "the service was not restarted successfully" >&2
+        exit 1
+  check:
+    run: curl -fsS -o /dev/null http://127.0.0.1:4012/
+    attempts: 10
+    interval: 3s
+    timeout: 5s
+  after:
+    steps:
+      - name: keep the last three releases after a successful health check
+        run: |
+          current=$(readlink -f "$HOME/current")
+          ls -1dt "$HOME"/releases/*/ | tail -n +4 | while IFS= read -r old; do
+            [ "$(readlink -f "$old")" = "$current" ] || rm -rf -- "$old"
+          done

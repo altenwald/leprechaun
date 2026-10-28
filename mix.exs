@@ -5,13 +5,26 @@ defmodule Leprechaun.MixProject do
     [
       app: :leprechaun,
       version: "1.2.4",
-      elixir: "~> 1.13",
+      elixir: "~> 1.18",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       aliases: aliases(),
-      dialyzer: dialyzer(),
-      preferred_cli_env: [
+      releases: [
+        leprechaun: [
+          applications: [runtime_tools: :permanent],
+          include_executables_for: [:unix],
+          steps: [:assemble, :tar]
+        ]
+      ],
+      test_coverage: [summary: [threshold: 90]],
+      dialyzer: dialyzer()
+    ]
+  end
+
+  def cli do
+    [
+      preferred_envs: [
         check: :test,
         credo: :test,
         dialyzer: :test,
@@ -33,7 +46,7 @@ defmodule Leprechaun.MixProject do
   def application do
     [
       mod: {Leprechaun.Application, []},
-      extra_applications: [:logger, :mnesia]
+      extra_applications: [:logger]
     ]
   end
 
@@ -41,15 +54,12 @@ defmodule Leprechaun.MixProject do
   defp deps do
     [
       {:jason, "~> 1.3"},
-      {:plug, "~> 1.13"},
-      {:plug_cowboy, "~> 2.5"},
+      {:plug, "~> 1.18"},
+      {:bandit, "~> 1.8"},
+      {:websock_adapter, "~> 0.5"},
       {:uuid, "~> 1.1"},
-      {:ecto_mnesia, github: "manuel-rubio/ecto_mnesia", branch: "support_for_ecto3"},
-      {:ephp, "~> 0.3"},
-
-      # for releases
-      {:distillery, "~> 2.1"},
-      {:ecto_boot_migration, "~> 0.1"},
+      {:ecto_sql, "~> 3.13"},
+      {:ecto_sqlite3, "~> 0.26.0"},
 
       # tooling for quality check
       {:dialyxir, ">= 0.0.0", only: [:dev, :test], runtime: false},
@@ -62,6 +72,7 @@ defmodule Leprechaun.MixProject do
 
   defp aliases do
     [
+      release: ["deps.get --only prod", "compile", "release --overwrite"],
       check: [
         "ecto.create",
         "ecto.migrate",
