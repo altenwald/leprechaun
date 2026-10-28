@@ -35,7 +35,14 @@ defmodule Leprechaun.MixProject do
   end
 
   defp dialyzer do
-    []
+    case System.get_env("DIALYZER_PLT_DIR") do
+      nil ->
+        []
+
+      directory ->
+        path = Path.join(directory, to_string(:erlang.system_info(:system_architecture)))
+        [plt_local_path: path, plt_core_path: path]
+    end
   end
 
   # Specifies which paths to compile per environment.

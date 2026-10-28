@@ -10,9 +10,11 @@ build:
     ERL_FLAGS: "+Q 65536"
     MIX_HOME: /cache/mix
     HEX_HOME: /cache/hex
+    DIALYZER_PLT_DIR: /cache/plt
   cache:
     - {name: mix, path: /cache/mix}
     - {name: hex, path: /cache/hex}
+    - {name: plt, path: /cache/plt}
   limits: {cpus: 2, memory: 2g, timeout: 10m, nofile: 65536}
   steps:
     - name: dependencies
